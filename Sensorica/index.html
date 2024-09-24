@@ -4,6 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iot Labs. </title>
+    <script>
+        function GetSwitchAnalogData(){
+            nocache = "%&nocache=" + Math.random() * 1000000;
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        if (this.responseText != null) {
+                            document.getElementById("sw_an_data").innerHTML = this.responseText;
+                        }
+                    }
+                }
+            }
+            request.open("Get", "ajax_Swich" + nocache,true);
+            request.send(null);
+            setTimeout('GetSwitchAnalogData()',1000);
+        }
+    </script>
 </head>
 <body>
     <h1>Iot Labs. Arduino Ethernet Shield</h1>
