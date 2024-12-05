@@ -1,0 +1,89 @@
+"id","sku","name","description","description_markdown","date_published","price","qty_price","in_stock","backorder_allowed","is_rohs_compliant","is_export_controlled","is_oshw","in_eagle_library","in_fritzing_library","sparkfun_original","hstariff","pack_length","pack_width","pack_height","packed_weight","ascii_art","ascii_art_url","categories","quantity","images","related_products","videos"
+"10536","DEV-10536","Ethernet Pro","<p><strong>Replacement:</strong> None. We are no longer making this board but check out the rest of our Arduino-compatible <a href=\""http://www.sparkfun.com/categories/103\"">development tools</a>! This page is for reference only.</p>
+
+<p>Ever wonder what would happen if you stacked an Ethernet shield on an Arduino Pro microcontroller and ran over it with a steam roller? Well, it would probably just break. But in a cartoon world it might turn into the Ethernet Pro! The Ethernet Pro is an Arduino-sized, shield-compatible microcontroller with all of the functionality of the Ethernet shield built right in!</p>
+
+<p>The Ethernet Pro is based on the same hardware as the Ethernet shield (Wiznet W5100) in the same configuration so it is a drop-in replacement for the \""Arduino/Ethernet double-stack,\"" and works with all of the existing Ethernet shield libraries and code. This board features the \'Optiboot\' bootloader, so be sure to select \""Arduino Uno\"" in the Arduino IDE when you program it. The board can be programmed using either an FTDI Basic or the ATmega8U2 breakout (w/ USB-to-Serial firmware).</p>
+
+<p>Not sure which Arduino or Arduino-compatible board is right for you? Check out our <a href=\""https://www.sparkfun.com/arduino_guide\"">Arduino Buying Guide</a>!</p>
+
+<p><strong>Note:</strong> The W5100 consumes a lot of power, so it\'s normal for it to run pretty warm. The regulator can also get pretty toasty, especially when it\'s dropping down higher voltages. For best operation, we recommend keeping the input voltage below 9V.</p>
+
+<p><strong>Documents:</strong></p>
+
+<ul>
+<li><a href=\""http://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/Arduino-Ethernet-v112pg.pdf\"">Schematic</a></li>
+<li><a href=\""http://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/Arduino-Ethernet-v11.zip\"">Eagle Files</a></li>
+<li><a href=\""http://www.sparkfun.com/datasheets/DevTools/Arduino/W5100_Datasheet_v1_1_6.pdf\"">Datasheet</a> (W5100)</li>
+<li><a href=\""http://arduino.cc/en/Main/ArduinoEthernetShield\"">Arduino EthernetShield Page</a></li>
+</ul>","**Replacement:** None. We are no longer making this board but check out the rest of our Arduino-compatible [development tools](http://www.sparkfun.com/categories/103)! This page is for reference only.
+
+Ever wonder what would happen if you stacked an Ethernet shield on an Arduino Pro microcontroller and ran over it with a steam roller? Well, it would probably just break. But in a cartoon world it might turn into the Ethernet Pro! The Ethernet Pro is an Arduino-sized, shield-compatible microcontroller with all of the functionality of the Ethernet shield built right in!
+
+ The Ethernet Pro is based on the same hardware as the Ethernet shield (Wiznet W5100) in the same configuration so it is a drop-in replacement for the \""Arduino/Ethernet double-stack,\"" and works with all of the existing Ethernet shield libraries and code. This board features the \'Optiboot\' bootloader, so be sure to select \""Arduino Uno\"" in the Arduino IDE when you program it. The board can be programmed using either an FTDI Basic or the ATmega8U2 breakout (w/ USB-to-Serial firmware).
+
+ Not sure which Arduino or Arduino-compatible board is right for you? Check out our [Arduino Buying Guide](https://www.sparkfun.com/arduino_guide)!
+
+**Note:** The W5100 consumes a lot of power, so it\'s normal for it to run pretty warm. The regulator can also get pretty toasty, especially when it\'s dropping down higher voltages. For best operation, we recommend keeping the input voltage below 9V.
+
+**Documents:**
+
+* [Schematic](http://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/Arduino-Ethernet-v112pg.pdf)
+* [Eagle Files](http://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/Arduino-Ethernet-v11.zip)
+* [Datasheet](http://www.sparkfun.com/datasheets/DevTools/Arduino/W5100_Datasheet_v1_1_6.pdf) (W5100)
+* [Arduino EthernetShield Page](http://arduino.cc/en/Main/ArduinoEthernetShield)
+
+","2011-06-30 10:47:02-06","54.95","54.95","","","1","","1","","","","8542.31.0000","80mm","60mm","18mm","0.0499lbs","
+
+
+
+
+
+                                                    ,;\',\'
+                                                 .cc,\'.;lxc.
+                                              .;l;.\';coll:cdd;.
+                                            \':c;.;cookxccclxOkkl,:::,.
+                                         .cl;,\';cxddddcodOOOOOOkxk.  .o,
+                                       ,ll.\';ccdkkoc;oddxOOOOOOOOOxc::o:::\'
+                                    .:xl.\'ldooxdcclodkOo:,lOOOOOOOOOo,,,,.\'l:.
+                                  ,cl\'.lxkdkko:codOOd:;lxxkkOxllxkOOxlc\'.::,.ox:.
+                               .:c;\'.coooOOk:cdOkoc:ododkOkdlolclxOOOOOkd;\'olokxoo;.
+                             ,c;\',,:ooddOxddkkdlcdooco:,clllocolxOOOkoxkOOOOkol,co:,c;.
+                          .;c,.;cooododddxkolokdlodc,cocoooccclkOOOOxcxkOOOOOko,;d.;clko\'
+                        \'::,.:loloddoddkookko:ckd;\'locdddxlcdkOOOOOkOxolokocOOOOOdoloxOkkd;.
+                     .;;\'\'.;odloxxddxOodOx;:kkd;:llloocllxOOOOOOOOkookxlllxcxOOOOOOkOOOk,  .o:
+                  .,c::;,codolkkxdd:\',cckkkOOkOkxkxldxxdkOOOOOOOxccdOOkklclxOOOOkOkOOxoll;:dkk.
+                \'coddloxkkdldkkkx;...,:kkkxloxOOxooxOOOOOOOOOOOkckOOkxxxOOdlOOOOOOOdccoodxl;,:o;
+              ,;...lodxxxkkkkkkkl:l:doxOdlokxkkxOOOdookOOOOOOOOkl:dkOkxkxl:oOOOOkdocddldoc.,:ll\'
+           .\',\':;\',oddoxkkxl:lc::kOoldOox0Okkkkkxk0K0kdOOOOOOOOdxkoccxkccdOOOOxxxOxxloo:\',lo:.
+        ,dkdo:::,oxlcdxxo;.\',;::olkkoxOllxOOkkkkOkOOdcoOOOdokdokdOOOkOOOOOOOOkkxoxdlc;\'\'od,
+      .,oOOkOkkll;;lo:\'..\'\'\',;:cloolokkddlcokOOOOkocoodOOOdd::dkOOOOOOOOOkdOOOOOxl;,,;do\'
+   .\';;llld0kOOOOxd,...\'\'\',,;;:ccllollcxkkxoco00oldkOxkOxcckd:xOOOOOOOOxl;lkddxxkklcdc.
+   ..l::ldlokOk00d:\',,,,,,,;;::ccllloooodxOkxkOOOOOOOOOOkdxxxkOOOOOOOxdolxoodl:.:Ox;.
+      .c:lxoodko;,,\'..,:,;;;:::cclllool:;ckldkOOOOOOOOOxx0kkdkkxdkkddkkxdll:,.:dl\'
+        .;:kd:\'\'\'\'..,dko,\',;;::cclloc;,lddkOOOOOOOOkkOO000O:lOOdlxkkoxklc,;\':xc.
+           ...\',.  lko:,..ld;::ccl:;cdxkOddOOOOxdOxx0kkOOOOdx:x0Oxodko;\';,ld;
+            .:.. .do:\'..ckxc;;:::loxkxdkxkkOOOOOOO0O0OlcOllldOO00kkd;.,:oo\'
+            .:Xk:\'.\'. \'xdc;,,;c:oxxxkddkkx000xkOOkkooxdlxkOKK0O:..:lc:oc.
+             cKNNXd\' ,l;,,\',cox0c,;dxxkOOxkOk0XX0clOk:okO0K00Ok;\'::dd;.
+             .ldKNWNOc..\',lxO0kkxool;cOO0OOOO000OO0loO000Ooldldd:xo\'
+               .c0NNNNXc\'xxxOkKXOkkxoxOOOO000kkOOoOOOKKKO\' .:klll.
+                  ;xKXXk.;ckXKklxOOOkkkkkO00OkO00O0Okk0kollxco:.
+                    .cxx.:ollo0OOOkkkkkOO0OOOO00000Ox::cxkcl,
+                       \',,:,..,l0XKOOOOOOOOO00Oc.dkkxl::ol.
+                              ..xXWKok0OkO00O00x .:OkOx:.
+                                \'o0XXOOkxdok0000o,coc\'
+                                  .:xOOOOkc :oOOxl;.
+                                     ,dx::xd;ldo,
+                                           .cl.
+
+
+
+
+
+
+","https://www.sparkfun.com/products/10536/images.txt","Development Tools","0","","9716, 
+12587, 
+11417, 
+10007, 
+8915",""
