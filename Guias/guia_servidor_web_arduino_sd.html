@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Completa: Servidor Web Arduino con Tarjeta SD y Enlaces</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section h3 {
+            color: #764ba2;
+            margin: 25px 0 15px 0;
+            font-size: 1.5em;
+        }
+        
+        .section h4 {
+            color: #f5576c;
+            margin: 20px 0 10px 0;
+            font-size: 1.2em;
+        }
+        
+        .icon {
+            width: 50px;
+            height: 50px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+            border-left: 5px solid #4caf50;
+        }
+        
+        .code-block.html {
+            border-left-color: #ff9800;
+        }
+        
+        .code-block.arduino {
+            border-left-color: #00bcd4;
+        }
+        
+        .keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .string {
+            color: #ce9178;
+        }
+        
+        .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .number {
+            color: #b5cea8;
+        }
+        
+        .function {
+            color: #dcdcaa;
+        }
+        
+        .type {
+            color: #4ec9b0;
+        }
+        
+        .tag {
+            color: #569cd6;
+        }
+        
+        .attribute {
+            color: #9cdcfe;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #2196f3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .info-box strong {
+            color: #1565c0;
+            font-size: 1.15em;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .warning-box strong {
+            color: #e65100;
+            font-size: 1.15em;
+        }
+        
+        .success-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .success-box strong {
+            color: #2e7d32;
+            font-size: 1.15em;
+        }
+        
+        .danger-box {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-left: 5px solid #f44336;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .danger-box strong {
+            color: #c62828;
+            font-size: 1.15em;
+        }
+        
+        .visual-diagram {
+            background: white;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .visual-diagram h4 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .flow-step {
+            background: #667eea;
+            color: white;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .arrow {
+            font-size: 2em;
+            color: #667eea;
+            margin: 10px;
+        }
+        
+        .step-container {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 15px;
+        }
+        
+        .step-title {
+            display: inline;
+            color: #667eea;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .materials-list {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .materials-list h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .materials-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .materials-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .materials-list li:before {
+            content: "✓ ";
+            color: #4caf50;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .highlight {
+            background: #fff59d;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .file-structure {
+            background: #263238;
+            color: #aed581;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+        }
+        
+        .file-structure .folder {
+            color: #64b5f6;
+            font-weight: bold;
+        }
+        
+        .file-structure .file {
+            color: #fff59d;
+        }
+        
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .comparison-box {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .comparison-box h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-table {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌐 Servidor Web Arduino con SD</h1>
+            <p class="subtitle">Crea páginas web enlazadas en tu Arduino con Ethernet Shield</p>
+        </header>
+        
+        <div class="content">
+            
+            <!-- INTRODUCCIÓN -->
+            <div class="section">
+                <h2><span class="icon">📋</span> Introducción</h2>
+                <p>En este tutorial aprenderás a crear un <strong>servidor web completo en Arduino</strong> que puede servir múltiples páginas HTML almacenadas en una tarjeta SD. Las páginas estarán enlazadas entre sí, permitiendo la navegación como en un sitio web real.</p>
+                
+                <div class="info-box">
+                    <strong>💡 ¿Qué lograrás con este tutorial?</strong>
+                    <ul style="margin: 15px 0 0 25px;">
+                        <li>Servir páginas HTML desde una tarjeta SD</li>
+                        <li>Crear enlaces entre páginas web</li>
+                        <li>Interpretar peticiones HTTP para servir diferentes páginas</li>
+                        <li>Construir un sitio web navegable completo en Arduino</li>
+                    </ul>
+                </div>
+
+                <div class="materials-list">
+                    <h4>📦 Materiales Necesarios</h4>
+                    <ul>
+                        <li>Arduino Uno (o compatible)</li>
+                        <li>Arduino Ethernet Shield oficial</li>
+                        <li>Tarjeta micro SD (2GB, formateada en FAT16)</li>
+                        <li>Cable Ethernet</li>
+                        <li>Router o switch de red</li>
+                        <li>Computadora para programar y probar</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- CONCEPTOS HTML -->
+            <div class="section">
+                <h2><span class="icon">📝</span> Creando Enlaces en HTML</h2>
+                
+                <h3>El tag &lt;a&gt; (anchor/ancla)</h3>
+                <p>Los enlaces en HTML se crean usando la etiqueta <span class="highlight">&lt;a&gt;</span>. El texto entre la etiqueta de apertura y cierre se convierte en un enlace clickeable.</p>
+
+                <div class="code-block html">
+<span class="tag">&lt;p&gt;</span>Ve a <span class="tag">&lt;a</span> <span class="attribute">href</span>=<span class="string">"page2.htm"</span><span class="tag">&gt;</span>página 2<span class="tag">&lt;/a&gt;</span>.<span class="tag">&lt;/p&gt;</span>
+                </div>
+
+                <div class="info-box">
+                    <strong>🔍 Anatomía de un enlace:</strong>
+                    <table style="margin-top: 15px;">
+                        <tr>
+                            <th>Parte</th>
+                            <th>Descripción</th>
+                        </tr>
+                        <tr>
+                            <td><code>&lt;a&gt;</code></td>
+                            <td>Etiqueta de apertura del enlace</td>
+                        </tr>
+                        <tr>
+                            <td><code>href="..."</code></td>
+                            <td>Atributo que contiene la URL o nombre de archivo destino</td>
+                        </tr>
+                        <tr>
+                            <td><code>página 2</code></td>
+                            <td>Texto visible del enlace (clickeable)</td>
+                        </tr>
+                        <tr>
+                            <td><code>&lt;/a&gt;</code></td>
+                            <td>Etiqueta de cierre del enlace</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Importante sobre rutas de archivos:</strong>
+                    <p>El archivo al que enlazas (por ejemplo, <code>page2.htm</code>) debe:</p>
+                    <ul style="margin: 10px 0 0 25px;">
+                        <li>Existir en la tarjeta SD</li>
+                        <li>Estar en el mismo directorio que la página que contiene el enlace</li>
+                        <li>Tener el nombre correcto (sensible a mayúsculas/minúsculas)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ARCHIVOS HTML DE EJEMPLO -->
+            <div class="section">
+                <h2><span class="icon">📄</span> Archivos HTML de Ejemplo</h2>
+                
+                <p>Crearemos dos páginas HTML que se enlazan mutuamente. Estas páginas deben guardarse en la tarjeta micro SD.</p>
+
+                <h3>Página Principal: index.htm</h3>
+                <p>Esta es la página que se cargará por defecto cuando accedas al servidor Arduino.</p>
+
+                <div class="code-block html">
+<span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+    <span class="tag">&lt;head&gt;</span>
+        <span class="tag">&lt;title&gt;</span>Arduino SD Card Web Page<span class="tag">&lt;/title&gt;</span>
+    <span class="tag">&lt;/head&gt;</span>
+    <span class="tag">&lt;body&gt;</span>
+        <span class="tag">&lt;h1&gt;</span>Arduino SD Card Page with Link<span class="tag">&lt;/h1&gt;</span>
+        <span class="tag">&lt;p&gt;</span>Go to <span class="tag">&lt;a</span> <span class="attribute">href</span>=<span class="string">"page2.htm"</span><span class="tag">&gt;</span>page 2<span class="tag">&lt;/a&gt;</span>.<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>
+                </div>
+
+                <div class="info-box">
+                    <strong>📌 Detalles de index.htm:</strong>
+                    <ul style="margin: 10px 0 0 25px;">
+                        <li><strong>&lt;!DOCTYPE html&gt;</strong> - Declara que es HTML5</li>
+                        <li><strong>&lt;title&gt;</strong> - Título que aparece en la pestaña del navegador</li>
+                        <li><strong>&lt;h1&gt;</strong> - Encabezado principal de la página</li>
+                        <li><strong>&lt;a href="page2.htm"&gt;</strong> - Enlace a la segunda página</li>
+                    </ul>
+                </div>
+
+                <h3>Segunda Página: page2.htm</h3>
+                <p>Esta página enlaza de vuelta a la página principal.</p>
+
+                <div class="code-block html">
+<span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+    <span class="tag">&lt;head&gt;</span>
+        <span class="tag">&lt;title&gt;</span>Arduino SD Card Web Page 2<span class="tag">&lt;/title&gt;</span>
+    <span class="tag">&lt;/head&gt;</span>
+    <span class="tag">&lt;body&gt;</span>
+        <span class="tag">&lt;h1&gt;</span>Arduino SD Card Page 2<span class="tag">&lt;/h1&gt;</span>
+        <span class="tag">&lt;p&gt;</span>Go back to <span class="tag">&lt;a</span> <span class="attribute">href</span>=<span class="string">"index.htm"</span><span class="tag">&gt;</span>main page<span class="tag">&lt;/a&gt;</span>.<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>
+                </div>
+
+                <div class="visual-diagram">
+                    <h4>🔄 Flujo de Navegación entre Páginas</h4>
+                    <div>
+                        <div class="flow-step">index.htm</div>
+                        <div class="arrow">→</div>
+                        <div class="flow-step">Click en "page 2"</div>
+                        <div class="arrow">→</div>
+                        <div class="flow-step">page2.htm</div>
+                    </div>
+                    <div class="arrow" style="transform: rotate(180deg);">↓</div>
+                    <div>
+                        <div class="flow-step">index.htm</div>
+                        <div class="arrow" style="transform: rotate(180deg);">←</div>
+                        <div class="flow-step">Click en "main page"</div>
+                        <div class="arrow" style="transform: rotate(180deg);">←</div>
+                        <div class="flow-step">page2.htm</div>
+                    </div>
+                </div>
+
+                <h3>Preparando los Archivos</h3>
+                
+                <div class="step-container">
+                    <span class="step-number">1</span>
+                    <span class="step-title">Crea los archivos HTML</span>
+                    <p style="margin-top: 15px;">Usa un editor de texto simple (Notepad, Notepad++, VS Code) y copia el código HTML exactamente como se muestra arriba.</p>
+                    <div class="warning-box" style="margin-top: 15px;">
+                        <strong>⚠️ No uses Word o procesadores de texto</strong> - estos añaden formato invisible que romperá el HTML.
+                    </div>
+                </div>
+
+                <div class="step-container">
+                    <span class="step-number">2</span>
+                    <span class="step-title">Guarda con los nombres correctos</span>
+                    <p style="margin-top: 15px;">
+                        Guarda los archivos como:<br>
+                        - <code>index.htm</code> (no .html, debe ser .htm)<br>
+                        - <code>page2.htm</code>
+                    </p>
+                </div>
+
+                <div class="step-container">
+                    <span class="step-number">3</span>
+                    <span class="step-title">Formatea la tarjeta SD</span>
+                    <p style="margin-top: 15px;">La tarjeta debe estar formateada en <strong>FAT16</strong> (no FAT32, no exFAT). Tarjetas de 2GB funcionan mejor.</p>
+                </div>
+
+                <div class="step-container">
+                    <span class="step-number">4</span>
+                    <span class="step-title">Copia los archivos a la SD</span>
+                    <p style="margin-top: 15px;">Copia ambos archivos HTML a la raíz de la tarjeta SD (no en carpetas).</p>
+                    
+                    <div class="file-structure">
+<span class="folder">📁 SD Card (raíz)</span>
+  <span class="file">📄 index.htm</span>
+  <span class="file">📄 page2.htm</span>
+                    </div>
+                </div>
+
+                <div class="step-container">
+                    <span class="step-number">5</span>
+                    <span class="step-title">Inserta la SD en el shield</span>
+                    <p style="margin-top: 15px;">Inserta cuidadosamente la tarjeta micro SD en el lector del Ethernet Shield.</p>
+                </div>
+
+                <div class="success-box">
+                    <strong>✅ Prueba en tu computadora primero:</strong>
+                    <p>Antes de subirlo al Arduino, puedes probar los archivos HTML en tu computadora. Pon ambos archivos en la misma carpeta y abre <code>index.htm</code> en tu navegador. El enlace debería funcionar.</p>
+                </div>
+            </div>
+
+            <!-- PETICIONES HTTP -->
+            <div class="section">
+                <h2><span class="icon">🌐</span> Entendiendo las Peticiones HTTP</h2>
+                
+                <p>Cuando un navegador solicita una página al servidor Arduino, envía una <strong>petición HTTP</strong>. Necesitamos entender estas peticiones para saber qué página servir.</p>
+
+                <h3>Petición Inicial (Página Principal)</h3>
+                <p>Cuando visitas el servidor por primera vez (ej: <code>http://192.168.0.20/</code>), el navegador envía:</p>
+
+                <div class="code-block">
+<span class="keyword">GET</span> <span class="string">/</span> HTTP/1.1
+Host: <span class="number">192.168.0.20</span>
+User-Agent: Mozilla/5.0 ...
+Accept: text/html ...
+Connection: keep-alive
+                </div>
+
+                <div class="info-box">
+                    <strong>🔍 Línea clave: <code>GET /</code></strong>
+                    <ul style="margin: 10px 0 0 25px;">
+                        <li><strong>GET</strong> - Método HTTP (solicitar datos)</li>
+                        <li><strong>/</strong> - Raíz del sitio (archivo por defecto)</li>
+                        <li>Esto significa: "Dame el archivo principal"</li>
+                    </ul>
+                </div>
+
+                <h3>Petición de Enlace (Segunda Página)</h3>
+                <p>Cuando haces click en el enlace a <code>page2.htm</code>, el navegador envía:</p>
+
+                <div class="code-block">
+<span class="keyword">GET</span> <span class="string">/page2.htm</span> HTTP/1.1
+Host: <span class="number">192.168.0.20</span>
+User-Agent: Mozilla/5.0 ...
+Accept: text/html ...
+<span class="function">Referer</span>: http://192.168.0.20/
+Connection: keep-alive
+                </div>
+
+                <div class="info-box">
+                    <strong>🔍 Línea clave: <code>GET /page2.htm</code></strong>
+                    <ul style="margin: 10px 0 0 25px;">
+                        <li>Ahora solicita un archivo específico: <code>page2.htm</code></li>
+                        <li><strong>Referer</strong> indica de dónde vino el usuario (la página anterior)</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-table">
+                    <div class="comparison-box">
+                        <h4>Petición Raíz</h4>
+                        <code style="color: #667eea; font-size: 1.2em;">GET /</code>
+                        <p style="margin-top: 10px;">Sirve <strong>index.htm</strong></p>
+                    </div>
+                    <div class="comparison-box">
+                        <h4>Petición Específica</h4>
+                        <code style="color: #f5576c; font-size: 1.2em;">GET /page2.htm</code>
+                        <p style="margin-top: 10px;">Sirve <strong>page2.htm</strong></p>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>💡 Concepto Clave:</strong>
+                    <p>El Arduino debe <strong>analizar la petición HTTP</strong> para saber qué archivo abrir de la tarjeta SD. Esto lo haremos con código en el sketch.</p>
+                </div>
+            </div>
+
+            <!-- CÓDIGO ARDUINO -->
+            <div class="section">
+                <h2><span class="icon">💻</span> Código Arduino Completo</h2>
+                
+                <p>Este sketch modifica el servidor web básico para manejar múltiples páginas enlazadas.</p>
+
+                <h3>Sketch: eth_websrv_SD_link</h3>
+
+                <div class="code-block arduino">
+<span class="comment">/*--------------------------------------------------------------
+  Programa:      eth_websrv_SD_link
+  
+  Descripción:   Servidor web Arduino que sirve páginas HTML
+                 enlazadas entre sí desde tarjeta SD.
+                 
+  Hardware:      Arduino Uno + Ethernet Shield oficial
+                 Tarjeta micro SD 2GB formateada FAT16
+--------------------------------------------------------------*/</span>
+
+<span class="keyword">#include</span> <span class="string">&lt;SPI.h&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;Ethernet.h&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;SD.h&gt;</span>
+
+<span class="comment">// Tamaño del buffer para capturar peticiones HTTP</span>
+<span class="keyword">#define</span> REQ_BUF_SZ   <span class="number">20</span>
+
+<span class="comment">// Dirección MAC del Ethernet Shield (está impresa en el shield)</span>
+<span class="type">byte</span> mac[] = { <span class="number">0xDE</span>, <span class="number">0xAD</span>, <span class="number">0xBE</span>, <span class="number">0xEF</span>, <span class="number">0xFE</span>, <span class="number">0xED</span> };
+<span class="type">IPAddress</span> ip(<span class="number">192</span>, <span class="number">168</span>, <span class="number">0</span>, <span class="number">20</span>);   <span class="comment">// IP fija (ajusta según tu red)</span>
+<span class="type">EthernetServer</span> server(<span class="number">80</span>);       <span class="comment">// Servidor en puerto 80</span>
+<span class="type">File</span> webFile;                    <span class="comment">// Archivo de la SD</span>
+<span class="type">char</span> HTTP_req[REQ_BUF_SZ] = {<span class="number">0</span>}; <span class="comment">// Buffer para petición HTTP</span>
+<span class="type">char</span> req_index = <span class="number">0</span>;              <span class="comment">// Índice del buffer</span>
+
+<span class="keyword">void</span> <span class="function">setup</span>()
+{
+    <span class="comment">// Deshabilitar chip Ethernet temporalmente</span>
+    <span class="function">pinMode</span>(<span class="number">10</span>, OUTPUT);
+    <span class="function">digitalWrite</span>(<span class="number">10</span>, HIGH);
+    
+    Serial.<span class="function">begin</span>(<span class="number">9600</span>);       <span class="comment">// Para debugging</span>
+    
+    <span class="comment">// Inicializar tarjeta SD</span>
+    Serial.<span class="function">println</span>(<span class="string">"Inicializando tarjeta SD..."</span>);
+    <span class="keyword">if</span> (!SD.<span class="function">begin</span>(<span class="number">4</span>)) {
+        Serial.<span class="function">println</span>(<span class="string">"ERROR - Falló inicialización SD!"</span>);
+        <span class="keyword">return</span>;
+    }
+    Serial.<span class="function">println</span>(<span class="string">"ÉXITO - Tarjeta SD inicializada."</span>);
+    
+    <span class="comment">// Verificar que exista index.htm</span>
+    <span class="keyword">if</span> (!SD.<span class="function">exists</span>(<span class="string">"index.htm"</span>)) {
+        Serial.<span class="function">println</span>(<span class="string">"ERROR - No se encuentra index.htm!"</span>);
+        <span class="keyword">return</span>;
+    }
+    Serial.<span class="function">println</span>(<span class="string">"ÉXITO - Encontrado index.htm."</span>);
+
+    Ethernet.<span class="function">begin</span>(mac, ip);  <span class="comment">// Inicializar Ethernet</span>
+    server.<span class="function">begin</span>();           <span class="comment">// Iniciar servidor</span>
+}
+
+<span class="keyword">void</span> <span class="function">loop</span>()
+{
+    <span class="type">EthernetClient</span> client = server.<span class="function">available</span>();
+
+    <span class="keyword">if</span> (client) {
+        <span class="type">boolean</span> currentLineIsBlank = <span class="keyword">true</span>;
+        <span class="keyword">while</span> (client.<span class="function">connected</span>()) {
+            <span class="keyword">if</span> (client.<span class="function">available</span>()) {
+                <span class="type">char</span> c = client.<span class="function">read</span>();
+                
+                <span class="comment">// Guardar petición HTTP en buffer</span>
+                <span class="keyword">if</span> (req_index < (REQ_BUF_SZ - <span class="number">1</span>)) {
+                    HTTP_req[req_index] = c;
+                    req_index++;
+                }
+                Serial.<span class="function">print</span>(c);
+                
+                <span class="comment">// Última línea de petición termina con \n y está vacía</span>
+                <span class="keyword">if</span> (c == <span class="string">'\n'</span> && currentLineIsBlank) {
+                    <span class="comment">// Enviar encabezado HTTP</span>
+                    client.<span class="function">println</span>(<span class="string">"HTTP/1.1 200 OK"</span>);
+                    client.<span class="function">println</span>(<span class="string">"Content-Type: text/html"</span>);
+                    client.<span class="function">println</span>(<span class="string">"Connection: close"</span>);
+                    client.<span class="function">println</span>();
+                    
+                    <span class="comment">// Abrir archivo solicitado</span>
+                    <span class="keyword">if</span> (<span class="function">StrContains</span>(HTTP_req, <span class="string">"GET / "</span>)
+                        || <span class="function">StrContains</span>(HTTP_req, <span class="string">"GET /index.htm"</span>)) {
+                        webFile = SD.<span class="function">open</span>(<span class="string">"index.htm"</span>);
+                    }
+                    <span class="keyword">else if</span> (<span class="function">StrContains</span>(HTTP_req, <span class="string">"GET /page2.htm"</span>)) {
+                        webFile = SD.<span class="function">open</span>(<span class="string">"page2.htm"</span>);
+                    }
+                    
+                    <span class="comment">// Enviar archivo al cliente</span>
+                    <span class="keyword">if</span> (webFile) {
+                        <span class="keyword">while</span>(webFile.<span class="function">available</span>()) {
+                            client.<span class="function">write</span>(webFile.<span class="function">read</span>());
+                        }
+                        webFile.<span class="function">close</span>();
+                    }
+                    
+                    <span class="comment">// Resetear buffer</span>
+                    req_index = <span class="number">0</span>;
+                    <span class="function">StrClear</span>(HTTP_req, REQ_BUF_SZ);
+                    <span class="keyword">break</span>;
+                }
+                
+                <span class="keyword">if</span> (c == <span class="string">'\n'</span>) {
+                    currentLineIsBlank = <span class="keyword">true</span>;
+                } 
+                <span class="keyword">else if</span> (c != <span class="string">'\r'</span>) {
+                    currentLineIsBlank = <span class="keyword">false</span>;
+                }
+            }
+        }
+        <span class="function">delay</span>(<span class="number">1</span>);
+        client.<span class="function">stop</span>();
+    }
+}
+
+<span class="comment">// Limpia el array (pone todo en 0)</span>
+<span class="keyword">void</span> <span class="function">StrClear</span>(<span class="type">char</span> *str, <span class="type">char</span> length)
+{
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i < length; i++) {
+        str[i] = <span class="number">0</span>;
+    }
+}
+
+<span class="comment">// Busca una subcadena dentro de otra cadena
+// Retorna 1 si la encuentra, 0 si no</span>
+<span class="type">char</span> <span class="function">StrContains</span>(<span class="type">char</span> *str, <span class="type">char</span> *sfind)
+{
+    <span class="type">char</span> found = <span class="number">0</span>;
+    <span class="type">char</span> index = <span class="number">0</span>;
+    <span class="type">char</span> len;
+
+    len = <span class="function">strlen</span>(str);
+    
+    <span class="keyword">if</span> (<span class="function">strlen</span>(sfind) > len) {
+        <span class="keyword">return</span> <span class="number">0</span>;
+    }
+    <span class="keyword">while</span> (index < len) {
+        <span class="keyword">if</span> (str[index] == sfind[found]) {
+            found++;
+            <span class="keyword">if</span> (<span class="function">strlen</span>(sfind) == found) {
+                <span class="keyword">return</span> <span class="number">1</span>;
+            }
+        }
+        <span class="keyword">else</span> {
+            found = <span class="number">0</span>;
+        }
+        index++;
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+                </div>
+            </div>
+
+            <!-- EXPLICACIÓN DEL CÓDIGO -->
+            <div class="section">
+                <h2><span class="icon">🔍</span> Explicación Detallada del Código</h2>
+
+                <h3>1. Bibliotecas y Definiciones</h3>
+                <div class="code-block arduino">
+<span class="keyword">#include</span> <span class="string">&lt;SPI.h&gt;</span>       <span class="comment">// Comunicación con el shield</span>
+<span class="keyword">#include</span> <span class="string">&lt;Ethernet.h&gt;</span>  <span class="comment">// Funciones de red</span>
+<span class="keyword">#include</span> <span class="string">&lt;SD.h&gt;</span>        <span class="comment">// Lectura de tarjeta SD</span>
+
+<span class="keyword">#define</span> REQ_BUF_SZ <span class="number">20</span>   <span class="comment">// Tamaño del buffer HTTP</span>
+                </div>
+
+                <div class="info-box">
+                    <strong>📌 REQ_BUF_SZ = 20:</strong>
+                    <p>Solo necesitamos los primeros 20 caracteres de la petición HTTP para saber qué página servir. Por ejemplo: <code>"GET /page2.htm HTTP"</code> tiene 19 caracteres.</p>
+                </div>
+
+                <h3>2. Variables Globales</h3>
+                <div class="code-block arduino">
+<span class="type">char</span> HTTP_req[REQ_BUF_SZ] = {<span class="number">0</span>};  <span class="comment">// Array para guardar petición</span>
+<span class="type">char</span> req_index = <span class="number">0</span>;               <span class="comment">// Posición actual en el buffer</span>
+                </div>
+
+                <table>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Tipo</th>
+                        <th>Propósito</th>
+                    </tr>
+                    <tr>
+                        <td><code>HTTP_req</code></td>
+                        <td>Array de char</td>
+                        <td>Almacena la petición HTTP del navegador</td>
+                    </tr>
+                    <tr>
+                        <td><code>req_index</code></td>
+                        <td>char (número)</td>
+                        <td>Índice para ir llenando el array</td>
+                    </tr>
+                    <tr>
+                        <td><code>webFile</code></td>
+                        <td>File</td>
+                        <td>Referencia al archivo HTML abierto</td>
+                    </tr>
+                </table>
+
+                <h3>3. Captura de la Petición HTTP</h3>
+                <div class="code-block arduino">
+<span class="comment">// Guardar cada carácter en el buffer</span>
+<span class="keyword">if</span> (req_index < (REQ_BUF_SZ - <span class="number">1</span>)) {
+    HTTP_req[req_index] = c;  <span class="comment">// c es el carácter leído</span>
+    req_index++;
+}
+                </div>
+
+                <div class="visual-diagram">
+                    <h4>Llenado del Buffer HTTP_req</h4>
+                    <div style="font-family: 'Courier New'; background: #1e1e1e; color: #fff; padding: 20px; text-align: left; border-radius: 8px; margin: 20px 0;">
+                        <p style="color: #6a9955;">// Primera iteración:</p>
+                        <p>c = 'G' → HTTP_req[0] = 'G' → req_index = 1</p>
+                        <p style="color: #6a9955;">// Segunda iteración:</p>
+                        <p>c = 'E' → HTTP_req[1] = 'E' → req_index = 2</p>
+                        <p style="color: #6a9955;">// Tercera iteración:</p>
+                        <p>c = 'T' → HTTP_req[2] = 'T' → req_index = 3</p>
+                        <p style="color: #6a9955;">// ... y así sucesivamente hasta:</p>
+                        <p style="color: #4ec9b0;">HTTP_req = "GET /page2.htm HTT"</p>
+                    </div>
+                </div>
+
+                <h3>4. Selección de Página (Parte Clave)</h3>
+                <div class="code-block arduino">
+<span class="comment">// Abrir archivo según la petición</span>
+<span class="keyword">if</span> (<span class="function">StrContains</span>(HTTP_req, <span class="string">"GET / "</span>)
+    || <span class="function">StrContains</span>(HTTP_req, <span class="string">"GET /index.htm"</span>)) {
+    webFile = SD.<span class="function">open</span>(<span class="string">"index.htm"</span>);
+}
+<span class="keyword">else if</span> (<span class="function">StrContains</span>(HTTP_req, <span class="string">"GET /page2.htm"</span>)) {
+    webFile = SD.<span class="function">open</span>(<span class="string">"page2.htm"</span>);
+}
+                </div>
+
+                <div class="info-box">
+                    <strong>🔍 Lógica de Selección:</strong>
+                    <table style="margin-top: 15px;">
+                        <tr>
+                            <th>Si la petición contiene...</th>
+                            <th>Entonces abre...</th>
+                        </tr>
+                        <tr>
+                            <td><code>"GET / "</code></td>
+                            <td><code>index.htm</code> (página raíz)</td>
+                        </tr>
+                        <tr>
+                            <td><code>"GET /index.htm"</code></td>
+                            <td><code>index.htm</code> (petición directa)</td>
+                        </tr>
+                        <tr>
+                            <td><code>"GET /page2.htm"</code></td>
+                            <td><code>page2.htm</code> (segunda página)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Nota sobre "GET / ":</strong>
+                    <p>El espacio después de <code>/</code> es importante. Buscamos <code>"GET / "</code> (con espacio) para no confundirlo con <code>"GET /page2.htm"</code> que también contiene <code>"GET /"</code> pero sin espacio inmediatamente después.</p>
+                </div>
+
+                <h3>5. Función StrContains (Búsqueda de Cadenas)</h3>
+                <div class="code-block arduino">
+<span class="type">char</span> <span class="function">StrContains</span>(<span class="type">char</span> *str, <span class="type">char</span> *sfind)
+{
+    <span class="comment">// Busca sfind dentro de str
+    // Retorna 1 si la encuentra, 0 si no</span>
+    <span class="type">char</span> found = <span class="number">0</span>;     <span class="comment">// Contador de caracteres coincidentes</span>
+    <span class="type">char</span> index = <span class="number">0</span>;     <span class="comment">// Posición actual en str</span>
+    
+    <span class="keyword">while</span> (index < <span class="function">strlen</span>(str)) {
+        <span class="keyword">if</span> (str[index] == sfind[found]) {
+            found++;  <span class="comment">// Coincidencia, incrementar</span>
+            <span class="keyword">if</span> (<span class="function">strlen</span>(sfind) == found) {
+                <span class="keyword">return</span> <span class="number">1</span>;  <span class="comment">// Encontrada completamente</span>
+            }
+        }
+        <span class="keyword">else</span> {
+            found = <span class="number">0</span>;  <span class="comment">// No coincide, resetear</span>
+        }
+        index++;
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;  <span class="comment">// No encontrada</span>
+}
+                </div>
+
+                <div class="visual-diagram">
+                    <h4>Ejemplo de StrContains en Acción</h4>
+                    <div style="font-family: 'Courier New'; background: #1e1e1e; color: #fff; padding: 20px; text-align: left; border-radius: 8px;">
+                        <p style="color: #4ec9b0;">str = "GET /page2.htm HTTP"</p>
+                        <p style="color: #f5576c;">sfind = "page2"</p>
+                        <p style="color: #6a9955; margin-top: 15px;">// Búsqueda:</p>
+                        <p>index=0: 'G' ≠ 'p' → found=0</p>
+                        <p>index=1: 'E' ≠ 'p' → found=0</p>
+                        <p>...</p>
+                        <p>index=5: 'p' = 'p' → found=1</p>
+                        <p>index=6: 'a' = 'a' → found=2</p>
+                        <p>index=7: 'g' = 'g' → found=3</p>
+                        <p>index=8: 'e' = 'e' → found=4</p>
+                        <p>index=9: '2' = '2' → found=5</p>
+                        <p style="color: #4caf50; margin-top: 10px;">→ found = strlen("page2") → ¡ENCONTRADO! Retorna 1</p>
+                    </div>
+                </div>
+
+                <h3>6. Envío del Archivo al Cliente</h3>
+                <div class="code-block arduino">
+<span class="keyword">if</span> (webFile) {
+    <span class="keyword">while</span>(webFile.<span class="function">available</span>()) {
+        client.<span class="function">write</span>(webFile.<span class="function">read</span>());
+    }
+    webFile.<span class="function">close</span>();
+}
+                </div>
+
+                <div class="info-box">
+                    <strong>📤 Proceso de Envío:</strong>
+                    <ol style="margin: 15px 0 0 25px;">
+                        <li>Verifica que el archivo se abrió correctamente (<code>if (webFile)</code>)</li>
+                        <li>Lee byte por byte del archivo (<code>webFile.read()</code>)</li>
+                        <li>Envía cada byte al cliente (<code>client.write()</code>)</li>
+                        <li>Cierra el archivo cuando termina (<code>webFile.close()</code>)</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- CONFIGURACIÓN DE RED -->
+            <div class="section">
+                <h2><span class="icon">🔧</span> Configuración de Red</h2>
+
+                <div class="warning-box">
+                    <strong>⚠️ Importante: Ajusta la IP a tu red</strong>
+                    <p>El código usa <code>IPAddress ip(192, 168, 0, 20)</code>. Debes cambiar esto según tu red:</p>
+                </div>
+
+                <h3>¿Cómo saber qué IP usar?</h3>
+
+                <div class="step-container">
+                    <span class="step-number">1</span>
+                    <span class="step-title">Descubre la IP de tu computadora</span>
+                    <p style="margin-top: 15px;"><strong>Windows:</strong> Abre CMD y escribe <code>ipconfig</code></p>
+                    <p><strong>Mac/Linux:</strong> Abre Terminal y escribe <code>ifconfig</code></p>
+                    <div class="code-block" style="margin-top: 10px;">
+<span class="comment"># Ejemplo de salida:</span>
+IPv4 Address. . . . . . . . . : <span class="number">192.168.1.100</span>
+Subnet Mask . . . . . . . . . : <span class="number">255.255.255.0</span>
+Default Gateway . . . . . . . : <span class="number">192.168.1.1</span>
+                    </div>
+                </div>
+
+                <div class="step-container">
+                    <span class="step-number">2</span>
+                    <span class="step-title">Elige una IP similar pero diferente</span>
+                    <p style="margin-top: 15px;">Si tu PC es <code>192.168.1.100</code>, usa para Arduino:</p>
+                    <div class="code-block arduino" style="margin-top: 10px;">
+<span class="type">IPAddress</span> ip(<span class="number">192</span>, <span class="number">168</span>, <span class="number">1</span>, <span class="number">177</span>);  <span class="comment">// Último número diferente</span>
+                    </div>
+                    <div class="info-box" style="margin-top: 15px;">
+                        <strong>💡 Consejos:</strong>
+                        <ul style="margin: 10px 0 0 25px;">
+                            <li>Mantén los primeros 3 números iguales a tu PC</li>
+                            <li>Cambia solo el último número</li>
+                            <li>Usa un número entre 2 y 254</li>
+                            <li>Evita números ya usados (100-200 suelen estar libres)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <table>
+                    <tr>
+                        <th>Red de Ejemplo</th>
+                        <th>IP del Arduino</th>
+                    </tr>
+                    <tr>
+                        <td>192.168.0.x</td>
+                        <td><code>IPAddress ip(192, 168, 0, 20);</code></td>
+                    </tr>
+                    <tr>
+                        <td>192.168.1.x</td>
+                        <td><code>IPAddress ip(192, 168, 1, 177);</code></td>
+                    </tr>
+                    <tr>
+                        <td>10.0.0.x</td>
+                        <td><code>IPAddress ip(10, 0, 0, 88);</code></td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- PRUEBAS -->
+            <div class="section">
+                <h2><span class="icon">🧪</span> Probando el Servidor</h2>
+
+                <div class="step-container">
+                    <span class="step-number">1</span>
+                    <span class="step-title">Sube el sketch al Arduino</span>
+                    <p style="margin-top: 15px;">Compila y sube el código usando el Arduino IDE.</p>
+                </div>
+
+                <div class="step-container">
+                    <span class="step-number">2</span>
+                    <span class="step-title">Conecta el cable Ethernet</span>
+                    <p style="margin-top: 15px;">Conecta el Ethernet Shield a tu router/switch con un cable Ethernet.</p>
+                </div>
+
+                <div class="step-container">
+                    <span class="step-number">3</span>
+                    <span class="step-title">Abre el Monitor Serial</span>
+                    <p style="margin-top: 15px;">En Arduino IDE: <strong>Herramientas → Monitor Serial</strong> (9600 baudios)</p>
+                    <div class="success-box" style="margin-top: 15px;">
+                        <strong>✅ Deberías ver:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+Inicializando tarjeta SD...
+ÉXITO - Tarjeta SD inicializada.
+ÉXITO - Encontrado index.htm.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-container">
+                    <span class="step-number">4</span>
+                    <span class="step-title">Accede desde tu navegador</span>
+                    <p style="margin-top: 15px;">Abre un navegador web y escribe la IP del Arduino:</p>
+                    <div class="code-block" style="margin-top: 10px;">
+http://192.168.0.20/
+                    </div>
+                    <p style="margin-top: 10px;">(Usa la IP que configuraste en el código)</p>
+                </div>
+
+                <div class="step-container">
+                    <span class="step-number">5</span>
+                    <span class="step-title">Prueba los enlaces</span>
+                    <p style="margin-top: 15px;">
+                        ✓ Deberías ver la página principal con el enlace "page 2"<br>
+                        ✓ Click en "page 2" debería llevarte a la segunda página<br>
+                        ✓ Click en "main page" debería regresar a index.htm
+                    </p>
+                </div>
+
+                <div class="success-box">
+                    <strong>🎉 ¡Funciona! Ahora tienes un sitio web con navegación en tu Arduino</strong>
+                </div>
+            </div>
+
+            <!-- MEJORAS -->
+            <div class="section">
+                <h2><span class="icon">🚀</span> Mejoras Posibles</h2>
+
+                <h3>1. Manejo de Páginas No Encontradas (Error 404)</h3>
+                <div class="code-block arduino">
+<span class="comment">// Agregar después de verificar page2.htm:</span>
+<span class="keyword">else</span> {
+    <span class="comment">// Página no encontrada</span>
+    client.<span class="function">println</span>(<span class="string">"HTTP/1.1 404 Not Found"</span>);
+    client.<span class="function">println</span>(<span class="string">"Content-Type: text/html"</span>);
+    client.<span class="function">println</span>();
+    client.<span class="function">println</span>(<span class="string">"&lt;h1&gt;404 - Página No Encontrada&lt;/h1&gt;"</span>);
+}
+                </div>
+
+                <h3>2. Extracción Dinámica del Nombre de Archivo</h3>
+                <p>En lugar de verificar cada página manualmente, extraer el nombre del archivo de la petición HTTP:</p>
+                <div class="code-block arduino">
+<span class="comment">// Función para extraer nombre de archivo de petición HTTP</span>
+<span class="keyword">void</span> <span class="function">GetFileName</span>(<span class="type">char</span>* HTTP_req, <span class="type">char</span>* filename) {
+    <span class="comment">// Buscar después de "GET /"</span>
+    <span class="comment">// Copiar hasta el espacio</span>
+    <span class="comment">// Si es solo "/", usar "index.htm"</span>
+}
+                </div>
+
+                <h3>3. Agregar Más Páginas</h3>
+                <p>Simplemente crea más archivos .htm y agrégalos a la tarjeta SD. El código automáticamente los podrá servir si modificas la lógica de selección.</p>
+
+                <h3>4. Agregar CSS y JavaScript</h3>
+                <p>Puedes crear archivos .css y .js en la SD y enlazarlos desde tus páginas HTML.</p>
+
+                <div class="code-block html">
+<span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;link</span> <span class="attribute">rel</span>=<span class="string">"stylesheet"</span> <span class="attribute">href</span>=<span class="string">"style.css"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;script</span> <span class="attribute">src</span>=<span class="string">"script.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+                </div>
+            </div>
+
+            <!-- SOLUCIÓN DE PROBLEMAS -->
+            <div class="section">
+                <h2><span class="icon">🔧</span> Solución de Problemas</h2>
+
+                <h3>Problema: "ERROR - SD card initialization failed"</h3>
+                <div class="danger-box">
+                    <strong>❌ Posibles causas:</strong>
+                    <ul style="margin: 10px 0 0 25px;">
+                        <li>Tarjeta SD no insertada correctamente</li>
+                        <li>Tarjeta formateada en FAT32 en lugar de FAT16</li>
+                        <li>Tarjeta dañada o incompatible</li>
+                        <li>Contactos sucios</li>
+                    </ul>
+                </div>
+                <div class="success-box">
+                    <strong>✅ Soluciones:</strong>
+                    <ul style="margin: 10px 0 0 25px;">
+                        <li>Reformatea la tarjeta en FAT16</li>
+                        <li>Usa una tarjeta de 2GB o menor</li>
+                        <li>Limpia los contactos con alcohol isopropílico</li>
+                        <li>Verifica que el pin 4 no esté siendo usado por otro shield</li>
+                    </ul>
+                </div>
+
+                <h3>Problema: "ERROR - Can't find index.htm file"</h3>
+                <div class="danger-box">
+                    <strong>❌ Posibles causas:</strong>
+                    <ul style="margin: 10px 0 0 25px;">
+                        <li>Archivo no está en la SD</li>
+                        <li>Nombre incorrecto (debe ser index.htm, no index.html)</li>
+                        <li>Archivo en una carpeta en lugar de la raíz</li>
+                    </ul>
+                </div>
+
+                <h3>Problema: La página carga pero los enlaces no funcionan</h3>
+                <div class="warning-box">
+                    <strong>⚠️ Verificar:</strong>
+                    <ul style="margin: 10px 0 0 25px;">
+                        <li>Que page2.htm exista en la SD</li>
+                        <li>Que el nombre en el enlace coincida exactamente con el archivo</li>
+                        <li>Que el código incluya la verificación para page2.htm</li>
+                        <li>Monitor Serial para ver qué petición HTTP está llegando</li>
+                    </ul>
+                </div>
+
+                <h3>Problema: No puedo acceder al servidor desde el navegador</h3>
+                <div class="success-box">
+                    <strong>✅ Checklist:</strong>
+                    <ul style="margin: 10px 0 0 25px;">
+                        <li>Arduino y PC están en la misma red</li>
+                        <li>La IP del Arduino está correctamente configurada</li>
+                        <li>Cable Ethernet bien conectado (LEDs del puerto parpadean)</li>
+                        <li>Firewall no está bloqueando la conexión</li>
+                        <li>Prueba hacer ping desde CMD: <code>ping 192.168.0.20</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- RESUMEN -->
+            <div class="section" style="border-left-color: #4caf50; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);">
+                <h2><span class="icon" style="background: #4caf50;">✓</span> Resumen del Tutorial</h2>
+                
+                <h3>Lo que aprendiste:</h3>
+                <ul style="margin: 15px 0 15px 25px; line-height: 2;">
+                    <li>✅ Cómo crear enlaces HTML con la etiqueta <code>&lt;a&gt;</code></li>
+                    <li>✅ Cómo servir múltiples páginas desde una tarjeta SD</li>
+                    <li>✅ Cómo interpretar peticiones HTTP (GET / vs GET /archivo.htm)</li>
+                    <li>✅ Cómo usar funciones de búsqueda de cadenas para seleccionar páginas</li>
+                    <li>✅ Cómo configurar correctamente la red del Arduino</li>
+                </ul>
+
+                <h3>Próximos pasos:</h3>
+                <ul style="margin: 15px 0 15px 25px; line-height: 2;">
+                    <li>🎨 Agregar estilos CSS a tus páginas</li>
+                    <li>🖼️ Incluir imágenes en tus páginas web</li>
+                    <li>📊 Mostrar datos de sensores en tiempo real</li>
+                    <li>🎛️ Controlar LEDs y relés desde la página web</li>
+                    <li>📡 Implementar AJAX para actualizaciones dinámicas</li>
+                </ul>
+
+                <div class="visual-diagram">
+                    <h4>🎓 Arquitectura Final del Proyecto</h4>
+                    <div style="text-align: left; max-width: 600px; margin: 20px auto;">
+                        <div class="flow-step" style="display: block; text-align: center;">🌐 Navegador Web</div>
+                        <div class="arrow">↓</div>
+                        <div class="flow-step" style="display: block; text-align: center;">📡 Petición HTTP<br/>(GET /page2.htm)</div>
+                        <div class="arrow">↓</div>
+                        <div class="flow-step" style="display: block; text-align: center;">🔷 Arduino + Ethernet Shield</div>
+                        <div class="arrow">↓</div>
+                        <div class="flow-step" style="display: block; text-align: center;">💾 Tarjeta SD<br/>(index.htm, page2.htm)</div>
+                        <div class="arrow">↓</div>
+                        <div class="flow-step" style="display: block; text-align: center;">📤 Respuesta HTTP<br/>(Archivo HTML)</div>
+                        <div class="arrow">↓</div>
+                        <div class="flow-step" style="display: block; text-align: center;">🌐 Navegador Muestra Página</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center;">
+            <h2 style="margin-bottom: 15px;">🎉 ¡Felicitaciones!</h2>
+            <p style="font-size: 1.2em;">Ahora tienes un servidor web completo funcionando en tu Arduino</p>
+            <p style="margin-top: 20px; opacity: 0.9;">Tutorial basado en Starting Electronics - Adaptado y traducido</p>
+        </footer>
+    </div>
+</body>
+</html>

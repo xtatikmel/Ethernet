@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Completa: Sistema de Monitoreo Solar con Arduino</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a56 0%, #ffcd3c 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 50px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            border-left: 5px solid #f5576c;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .section h2 {
+            color: #f5576c;
+            margin-bottom: 25px;
+            font-size: 2.2em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section h3 {
+            color: #764ba2;
+            margin: 30px 0 20px 0;
+            font-size: 1.6em;
+            border-bottom: 2px solid #764ba2;
+            padding-bottom: 10px;
+        }
+        
+        .section h4 {
+            color: #ff9a56;
+            margin: 20px 0 15px 0;
+            font-size: 1.3em;
+        }
+        
+        .icon {
+            width: 60px;
+            height: 60px;
+            background: #f5576c;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+            border-left: 5px solid #4caf50;
+        }
+        
+        .keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .string {
+            color: #ce9178;
+        }
+        
+        .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .number {
+            color: #b5cea8;
+        }
+        
+        .function {
+            color: #dcdcaa;
+        }
+        
+        .type {
+            color: #4ec9b0;
+        }
+        
+        .materials-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 3px solid #4caf50;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+        
+        .materials-box h3 {
+            color: #2e7d32;
+            margin-top: 0;
+            border: none;
+            padding: 0;
+        }
+        
+        .component-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .component-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+            border-color: #4caf50;
+        }
+        
+        .component-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .component-icon {
+            width: 50px;
+            height: 50px;
+            background: #4caf50;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+        
+        .component-title {
+            font-size: 1.3em;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        
+        .component-specs {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .component-specs ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .component-specs li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .component-specs li:last-child {
+            border-bottom: none;
+        }
+        
+        .component-specs strong {
+            color: #2e7d32;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #2196f3;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+        }
+        
+        .info-box strong {
+            color: #1565c0;
+            font-size: 1.2em;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 5px solid #ff9800;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+        }
+        
+        .warning-box strong {
+            color: #e65100;
+            font-size: 1.2em;
+        }
+        
+        .tip-box {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            border-left: 5px solid #9c27b0;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+        }
+        
+        .tip-box strong {
+            color: #6a1b9a;
+            font-size: 1.2em;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: #f5576c;
+            color: white;
+            padding: 18px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        td {
+            padding: 15px 18px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .architecture-diagram {
+            background: white;
+            border: 3px solid #f5576c;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .arch-box {
+            background: #f5576c;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 15px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-size: 1.1em;
+        }
+        
+        .arch-arrow {
+            font-size: 2.5em;
+            color: #f5576c;
+            margin: 15px;
+        }
+        
+        .flow-diagram {
+            background: #f8f9fa;
+            border: 2px dashed #764ba2;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+        
+        .flow-step {
+            background: white;
+            border: 2px solid #764ba2;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            position: relative;
+            padding-left: 70px;
+        }
+        
+        .flow-number {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #764ba2;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .wiring-table {
+            background: #fff;
+            border: 2px solid #ff9800;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .wiring-table h4 {
+            color: #e65100;
+            margin-top: 0;
+        }
+        
+        .price-tag {
+            background: #4caf50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        
+        .highlight {
+            background: #fff59d;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .circuit-diagram {
+            background: white;
+            border: 3px solid #2196f3;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .circuit-diagram h4 {
+            color: #1565c0;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .arch-box {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌞 Sistema de Monitoreo Solar</h1>
+            <p class="subtitle">Guía Completa del Código y Componentes Necesarios</p>
+        </header>
+        
+        <div class="content">
+            
+            <!-- RESUMEN EJECUTIVO -->
+            <div class="section">
+                <h2><span class="icon">📋</span> ¿Qué hace este sistema?</h2>
+                
+                <p style="font-size: 1.2em; line-height: 1.8;">Este código implementa un <strong>sistema completo de monitoreo de energía solar</strong> que mide y muestra en tiempo real:</p>
+                
+                <div class="architecture-diagram">
+                    <h3 style="color: #f5576c; margin-bottom: 30px;">Arquitectura del Sistema</h3>
+                    <div>
+                        <div class="arch-box" style="background: #ff9800;">☀️ Panel Solar</div>
+                        <div class="arch-arrow">→</div>
+                        <div class="arch-box" style="background: #4caf50;">🔋 Batería</div>
+                        <div class="arch-arrow">→</div>
+                        <div class="arch-box" style="background: #2196f3;">⚡ Cargas</div>
+                    </div>
+                    <div class="arch-arrow" style="transform: rotate(90deg);">↓</div>
+                    <div>
+                        <div class="arch-box" style="background: #9c27b0;">Arduino + Sensores</div>
+                        <div class="arch-arrow">→</div>
+                        <div class="arch-box" style="background: #f5576c;">Servidor Web</div>
+                        <div class="arch-arrow">→</div>
+                        <div class="arch-box" style="background: #00bcd4;">📱 Navegador</div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>🎯 Funcionalidades Principales:</strong>
+                    <ul style="margin: 15px 0 0 25px; font-size: 1.1em;">
+                        <li>✅ <strong>Medición de Voltaje:</strong> Panel solar, batería y cargas</li>
+                        <li>✅ <strong>Medición de Corriente:</strong> En los tres puntos del sistema</li>
+                        <li>✅ <strong>Cálculo de Potencia:</strong> Automático (V × I)</li>
+                        <li>✅ <strong>LEDs Indicadores:</strong> Estado visual del sistema</li>
+                        <li>✅ <strong>Servidor Web:</strong> Monitoreo remoto desde cualquier dispositivo</li>
+                        <li>✅ <strong>Actualización en Tiempo Real:</strong> Vía AJAX/JSON</li>
+                        <li>✅ <strong>Almacenamiento en SD:</strong> Página web personalizable</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- COMPONENTES NECESARIOS -->
+            <div class="section">
+                <h2><span class="icon">🛒</span> Lista de Componentes Necesarios</h2>
+                
+                <div class="materials-box">
+                    <h3>📦 Hardware Principal</h3>
+                    
+                    <div class="component-card">
+                        <div class="component-header">
+                            <div class="component-icon">🔷</div>
+                            <div class="component-title">1. Arduino Uno (o compatible)</div>
+                        </div>
+                        <div class="component-specs">
+                            <ul>
+                                <li><strong>Función:</strong> Cerebro del sistema</li>
+                                <li><strong>Especificación:</strong> ATmega328P, 16MHz</li>
+                                <li><strong>Cantidad:</strong> 1 unidad</li>
+                                <li><strong>Precio aprox:</strong> <span class="price-tag">$15 - $25 USD</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="component-card">
+                        <div class="component-header">
+                            <div class="component-icon">🌐</div>
+                            <div class="component-title">2. Arduino Ethernet Shield W5100</div>
+                        </div>
+                        <div class="component-specs">
+                            <ul>
+                                <li><strong>Función:</strong> Conectividad de red y almacenamiento</li>
+                                <li><strong>Chip:</strong> W5100 (Ethernet)</li>
+                                <li><strong>Incluye:</strong> Lector de tarjeta micro SD</li>
+                                <li><strong>Cantidad:</strong> 1 unidad</li>
+                                <li><strong>Precio aprox:</strong> <span class="price-tag">$20 - $35 USD</span></li>
+                            </ul>
+                        </div>
+                        <div class="warning-box">
+                            <strong>⚠️ Importante:</strong> Asegúrate de comprar el shield W5100 oficial o compatible de buena calidad. Los clones baratos pueden tener problemas de compatibilidad.
+                        </div>
+                    </div>
+
+                    <div class="component-card">
+                        <div class="component-header">
+                            <div class="component-icon">⚡</div>
+                            <div class="component-title">3. Sensores de Corriente ACS712-05B</div>
+                        </div>
+                        <div class="component-specs">
+                            <ul>
+                                <li><strong>Función:</strong> Medir corriente AC/DC</li>
+                                <li><strong>Rango:</strong> -5A a +5A</li>
+                                <li><strong>Sensibilidad:</strong> 185mV/A</li>
+                                <li><strong>Voltaje operación:</strong> 5V</li>
+                                <li><strong>Cantidad:</strong> 3 unidades (panel, batería, carga)</li>
+                                <li><strong>Precio aprox:</strong> <span class="price-tag">$3 - $5 USD c/u</span></li>
+                            </ul>
+                        </div>
+                        <div class="info-box">
+                            <strong>💡 Alternativas:</strong>
+                            <ul style="margin: 10px 0 0 25px;">
+                                <li><strong>ACS712-20B:</strong> Si necesitas medir hasta 20A (sensibilidad 100mV/A)</li>
+                                <li><strong>ACS712-30B:</strong> Para corrientes hasta 30A (sensibilidad 66mV/A)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="component-card">
+                        <div class="component-header">
+                            <div class="component-icon">🔋</div>
+                            <div class="component-title">4. Resistencias para Divisores de Voltaje</div>
+                        </div>
+                        <div class="component-specs">
+                            <ul>
+                                <li><strong>Función:</strong> Reducir voltajes DC para Arduino</li>
+                                <li><strong>Configuración:</strong> Divisor 5:1 (para medir hasta 25V)</li>
+                                <li><strong>Valores sugeridos:</strong> 
+                                    <ul style="margin-top: 10px;">
+                                        <li>R1 = 100kΩ (hacia voltaje a medir)</li>
+                                        <li>R2 = 25kΩ (hacia GND)</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Cantidad:</strong> 3 divisores (6 resistencias)</li>
+                                <li><strong>Precio aprox:</strong> <span class="price-tag">$0.10 USD c/u</span></li>
+                            </ul>
+                        </div>
+                        <div class="circuit-diagram">
+                            <h4>Esquema de Divisor de Voltaje</h4>
+                            <div class="code-block" style="background: white; color: #333; border-color: #2196f3;">
+<pre style="margin: 0; line-height: 2;">
+    Voltaje a medir (12-24V)
+           |
+           |
+         [R1] 100kΩ
+           |
+           |----→ A Pin Analógico Arduino (0-5V)
+           |
+         [R2] 25kΩ
+           |
+          GND
+
+Fórmula: Vout = Vin × (R2 / (R1 + R2))
+Relación: 25kΩ / (100kΩ + 25kΩ) = 1/5
+Por lo tanto: Vreal = Vmedido × 5
+</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="component-card">
+                        <div class="component-header">
+                            <div class="component-icon">💡</div>
+                            <div class="component-title">5. LEDs Indicadores</div>
+                        </div>
+                        <div class="component-specs">
+                            <ul>
+                                <li><strong>Función:</strong> Indicadores visuales de estado</li>
+                                <li><strong>Tipos necesarios:</strong>
+                                    <ul style="margin-top: 10px;">
+                                        <li>3 LEDs Verdes (estado OK)</li>
+                                        <li>3 LEDs Rojos (estado Alerta)</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Especificación:</strong> 5mm, 20mA, 2V típico</li>
+                                <li><strong>Resistencias:</strong> 6× 220Ω (limitadoras de corriente)</li>
+                                <li><strong>Precio aprox:</strong> <span class="price-tag">$0.10 USD c/u</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="component-card">
+                        <div class="component-header">
+                            <div class="component-icon">💾</div>
+                            <div class="component-title">6. Tarjeta Micro SD</div>
+                        </div>
+                        <div class="component-specs">
+                            <ul>
+                                <li><strong>Función:</strong> Almacenar archivos HTML/CSS/JS</li>
+                                <li><strong>Capacidad:</strong> 2GB (recomendado)</li>
+                                <li><strong>Formato:</strong> FAT16 (obligatorio)</li>
+                                <li><strong>Cantidad:</strong> 1 unidad</li>
+                                <li><strong>Precio aprox:</strong> <span class="price-tag">$3 - $5 USD</span></li>
+                            </ul>
+                        </div>
+                        <div class="warning-box">
+                            <strong>⚠️ Formato crítico:</strong> La tarjeta DEBE estar formateada en FAT16. Tarjetas mayores a 2GB normalmente usan FAT32 que puede causar problemas.
+                        </div>
+                    </div>
+
+                    <div class="component-card">
+                        <div class="component-header">
+                            <div class="component-icon">🔌</div>
+                            <div class="component-title">7. Cables y Conectores</div>
+                        </div>
+                        <div class="component-specs">
+                            <ul>
+                                <li><strong>Cable Ethernet:</strong> 1 unidad (para conectar a router)</li>
+                                <li><strong>Cables jumper:</strong> Macho-Macho, Macho-Hembra</li>
+                                <li><strong>Protoboard:</strong> 830 puntos (opcional, para prototipar)</li>
+                                <li><strong>Bloques de terminales:</strong> Para conexiones de potencia</li>
+                                <li><strong>Precio aprox:</strong> <span class="price-tag">$5 - $10 USD</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="component-card">
+                        <div class="component-header">
+                            <div class="component-icon">⚙️</div>
+                            <div class="component-title">8. Fuente de Alimentación</div>
+                        </div>
+                        <div class="component-specs">
+                            <ul>
+                                <li><strong>Opción 1:</strong> Adaptador 9V DC, 1A (para Arduino)</li>
+                                <li><strong>Opción 2:</strong> Conexión USB (desde computadora/power bank)</li>
+                                <li><strong>Opción 3:</strong> Desde la batería del sistema (con regulador)</li>
+                                <li><strong>Precio aprox:</strong> <span class="price-tag">$5 - $15 USD</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>💰 Resumen de Costos</h3>
+                <table>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unit.</th>
+                        <th>Subtotal</th>
+                    </tr>
+                    <tr>
+                        <td>Arduino Uno</td>
+                        <td>1</td>
+                        <td>$20</td>
+                        <td>$20</td>
+                    </tr>
+                    <tr>
+                        <td>Ethernet Shield W5100</td>
+                        <td>1</td>
+                        <td>$25</td>
+                        <td>$25</td>
+                    </tr>
+                    <tr>
+                        <td>Sensor ACS712-05B</td>
+                        <td>3</td>
+                        <td>$4</td>
+                        <td>$12</td>
+                    </tr>
+                    <tr>
+                        <td>Resistencias (divisores)</td>
+                        <td>6</td>
+                        <td>$0.10</td>
+                        <td>$0.60</td>
+                    </tr>
+                    <tr>
+                        <td>LEDs + Resistencias</td>
+                        <td>12</td>
+                        <td>$0.15</td>
+                        <td>$1.80</td>
+                    </tr>
+                    <tr>
+                        <td>Tarjeta Micro SD 2GB</td>
+                        <td>1</td>
+                        <td>$4</td>
+                        <td>$4</td>
+                    </tr>
+                    <tr>
+                        <td>Cables y conectores</td>
+                        <td>1</td>
+                        <td>$8</td>
+                        <td>$8</td>
+                    </tr>
+                    <tr>
+                        <td>Fuente de alimentación</td>
+                        <td>1</td>
+                        <td>$10</td>
+                        <td>$10</td>
+                    </tr>
+                    <tr style="background: #4caf50; color: white; font-weight: bold; font-size: 1.2em;">
+                        <td colspan="3">TOTAL ESTIMADO</td>
+                        <td>~$81</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- ESTRUCTURA DEL CÓDIGO -->
+            <div class="section">
+                <h2><span class="icon">📝</span> Estructura del Código</h2>
+                
+                <div class="flow-diagram">
+                    <h3 style="color: #764ba2; margin-bottom: 20px;">Organización del Programa</h3>
+                    
+                    <div class="flow-step">
+                        <div class="flow-number">1</div>
+                        <strong>Bibliotecas y Definiciones</strong>
+                        <p>Importa SPI, Ethernet, SD. Define constantes y pines.</p>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="flow-number">2</div>
+                        <strong>Variables Globales</strong>
+                        <p>Configuración de red, buffers HTTP, variables de medición.</p>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="flow-number">3</div>
+                        <strong>setup()</strong>
+                        <p>Inicialización: Serial, SD, LEDs, Ethernet, Servidor Web.</p>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="flow-number">4</div>
+                        <strong>loop()</strong>
+                        <p>Ciclo principal: Leer sensores → Controlar LEDs → Atender clientes web.</p>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="flow-number">5</div>
+                        <strong>Funciones de Medición</strong>
+                        <p>leerCorriente(), leerVoltaje(), leerCorrienteBidireccional().</p>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="flow-number">6</div>
+                        <strong>Funciones de Control</strong>
+                        <p>controlarLEDs(), testLEDs().</p>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="flow-number">7</div>
+                        <strong>Funciones Web</strong>
+                        <p>manejarClienteWeb(), servirArchivo(), enviarDatosJSON().</p>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="flow-number">8</div>
+                        <strong>Funciones Auxiliares</strong>
+                        <p>StrContains(), StrClear() para manejo de strings.</p>
+                    </div>
+                </div>
+
+                <h3>1️⃣ Bibliotecas y Constantes</h3>
+                <div class="code-block">
+<span class="keyword">#include</span> <span class="string">&lt;SPI.h&gt;</span>       <span class="comment">// Comunicación con W5100</span>
+<span class="keyword">#include</span> <span class="string">&lt;Ethernet.h&gt;</span>  <span class="comment">// Funciones de red</span>
+<span class="keyword">#include</span> <span class="string">&lt;SD.h&gt;</span>        <span class="comment">// Lectura de tarjeta SD</span>
+
+<span class="comment">// Definición de pines para LEDs (6 en total)</span>
+<span class="keyword">#define</span> LED_BAT_VERDE <span class="number">2</span>      <span class="comment">// LED verde batería OK</span>
+<span class="keyword">#define</span> LED_BAT_ROJO <span class="number">3</span>       <span class="comment">// LED rojo batería baja</span>
+<span class="keyword">#define</span> LED_CARGA_VERDE <span class="number">4</span>    <span class="comment">// LED verde carga normal</span>
+<span class="keyword">#define</span> LED_CARGA_ROJO <span class="number">5</span>     <span class="comment">// LED rojo carga alta</span>
+<span class="keyword">#define</span> LED_PANEL_VERDE <span class="number">6</span>    <span class="comment">// LED verde panel produciendo</span>
+<span class="keyword">#define</span> LED_PANEL_ROJO <span class="number">7</span>     <span class="comment">// LED rojo panel sin producción</span>
+
+<span class="comment">// Pines analógicos para sensores de corriente (3)</span>
+<span class="keyword">#define</span> PIN_PANEL <span class="number">A0</span>         <span class="comment">// ACS712 del panel</span>
+<span class="keyword">#define</span> PIN_BATERIA <span class="number">A1</span>       <span class="comment">// ACS712 de la batería</span>
+<span class="keyword">#define</span> PIN_CARGA <span class="number">A2</span>         <span class="comment">// ACS712 de la carga</span>
+
+<span class="comment">// Pines analógicos para divisores de voltaje (3)</span>
+<span class="keyword">#define</span> PIN_VOLTAJE_PANEL <span class="number">A3</span>
+<span class="keyword">#define</span> PIN_VOLTAJE_BATERIA <span class="number">A4</span>
+<span class="keyword">#define</span> PIN_VOLTAJE_CARGA <span class="number">A5</span>
+
+<span class="comment">// Constantes para cálculos</span>
+<span class="keyword">#define</span> MUESTRAS <span class="number">1000</span>           <span class="comment">// Muestras para RMS</span>
+<span class="keyword">#define</span> MV_POR_AMP <span class="number">185.0</span>       <span class="comment">// Sensibilidad ACS712-05B</span>
+<span class="keyword">#define</span> OFFSET_VOLTAJE <span class="number">2500</span>    <span class="comment">// 2.5V centro del ACS712</span>
+<span class="keyword">#define</span> RELACION_DIVISOR <span class="number">5.0</span>   <span class="comment">// Divisor 5:1</span>
+                </div>
+
+                <div class="info-box">
+                    <strong>🔍 Detalles Importantes:</strong>
+                    <ul style="margin: 15px 0 0 25px;">
+                        <li><strong>MUESTRAS = 1000:</strong> Para cálculo preciso de corriente RMS</li>
+                        <li><strong>MV_POR_AMP = 185.0:</strong> Específico para ACS712-05B. Cambiar si usas otro modelo</li>
+                        <li><strong>OFFSET_VOLTAJE = 2500:</strong> El ACS712 centra en 2.5V (0A = 2.5V)</li>
+                        <li><strong>RELACION_DIVISOR = 5.0:</strong> Si mides 5V en Arduino, el voltaje real es 25V</li>
+                    </ul>
+                </div>
+
+                <h3>2️⃣ Variables Globales de Medición</h3>
+                <div class="code-block">
+<span class="comment">// Variables para almacenar mediciones actuales</span>
+<span class="type">float</span> corrientePanel = <span class="number">0</span>;
+<span class="type">float</span> corrienteBateria = <span class="number">0</span>;  <span class="comment">// Positiva = carga, Negativa = descarga</span>
+<span class="type">float</span> corrienteCarga = <span class="number">0</span>;
+<span class="type">float</span> voltajePanel = <span class="number">0</span>;
+<span class="type">float</span> voltajeBateria = <span class="number">0</span>;
+<span class="type">float</span> voltajeCarga = <span class="number">0</span>;
+
+<span class="comment">// Banderas de estado del sistema</span>
+<span class="type">bool</span> ethernetOK = <span class="keyword">false</span>;
+<span class="type">bool</span> sdOK = <span class="keyword">false</span>;
+                </div>
+
+                <div class="tip-box">
+                    <strong>💡 Corriente Bidireccional:</strong>
+                    <p>La batería puede <strong>cargar</strong> (corriente positiva desde el panel) o <strong>descargar</strong> (corriente negativa hacia las cargas). El código maneja ambos casos.</p>
+                </div>
+
+                <h3>3️⃣ Función setup() - Inicialización</h3>
+                <div class="code-block">
+<span class="keyword">void</span> <span class="function">setup</span>() {
+  Serial.<span class="function">begin</span>(<span class="number">9600</span>);
+  Serial.<span class="function">println</span>(F(<span class="string">"Iniciando sistema..."</span>));
+  
+  <span class="comment">// ✅ CRÍTICO: Pin 10 controla CS del W5100</span>
+  <span class="function">pinMode</span>(<span class="number">10</span>, OUTPUT);
+  <span class="function">digitalWrite</span>(<span class="number">10</span>, HIGH);  <span class="comment">// HIGH = SD activa</span>
+  
+  <span class="comment">// ✅ Inicializar SD PRIMERO</span>
+  <span class="keyword">if</span> (!SD.<span class="function">begin</span>(<span class="number">4</span>)) {
+    Serial.<span class="function">println</span>(F(<span class="string">"ERROR - SD no inicializada"</span>));
+    <span class="keyword">return</span>;
+  }
+  
+  <span class="comment">// Verificar archivo index.htm</span>
+  <span class="keyword">if</span> (!SD.<span class="function">exists</span>(<span class="string">"index.htm"</span>)) {
+    Serial.<span class="function">println</span>(F(<span class="string">"ERROR - index.htm no encontrado"</span>));
+    <span class="keyword">return</span>;
+  }
+  
+  <span class="comment">// Configurar pines de LEDs como salidas</span>
+  <span class="function">pinMode</span>(LED_BAT_VERDE, OUTPUT);
+  <span class="comment">// ... (los otros 5 LEDs)</span>
+  
+  <span class="comment">// Test visual de LEDs</span>
+  <span class="function">testLEDs</span>();
+  
+  <span class="comment">// ✅ Cambiar a Ethernet</span>
+  <span class="function">digitalWrite</span>(<span class="number">10</span>, LOW);   <span class="comment">// LOW = Ethernet activo</span>
+  
+  <span class="comment">// Inicializar Ethernet</span>
+  <span class="keyword">if</span> (Ethernet.<span class="function">begin</span>(mac) == <span class="number">0</span>) {
+    Serial.<span class="function">println</span>(F(<span class="string">"DHCP falló, usando IP estática"</span>));
+    Ethernet.<span class="function">begin</span>(mac, ip);
+  }
+  
+  server.<span class="function">begin</span>();  <span class="comment">// Iniciar servidor web</span>
+  Serial.<span class="function">println</span>(F(<span class="string">"Sistema listo"</span>));
+}
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ CRÍTICO - Control del Pin 10:</strong>
+                    <p>El pin 10 es el CS (Chip Select) del W5100 que controla si está activo SD o Ethernet:</p>
+                    <ul style="margin: 10px 0 0 25px;">
+                        <li><code>digitalWrite(10, HIGH)</code> → SD activa, Ethernet deshabilitado</li>
+                        <li><code>digitalWrite(10, LOW)</code> → Ethernet activo, SD deshabilitado</li>
+                    </ul>
+                    <p style="margin-top: 10px;">Debes cambiar entre ellos según qué estés usando. <strong>No puedes usar ambos simultáneamente.</strong></p>
+                </div>
+
+                <h3>4️⃣ Función loop() - Ciclo Principal</h3>
+                <div class="code-block">
+<span class="keyword">void</span> <span class="function">loop</span>() {
+  <span class="comment">// 1. Leer todos los sensores</span>
+  <span class="function">leerSensores</span>();
+  
+  <span class="comment">// 2. Actualizar LEDs según valores leídos</span>
+  <span class="function">controlarLEDs</span>();
+  
+  <span class="comment">// 3. Atender peticiones web (si Ethernet está OK)</span>
+  <span class="keyword">if</span> (ethernetOK) {
+    <span class="function">manejarClienteWeb</span>();
+  }
+  
+  <span class="function">delay</span>(<span class="number">100</span>);  <span class="comment">// Pequeña pausa</span>
+}
+                </div>
+
+                <div class="info-box">
+                    <strong>🔄 Ciclo de Ejecución:</strong>
+                    <p>El loop se ejecuta continuamente (aproximadamente 10 veces por segundo con el delay de 100ms):</p>
+                    <ol style="margin: 10px 0 0 25px;">
+                        <li>Lee voltajes y corrientes de panel, batería y carga</li>
+                        <li>Enciende/apaga LEDs según los valores</li>
+                        <li>Si hay un cliente web conectado, responde sus peticiones</li>
+                        <li>Repite infinitamente</li>
+                    </ol>
+                </div>
+
+                <h3>5️⃣ Medición de Corriente (ACS712)</h3>
+                <div class="code-block">
+<span class="type">float</span> <span class="function">leerCorriente</span>(<span class="type">int</span> pin) {
+  <span class="type">float</span> suma = <span class="number">0</span>;
+  
+  <span class="comment">// Tomar 1000 muestras para cálculo RMS</span>
+  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i < MUESTRAS; i++) {
+    <span class="type">int</span> valor = <span class="function">analogRead</span>(pin);  <span class="comment">// 0-1023</span>
+    
+    <span class="comment">// Convertir a voltaje en mV</span>
+    <span class="type">float</span> voltaje = (valor / <span class="number">1023.0</span>) * <span class="number">5000</span>;
+    
+    <span class="comment">// Calcular corriente usando la fórmula del ACS712</span>
+    <span class="type">float</span> corriente = (voltaje - OFFSET_VOLTAJE) / MV_POR_AMP;
+    
+    <span class="comment">// Sumar cuadrado (para RMS)</span>
+    suma += corriente * corriente;
+    
+    <span class="function">delayMicroseconds</span>(<span class="number">100</span>);
+  }
+  
+  <span class="comment">// Calcular RMS (raíz cuadrada de la media)</span>
+  <span class="type">float</span> corriente_rms = <span class="function">sqrt</span>(suma / MUESTRAS);
+  
+  <span class="keyword">return</span> <span class="function">fabs</span>(corriente_rms);  <span class="comment">// Valor absoluto</span>
+}
+                </div>
+
+                <div class="info-box">
+                    <strong>📊 Cálculo RMS (Root Mean Square):</strong>
+                    <p>Para corriente AC o fluctuante, el valor RMS representa el equivalente DC en potencia:</p>
+                    <div style="background: white; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <p><strong>1.</strong> Lee el sensor 1000 veces</p>
+                        <p><strong>2.</strong> Para cada lectura: calcula corriente, eleva al cuadrado, suma</p>
+                        <p><strong>3.</strong> Promedia las sumas: suma/1000</p>
+                        <p><strong>4.</strong> Raíz cuadrada del promedio = RMS</p>
+                        <p style="margin-top: 10px; color: #1565c0;"><strong>Fórmula:</strong> I_RMS = √(Σ(I²)/N)</p>
+                    </div>
+                </div>
+
+                <h3>6️⃣ Medición de Voltaje (Divisor)</h3>
+                <div class="code-block">
+<span class="type">float</span> <span class="function">leerVoltaje</span>(<span class="type">int</span> pin) {
+  <span class="type">float</span> suma = <span class="number">0</span>;
+  
+  <span class="comment">// Tomar 100 muestras y promediar</span>
+  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i < <span class="number">100</span>; i++) {
+    suma += <span class="function">analogRead</span>(pin);
+    <span class="function">delayMicroseconds</span>(<span class="number">100</span>);
+  }
+  
+  <span class="type">float</span> promedio = suma / <span class="number">100.0</span>;
+  
+  <span class="comment">// Convertir a voltaje real (0-5V)</span>
+  <span class="keyword">return</span> (promedio * <span class="number">5.0</span>) / <span class="number">1023.0</span>;
+}
+
+<span class="comment">// En leerSensores() se multiplica por RELACION_DIVISOR:</span>
+voltajePanel = <span class="function">leerVoltaje</span>(PIN_VOLTAJE_PANEL) * RELACION_DIVISOR;
+<span class="comment">// Si leerVoltaje() retorna 3.0V, voltajePanel = 15V</span>
+                </div>
+
+                <div class="info-box">
+                    <strong>🔌 Ejemplo de Cálculo de Voltaje:</strong>
+                    <table style="margin-top: 15px;">
+                        <tr>
+                            <th>Voltaje Real</th>
+                            <th>Después del Divisor</th>
+                            <th>Arduino Lee</th>
+                            <th>Código Calcula</th>
+                        </tr>
+                        <tr>
+                            <td>25V</td>
+                            <td>5V</td>
+                            <td>1023</td>
+                            <td>5.0 × 5 = 25V ✓</td>
+                        </tr>
+                        <tr>
+                            <td>12.5V</td>
+                            <td>2.5V</td>
+                            <td>512</td>
+                            <td>2.5 × 5 = 12.5V ✓</td>
+                        </tr>
+                        <tr>
+                            <td>6V</td>
+                            <td>1.2V</td>
+                            <td>245</td>
+                            <td>1.2 × 5 = 6V ✓</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>7️⃣ Control de LEDs</h3>
+                <div class="code-block">
+<span class="keyword">void</span> <span class="function">controlarLEDs</span>() {
+  <span class="comment">// LEDs de batería con 3 estados</span>
+  <span class="keyword">if</span> (voltajeBateria > <span class="number">12.5</span>) {
+    <span class="comment">// Batería cargada - LED verde</span>
+    <span class="function">digitalWrite</span>(LED_BAT_VERDE, HIGH);
+    <span class="function">digitalWrite</span>(LED_BAT_ROJO, LOW);
+  } 
+  <span class="keyword">else if</span> (voltajeBateria < <span class="number">11.8</span>) {
+    <span class="comment">// Batería baja - LED rojo</span>
+    <span class="function">digitalWrite</span>(LED_BAT_VERDE, LOW);
+    <span class="function">digitalWrite</span>(LED_BAT_ROJO, HIGH);
+  } 
+  <span class="keyword">else</span> {
+    <span class="comment">// Estado intermedio - LED rojo parpadeante</span>
+    <span class="keyword">static</span> <span class="type">unsigned long</span> ultimoParpadeo = <span class="number">0</span>;
+    <span class="keyword">static</span> <span class="type">bool</span> estadoLED = <span class="keyword">false</span>;
+    
+    <span class="keyword">if</span> (<span class="function">millis</span>() - ultimoParpadeo > <span class="number">500</span>) {
+      estadoLED = !estadoLED;
+      <span class="function">digitalWrite</span>(LED_BAT_ROJO, estadoLED);
+      ultimoParpadeo = <span class="function">millis</span>();
+    }
+  }
+  
+  <span class="comment">// LEDs de panel (simple: produciendo o no)</span>
+  <span class="function">digitalWrite</span>(LED_PANEL_VERDE, voltajePanel > <span class="number">14.0</span>);
+  <span class="function">digitalWrite</span>(LED_PANEL_ROJO, voltajePanel <= <span class="number">14.0</span>);
+  
+  <span class="comment">// LEDs de carga (normal o alta)</span>
+  <span class="function">digitalWrite</span>(LED_CARGA_VERDE, corrienteCarga < <span class="number">1.0</span>);
+  <span class="function">digitalWrite</span>(LED_CARGA_ROJO, corrienteCarga >= <span class="number">1.0</span>);
+}
+                </div>
+
+                <div class="info-box">
+                    <strong>🚦 Lógica de LEDs:</strong>
+                    <table style="margin-top: 15px;">
+                        <tr>
+                            <th>Sistema</th>
+                            <th>Verde</th>
+                            <th>Rojo</th>
+                            <th>Parpadeo</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Batería</strong></td>
+                            <td>&gt; 12.5V</td>
+                            <td>&lt; 11.8V</td>
+                            <td>11.8V - 12.5V</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Panel</strong></td>
+                            <td>&gt; 14V</td>
+                            <td>≤ 14V</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Carga</strong></td>
+                            <td>&lt; 1A</td>
+                            <td>≥ 1A</td>
+                            <td>-</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>8️⃣ Servidor Web - Manejo de Peticiones</h3>
+                <div class="code-block">
+<span class="keyword">void</span> <span class="function">manejarClienteWeb</span>() {
+  EthernetClient client = server.<span class="function">available</span>();
+  
+  <span class="keyword">if</span> (client) {
+    <span class="type">boolean</span> currentLineIsBlank = <span class="keyword">true</span>;
+    
+    <span class="keyword">while</span> (client.<span class="function">connected</span>()) {
+      <span class="keyword">if</span> (client.<span class="function">available</span>()) {
+        <span class="type">char</span> c = client.<span class="function">read</span>();
+        
+        <span class="comment">// Guardar petición HTTP en buffer</span>
+        <span class="keyword">if</span> (req_index < (REQ_BUF_SZ - <span class="number">1</span>)) {
+          HTTP_req[req_index] = c;
+          req_index++;
+        }
+        
+        <span class="comment">// Fin de petición HTTP</span>
+        <span class="keyword">if</span> (c == <span class="string">'\n'</span> && currentLineIsBlank) {
+          
+          <span class="comment">// Determinar qué servir según la petición</span>
+          <span class="keyword">if</span> (<span class="function">StrContains</span>(HTTP_req, <span class="string">"ajax_inputs"</span>) || 
+              <span class="function">StrContains</span>(HTTP_req, <span class="string">"GET /data"</span>)) {
+            <span class="comment">// Petición AJAX - enviar JSON</span>
+            <span class="function">enviarDatosJSON</span>(client);
+          }
+          <span class="keyword">else if</span> (<span class="function">StrContains</span>(HTTP_req, <span class="string">"GET /"</span>)) {
+            <span class="comment">// Página principal</span>
+            <span class="function">servirArchivo</span>(client, <span class="string">"index.htm"</span>);
+          }
+          <span class="keyword">else if</span> (<span class="function">StrContains</span>(HTTP_req, <span class="string">"style.css"</span>)) {
+            <span class="function">servirArchivo</span>(client, <span class="string">"style.css"</span>);
+          }
+          <span class="keyword">else</span> {
+            <span class="function">enviar404</span>(client);
+          }
+          
+          <span class="comment">// Limpiar buffer</span>
+          req_index = <span class="number">0</span>;
+          <span class="function">StrClear</span>(HTTP_req, REQ_BUF_SZ);
+          <span class="keyword">break</span>;
+        }
+        
+        <span class="keyword">if</span> (c == <span class="string">'\n'</span>) {
+          currentLineIsBlank = <span class="keyword">true</span>;
+        } <span class="keyword">else if</span> (c != <span class="string">'\r'</span>) {
+          currentLineIsBlank = <span class="keyword">false</span>;
+        }
+      }
+    }
+    
+    <span class="function">delay</span>(<span class="number">1</span>);
+    client.<span class="function">stop</span>();
+  }
+}
+                </div>
+
+                <h3>9️⃣ Envío de Datos JSON (AJAX)</h3>
+                <div class="code-block">
+<span class="keyword">void</span> <span class="function">enviarDatosJSON</span>(EthernetClient client) {
+  client.<span class="function">println</span>(F(<span class="string">"HTTP/1.1 200 OK"</span>));
+  client.<span class="function">println</span>(F(<span class="string">"Content-Type: application/json"</span>));
+  client.<span class="function">println</span>(F(<span class="string">"Connection: close"</span>));
+  client.<span class="function">println</span>();
+  
+  <span class="comment">// JSON optimizado con F() para ahorrar RAM</span>
+  client.<span class="function">print</span>(F(<span class="string">"{\"panel\":{\"voltaje\":"</span>));
+  client.<span class="function">print</span>(voltajePanel, <span class="number">2</span>);
+  client.<span class="function">print</span>(F(<span class="string">",\"corriente\":"</span>));
+  client.<span class="function">print</span>(corrientePanel, <span class="number">3</span>);
+  client.<span class="function">print</span>(F(<span class="string">",\"potencia\":"</span>));
+  client.<span class="function">print</span>(voltajePanel * corrientePanel, <span class="number">2</span>);
+  <span class="comment">// ... resto del JSON</span>
+  client.<span class="function">println</span>(F(<span class="string">"}}"</span>));
+}
+                </div>
+
+                <div class="info-box">
+                    <strong>📊 Ejemplo de Respuesta JSON:</strong>
+                    <div class="code-block" style="background: #263238; color: #aed581; border-color: #4caf50;">
+{
+  "panel": {
+    "voltaje": 18.75,
+    "corriente": 2.450,
+    "potencia": 45.94,
+    "led": "verde"
+  },
+  "bateria": {
+    "voltaje": 12.85,
+    "corriente": 1.200,
+    "potencia": 15.42,
+    "estado": "cargando",
+    "led": "verde"
+  },
+  "carga": {
+    "voltaje": 12.60,
+    "corriente": 0.850,
+    "potencia": 10.71,
+    "led": "verde"
+  }
+}
+                    </div>
+                    <p style="margin-top: 15px;">Este JSON es leído por JavaScript en la página web para actualizar los valores en tiempo real.</p>
+                </div>
+            </div>
+
+            <!-- CONEXIONES -->
+            <div class="section">
+                <h2><span class="icon">🔌</span> Diagrama de Conexiones</h2>
+                
+                <div class="wiring-table">
+                    <h4>Conexiones de los Sensores ACS712</h4>
+                    <table>
+                        <tr>
+                            <th>Sensor</th>
+                            <th>Pin VCC</th>
+                            <th>Pin GND</th>
+                            <th>Pin OUT</th>
+                            <th>Conexión Serie</th>
+                        </tr>
+                        <tr>
+                            <td>ACS712 Panel</td>
+                            <td>5V Arduino</td>
+                            <td>GND Arduino</td>
+                            <td>A0</td>
+                            <td>Panel(+) → IP+ | IP- → Batería(+)</td>
+                        </tr>
+                        <tr>
+                            <td>ACS712 Batería</td>
+                            <td>5V Arduino</td>
+                            <td>GND Arduino</td>
+                            <td>A1</td>
+                            <td>Batería(+) → IP+ | IP- → Cargas(+)</td>
+                        </tr>
+                        <tr>
+                            <td>ACS712 Carga</td>
+                            <td>5V Arduino</td>
+                            <td>GND Arduino</td>
+                            <td>A2</td>
+                            <td>Cargas(-) → IP+ | IP- → Batería(-)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ IMPORTANTE - Polaridad del ACS712:</strong>
+                    <ul style="margin: 10px 0 0 25px;">
+                        <li>La corriente debe fluir de <strong>IP+</strong> a <strong>IP-</strong></li>
+                        <li>Si la conectas al revés, leerás valores negativos</li>
+                        <li>El sensor está en <strong>serie</strong> con el circuito (la corriente pasa a través de él)</li>
+                    </ul>
+                </div>
+
+                <div class="wiring-table">
+                    <h4>Divisores de Voltaje</h4>
+                    <table>
+                        <tr>
+                            <th>Medición</th>
+                            <th>Punto de Conexión</th>
+                            <th>R1 (100kΩ)</th>
+                            <th>R2 (25kΩ)</th>
+                            <th>Pin Arduino</th>
+                        </tr>
+                        <tr>
+                            <td>Voltaje Panel</td>
+                            <td>Terminal (+) Panel</td>
+                            <td>→ Punto medio</td>
+                            <td>→ GND común</td>
+                            <td>A3</td>
+                        </tr>
+                        <tr>
+                            <td>Voltaje Batería</td>
+                            <td>Terminal (+) Batería</td>
+                            <td>→ Punto medio</td>
+                            <td>→ GND común</td>
+                            <td>A4</td>
+                        </tr>
+                        <tr>
+                            <td>Voltaje Carga</td>
+                            <td>Terminal (+) Cargas</td>
+                            <td>→ Punto medio</td>
+                            <td>→ GND común</td>
+                            <td>A5</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="wiring-table">
+                    <h4>LEDs Indicadores</h4>
+                    <table>
+                        <tr>
+                            <th>LED</th>
+                            <th>Color</th>
+                            <th>Pin Arduino</th>
+                            <th>Resistencia</th>
+                            <th>Significado</th>
+                        </tr>
+                        <tr>
+                            <td>Panel Verde</td>
+                            <td>🟢</td>
+                            <td>6</td>
+                            <td>220Ω</td>
+                            <td>Panel produciendo (&gt;14V)</td>
+                        </tr>
+                        <tr>
+                            <td>Panel Rojo</td>
+                            <td>🔴</td>
+                            <td>7</td>
+                            <td>220Ω</td>
+                            <td>Panel sin producción</td>
+                        </tr>
+                        <tr>
+                            <td>Batería Verde</td>
+                            <td>🟢</td>
+                            <td>2</td>
+                            <td>220Ω</td>
+                            <td>Batería cargada (&gt;12.5V)</td>
+                        </tr>
+                        <tr>
+                            <td>Batería Rojo</td>
+                            <td>🔴</td>
+                            <td>3</td>
+                            <td>220Ω</td>
+                            <td>Batería baja (&lt;11.8V)</td>
+                        </tr>
+                        <tr>
+                            <td>Carga Verde</td>
+                            <td>🟢</td>
+                            <td>4</td>
+                            <td>220Ω</td>
+                            <td>Consumo normal (&lt;1A)</td>
+                        </tr>
+                        <tr>
+                            <td>Carga Rojo</td>
+                            <td>🔴</td>
+                            <td>5</td>
+                            <td>220Ω</td>
+                            <td>Consumo alto (≥1A)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="tip-box">
+                    <strong>💡 Conexión de LEDs:</strong>
+                    <p>Cada LED se conecta así:</p>
+                    <div style="background: white; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <code>Pin Arduino → Resistencia 220Ω → Ánodo LED (+) → Cátodo LED (-) → GND</code>
+                    </div>
+                    <p style="margin-top: 10px;">El cátodo (pata corta) va a GND. El ánodo (pata larga) va a la resistencia.</p>
+                </div>
+            </div>
+
+            <!-- ARCHIVOS SD -->
+            <div class="section">
+                <h2><span class="icon">💾</span> Archivos Necesarios en la Tarjeta SD</h2>
+                
+                <p>Necesitas crear estos archivos y copiarlos a la raíz de la tarjeta SD:</p>
+
+                <h3>1. index.htm (Página Principal)</h3>
+                <div class="info-box">
+                    <strong>📄 Contenido Mínimo:</strong>
+                    <p>Debe tener al menos:</p>
+                    <ul style="margin: 10px 0 0 25px;">
+                        <li>Estructura HTML básica</li>
+                        <li>Elementos para mostrar voltaje, corriente y potencia de panel, batería y carga</li>
+                        <li>JavaScript para peticiones AJAX cada 2-5 segundos</li>
+                        <li>CSS para estilos y colores de LEDs</li>
+                    </ul>
+                </div>
+
+                <h3>2. style.css (Opcional)</h3>
+                <p>Para separar los estilos del HTML</p>
+
+                <h3>3. script.js (Opcional)</h3>
+                <p>Para separar el JavaScript del HTML</p>
+
+                <div class="warning-box">
+                    <strong>⚠️ Requisitos Importantes:</strong>
+                    <ul style="margin: 10px 0 0 25px;">
+                        <li>Nombres de archivo deben coincidir EXACTAMENTE con el código</li>
+                        <li>Usar extensión <code>.htm</code> (no .html)</li>
+                        <li>Archivos en la RAÍZ de la SD, no en carpetas</li>
+                        <li>Tarjeta formateada en FAT16</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- PASOS PARA IMPLEMENTAR -->
+            <div class="section">
+                <h2><span class="icon">🛠️</span> Pasos para Implementar el Sistema</h2>
+                
+                <div class="flow-step">
+                    <div class="flow-number">1</div>
+                    <strong>Preparar los Componentes</strong>
+                    <p>Compra todos los componentes de la lista. Verifica que tengas todo antes de empezar.</p>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">2</div>
+                    <strong>Montar el Hardware</strong>
+                    <p>Conecta el Ethernet Shield al Arduino. Inserta la tarjeta SD en el shield.</p>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">3</div>
+                    <strong>Construir Divisores de Voltaje</strong>
+                    <p>Suelda o conecta en protoboard los 3 divisores de voltaje (R1=100kΩ, R2=25kΩ cada uno).</p>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">4</div>
+                    <strong>Conectar Sensores ACS712</strong>
+                    <p>Conecta VCC, GND y OUT de cada sensor. Deja IP+/IP- para conectar al sistema solar.</p>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">5</div>
+                    <strong>Conectar LEDs</strong>
+                    <p>Conecta los 6 LEDs con sus resistencias limitadoras a los pines 2-7.</p>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">6</div>
+                    <strong>Preparar Archivos HTML</strong>
+                    <p>Crea index.htm con la interfaz web. Formatea la SD en FAT16 y copia los archivos.</p>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">7</div>
+                    <strong>Configurar IP en el Código</strong>
+                    <p>Ajusta la línea <code>IPAddress ip(192, 168, 1, 140)</code> según tu red.</p>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">8</div>
+                    <strong>Subir el Código</strong>
+                    <p>Compila y sube el sketch al Arduino usando el IDE.</p>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">9</div>
+                    <strong>Probar sin Carga Real</strong>
+                    <p>Conecta a red, verifica Monitor Serial, accede desde navegador. Verifica que funciona sin conectar al sistema solar.</p>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">10</div>
+                    <strong>Conectar al Sistema Solar</strong>
+                    <p>Con mucho cuidado, conecta los sensores ACS712 en serie con panel, batería y cargas. Conecta divisores de voltaje a los terminales (+).</p>
+                </div>
+
+                <div class="danger-box">
+                    <strong>⚡ ADVERTENCIA DE SEGURIDAD:</strong>
+                    <ul style="margin: 10px 0 0 25px;">
+                        <li>Desconecta el panel solar antes de hacer conexiones</li>
+                        <li>Verifica polaridades dos veces antes de energizar</li>
+                        <li>Usa fusibles en todas las líneas de corriente</li>
+                        <li>Los sensores ACS712 manejan hasta 5A - no excedas este límite</li>
+                        <li>Asegura buenas conexiones para evitar falsos contactos y chispas</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- RESUMEN -->
+            <div class="section" style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-left-color: #4caf50;">
+                <h2><span class="icon" style="background: #4caf50;">✓</span> Resumen del Sistema</h2>
+                
+                <h3>Componentes Principales</h3>
+                <table>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Elementos</th>
+                        <th>Función</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Control</strong></td>
+                        <td>Arduino Uno + Ethernet Shield</td>
+                        <td>Procesamiento y conectividad</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Medición Corriente</strong></td>
+                        <td>3× ACS712-05B</td>
+                        <td>Medir hasta 5A AC/DC</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Medición Voltaje</strong></td>
+                        <td>3× Divisores (100k/25k)</td>
+                        <td>Medir hasta 25V DC</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Indicadores</strong></td>
+                        <td>6× LEDs (3 verdes, 3 rojos)</td>
+                        <td>Estado visual del sistema</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Almacenamiento</strong></td>
+                        <td>Tarjeta SD 2GB FAT16</td>
+                        <td>Página web personalizada</td>
+                    </tr>
+                </table>
+
+                <h3>Capacidades del Sistema</h3>
+                <ul style="font-size: 1.1em; line-height: 2;">
+                    <li>✅ Monitoreo en tiempo real de 3 puntos del sistema solar</li>
+                    <li>✅ Medición precisa de voltaje (±0.1V) y corriente (±0.01A)</li>
+                    <li>✅ Cálculo automático de potencia instantánea</li>
+                    <li>✅ Interfaz web accesible desde cualquier dispositivo</li>
+                    <li>✅ Actualización automática vía AJAX cada 2-5 segundos</li>
+                    <li>✅ Indicadores LED físicos para diagnóstico rápido</li>
+                    <li>✅ Detección de dirección de flujo de corriente en batería</li>
+                    <li>✅ Alertas visuales de sobrecarga y batería baja</li>
+                </ul>
+
+                <h3>Costo Total Estimado</h3>
+                <div style="text-align: center; margin: 30px 0;">
+                    <div style="background: #4caf50; color: white; padding: 30px; border-radius: 15px; display: inline-block; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                        <p style="font-size: 1.5em; margin-bottom: 10px;">💰 Inversión Total</p>
+                        <p style="font-size: 3em; font-weight: bold; margin: 0;">~$81 USD</p>
+                        <p style="font-size: 1.2em; margin-top: 10px; opacity: 0.9;">Todos los componentes incluidos</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 40px; text-align: center;">
+            <h2 style="margin-bottom: 20px;">🌞 ¡Listo para Construir tu Sistema de Monitoreo Solar!</h2>
+            <p style="font-size: 1.3em; opacity: 0.95;">Con esta guía tienes todo lo necesario para implementar un sistema profesional de monitoreo</p>
+            <p style="margin-top: 30px; font-size: 1.1em;">¿Preguntas? Revisa el código línea por línea en la sección de estructura</p>
+        </footer>
+    </div>
+</body>
+</html>
