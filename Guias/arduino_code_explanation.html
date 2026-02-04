@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explicación: Arduino Web Client</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            border-left: 4px solid #3a7bd5;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .section:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .section.active {
+            background: #e3f2fd;
+            border-left-color: #1976d2;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .section-title {
+            font-size: 1.3em;
+            color: #1976d2;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .icon {
+            width: 30px;
+            height: 30px;
+            background: #1976d2;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .toggle {
+            font-size: 1.5em;
+            color: #1976d2;
+            transition: transform 0.3s ease;
+        }
+        
+        .section.active .toggle {
+            transform: rotate(180deg);
+        }
+        
+        .code-block {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        
+        .explanation {
+            display: none;
+            margin-top: 15px;
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        .section.active .explanation {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .highlight {
+            background: #fff59d;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .note {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .note strong {
+            color: #e65100;
+        }
+        
+        .flow-diagram {
+            background: white;
+            border: 2px solid #1976d2;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .flow-step {
+            background: #e3f2fd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #1976d2;
+        }
+        
+        .arrow {
+            color: #1976d2;
+            font-size: 2em;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔌 Arduino Web Client</h1>
+            <p class="subtitle">Explicación detallada del código que conecta Arduino a internet</p>
+        </header>
+        
+        <div class="content">
+            <div class="section" onclick="toggleSection(this)">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="icon">1</div>
+                        Comentarios y Descripción
+                    </div>
+                    <div class="toggle">▼</div>
+                </div>
+                <div class="explanation">
+                    <div class="code-block">/* Web client
+En este sketch Arduino se conecta a una pagina Web...
+Circuit:
+* Ethernet shield ocupa los pins 10, 11, 12, 13
+... */</div>
+                    <p><strong>¿Qué hace?</strong></p>
+                    <p>Estos son <span class="highlight">comentarios</span> que documentan el código. No se ejecutan, solo explican:</p>
+                    <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+                        <li>📝 El propósito del programa (conectarse a Google)</li>
+                        <li>🔌 Qué pines usa el shield Ethernet (10, 11, 12, 13)</li>
+                        <li>👨‍💻 Quién lo creó y cuándo</li>
+                    </ul>
+                    <div class="note">
+                        <strong>💡 Nota:</strong> Los comentarios entre /* */ pueden ocupar múltiples líneas.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" onclick="toggleSection(this)">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="icon">2</div>
+                        Bibliotecas (Includes)
+                    </div>
+                    <div class="toggle">▼</div>
+                </div>
+                <div class="explanation">
+                    <div class="code-block">#include &lt;SPI.h&gt;
+#include &lt;Ethernet.h&gt;</div>
+                    <p><strong>¿Qué hace?</strong></p>
+                    <p>Importa <span class="highlight">bibliotecas</span> que contienen código pre-escrito para funciones específicas:</p>
+                    <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+                        <li><strong>SPI.h:</strong> Permite comunicación SPI (Serial Peripheral Interface) entre Arduino y el shield Ethernet</li>
+                        <li><strong>Ethernet.h:</strong> Contiene todas las funciones para conectarse a internet</li>
+                    </ul>
+                    <div class="note">
+                        <strong>🔧 Analogía:</strong> Es como importar herramientas especializadas a tu taller antes de empezar a trabajar.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" onclick="toggleSection(this)">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="icon">3</div>
+                        Dirección MAC
+                    </div>
+                    <div class="toggle">▼</div>
+                </div>
+                <div class="explanation">
+                    <div class="code-block">byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };</div>
+                    <p><strong>¿Qué hace?</strong></p>
+                    <p>Define la <span class="highlight">dirección MAC</span> (Media Access Control) del shield Ethernet:</p>
+                    <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+                        <li>🆔 Es como el "DNI" único de tu dispositivo en la red</li>
+                        <li>📊 Es un arreglo de 6 bytes en formato hexadecimal</li>
+                        <li>🏷️ Normalmente viene impresa en una etiqueta en el shield</li>
+                    </ul>
+                    <div class="note">
+                        <strong>⚠️ Importante:</strong> Cada dispositivo en una red debe tener una MAC única. Los shields modernos traen su propia MAC impresa.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" onclick="toggleSection(this)">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="icon">4</div>
+                        Dirección IP del Servidor
+                    </div>
+                    <div class="toggle">▼</div>
+                </div>
+                <div class="explanation">
+                    <div class="code-block">IPAddress server(74,125,230,223); // Google</div>
+                    <p><strong>¿Qué hace?</strong></p>
+                    <p>Almacena la <span class="highlight">dirección IP de Google</span> a la que se va a conectar:</p>
+                    <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+                        <li>🌐 74.125.230.223 es una de las IPs de Google</li>
+                        <li>📍 Es como la "dirección postal" del servidor de Google</li>
+                        <li>💻 IPAddress es un tipo de dato especial para manejar IPs</li>
+                    </ul>
+                    <div class="note">
+                        <strong>💡 Tip:</strong> Las IPs pueden cambiar. Normalmente usarías DNS para resolver nombres de dominio, pero este ejemplo usa la IP directamente.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" onclick="toggleSection(this)">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="icon">5</div>
+                        Cliente Ethernet
+                    </div>
+                    <div class="toggle">▼</div>
+                </div>
+                <div class="explanation">
+                    <div class="code-block">EthernetClient client;</div>
+                    <p><strong>¿Qué hace?</strong></p>
+                    <p>Crea un objeto <span class="highlight">client</span> que manejará la conexión:</p>
+                    <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+                        <li>🔌 Este objeto tiene funciones como connect(), read(), write()</li>
+                        <li>📡 Actúa como el "navegador web" de tu Arduino</li>
+                        <li>💬 Gestiona la comunicación bidireccional con el servidor</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section" onclick="toggleSection(this)">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="icon">6</div>
+                        Función setup() - Parte 1
+                    </div>
+                    <div class="toggle">▼</div>
+                </div>
+                <div class="explanation">
+                    <div class="code-block">void setup() {
+  Serial.begin(9600);
+  while (!Serial) {
+    ; // esperar para conectar. Necesario para Leonardo sólo
+  }
+}</div>
+                    <p><strong>¿Qué hace?</strong></p>
+                    <p>Inicializa la <span class="highlight">comunicación serial</span>:</p>
+                    <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+                        <li>📺 <strong>Serial.begin(9600):</strong> Abre el puerto serial a 9600 baudios (bits por segundo)</li>
+                        <li>⏳ <strong>while (!Serial):</strong> Espera a que el puerto serial esté listo (necesario en Arduino Leonardo)</li>
+                        <li>💬 Esto permite ver mensajes en el Monitor Serial de Arduino</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section" onclick="toggleSection(this)">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="icon">7</div>
+                        Función setup() - Parte 2: Configuración DHCP
+                    </div>
+                    <div class="toggle">▼</div>
+                </div>
+                <div class="explanation">
+                    <div class="code-block">if (Ethernet.begin(mac) == 0) {
+  Serial.println("Falla la conexión configurada usando DHCP");
+  for(;;)
+    ;
+}</div>
+                    <p><strong>¿Qué hace?</strong></p>
+                    <p>Intenta configurar la red usando <span class="highlight">DHCP</span>:</p>
+                    <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+                        <li>🌐 <strong>Ethernet.begin(mac):</strong> Intenta obtener automáticamente una IP del router (DHCP)</li>
+                        <li>❌ Si retorna 0, significa que falló la configuración</li>
+                        <li>🔄 <strong>for(;;):</strong> Bucle infinito que detiene el programa si falla</li>
+                    </ul>
+                    <div class="note">
+                        <strong>🔍 DHCP:</strong> Dynamic Host Configuration Protocol - le pide al router que asigne automáticamente una IP al Arduino.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" onclick="toggleSection(this)">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="icon">8</div>
+                        Función setup() - Parte 3: Conexión a Google
+                    </div>
+                    <div class="toggle">▼</div>
+                </div>
+                <div class="explanation">
+                    <div class="code-block">delay(1000);
+Serial.println("conectando...");
+
+if (client.connect(server, 80)) {
+  Serial.println("conectado");
+  client.println("GET /search?q=arduino HTTP/1.0");
+  client.println();
+}
+else {
+  Serial.println("conexion fallida");
+}</div>
+                    <p><strong>¿Qué hace?</strong></p>
+                    <p>Intenta conectarse a Google y hacer una <span class="highlight">petición HTTP</span>:</p>
+                    <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+                        <li>⏱️ <strong>delay(1000):</strong> Espera 1 segundo para estabilizar la conexión</li>
+                        <li>🔌 <strong>client.connect(server, 80):</strong> Intenta conectar al servidor en el puerto 80 (HTTP)</li>
+                        <li>📨 <strong>GET /search?q=arduino HTTP/1.0:</strong> Solicitud HTTP GET para buscar "arduino" en Google</li>
+                        <li>📄 <strong>client.println():</strong> Línea vacía que indica el fin de la petición HTTP</li>
+                    </ul>
+                    <div class="note">
+                        <strong>🌐 Puerto 80:</strong> Es el puerto estándar para tráfico HTTP (páginas web normales).
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" onclick="toggleSection(this)">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="icon">9</div>
+                        Función loop() - Lectura de Respuesta
+                    </div>
+                    <div class="toggle">▼</div>
+                </div>
+                <div class="explanation">
+                    <div class="code-block">void loop() {
+  if (client.available()) {
+    char c = client.read();
+    Serial.print(c);
+  }
+}</div>
+                    <p><strong>¿Qué hace?</strong></p>
+                    <p>Lee y muestra la <span class="highlight">respuesta del servidor</span>:</p>
+                    <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+                        <li>🔄 <strong>loop():</strong> Se ejecuta continuamente en bucle infinito</li>
+                        <li>📥 <strong>client.available():</strong> Verifica si hay datos disponibles del servidor</li>
+                        <li>📖 <strong>client.read():</strong> Lee un carácter (byte) de la respuesta</li>
+                        <li>🖥️ <strong>Serial.print(c):</strong> Imprime el carácter en el Monitor Serial</li>
+                    </ul>
+                    <div class="note">
+                        <strong>💡 Importante:</strong> Lee carácter por carácter para mostrar toda la respuesta HTML de Google.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" onclick="toggleSection(this)">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="icon">10</div>
+                        Función loop() - Desconexión
+                    </div>
+                    <div class="toggle">▼</div>
+                </div>
+                <div class="explanation">
+                    <div class="code-block">if (!client.connected()) {
+  Serial.println();
+  Serial.println("disconnectar.");
+  client.stop();
+  for(;;)
+    ;
+}</div>
+                    <p><strong>¿Qué hace?</strong></p>
+                    <p>Detecta cuando el servidor se desconecta y <span class="highlight">cierra la conexión</span>:</p>
+                    <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+                        <li>🔍 <strong>!client.connected():</strong> Verifica si ya NO está conectado</li>
+                        <li>📢 Imprime mensaje de desconexión</li>
+                        <li>🛑 <strong>client.stop():</strong> Cierra formalmente la conexión</li>
+                        <li>⏸️ <strong>for(;;):</strong> Detiene el programa en un bucle infinito</li>
+                    </ul>
+                    <div class="note">
+                        <strong>🔚 Final:</strong> Una vez que recibe toda la respuesta y se desconecta, el programa se detiene completamente.
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-diagram">
+                <h3 style="color: #1976d2; margin-bottom: 20px;">📊 Flujo del Programa</h3>
+                <div class="flow-step">1️⃣ Iniciar comunicación serial (9600 baudios)</div>
+                <div class="arrow">↓</div>
+                <div class="flow-step">2️⃣ Conectar a la red usando DHCP</div>
+                <div class="arrow">↓</div>
+                <div class="flow-step">3️⃣ Conectar al servidor de Google (puerto 80)</div>
+                <div class="arrow">↓</div>
+                <div class="flow-step">4️⃣ Enviar petición HTTP GET (buscar "arduino")</div>
+                <div class="arrow">↓</div>
+                <div class="flow-step">5️⃣ Leer respuesta carácter por carácter</div>
+                <div class="arrow">↓</div>
+                <div class="flow-step">6️⃣ Mostrar en Monitor Serial</div>
+                <div class="arrow">↓</div>
+                <div class="flow-step">7️⃣ Detectar desconexión y cerrar</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSection(element) {
+            // Si ya está activo, lo cerramos
+            if (element.classList.contains('active')) {
+                element.classList.remove('active');
+            } else {
+                // Cerramos todas las demás secciones
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                // Abrimos la sección clickeada
+                element.classList.add('active');
+            }
+        }
+
+        // Abrir la primera sección por defecto
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.section').classList.add('active');
+        });
+    </script>
+</body>
+</html>

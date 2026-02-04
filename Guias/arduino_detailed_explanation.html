@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explicación Línea por Línea - Arduino Web Client</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            opacity: 0.95;
+            font-size: 1.2em;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .code-section {
+            margin-bottom: 40px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .code-section:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 25px;
+            font-size: 1.4em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section-number {
+            background: rgba(255,255,255,0.3);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .code-display {
+            background: #1e1e1e;
+            padding: 25px;
+            position: relative;
+        }
+        
+        .code-line {
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            line-height: 2;
+            color: #d4d4d4;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin: 5px 0;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .code-line:hover {
+            background: rgba(255,255,255,0.05);
+            transform: translateX(5px);
+        }
+        
+        .code-line.active {
+            background: rgba(66, 133, 244, 0.2);
+            border-left: 4px solid #4285f4;
+            padding-left: 20px;
+        }
+        
+        .keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .string {
+            color: #ce9178;
+        }
+        
+        .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .number {
+            color: #b5cea8;
+        }
+        
+        .function {
+            color: #dcdcaa;
+        }
+        
+        .type {
+            color: #4ec9b0;
+        }
+        
+        .explanation-panel {
+            background: #f8f9fa;
+            padding: 25px;
+            border-top: 3px solid #667eea;
+        }
+        
+        .explanation-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .explanation-content {
+            color: #333;
+            line-height: 1.9;
+            font-size: 1.05em;
+        }
+        
+        .explanation-content p {
+            margin-bottom: 15px;
+        }
+        
+        .explanation-content ul {
+            margin: 15px 0 15px 25px;
+        }
+        
+        .explanation-content li {
+            margin: 10px 0;
+            line-height: 1.7;
+        }
+        
+        .analogy-box {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cc 100%);
+            border-left: 5px solid #ffa500;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .analogy-box strong {
+            color: #ff8c00;
+            font-size: 1.1em;
+        }
+        
+        .technical-note {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #2196f3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .technical-note strong {
+            color: #1976d2;
+            font-size: 1.1em;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-left: 5px solid #f44336;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .warning-box strong {
+            color: #c62828;
+            font-size: 1.1em;
+        }
+        
+        .visual-example {
+            background: white;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .visual-example h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .diagram-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .diagram-box {
+            background: #667eea;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .arrow-right {
+            font-size: 2em;
+            color: #667eea;
+        }
+        
+        .highlight-code {
+            background: #fffbcc;
+            color: #333;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .data-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .data-table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .tip-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .tip-box strong {
+            color: #2e7d32;
+            font-size: 1.1em;
+        }
+
+        .interactive-demo {
+            background: #f0f0f0;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .demo-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+
+        .demo-button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .demo-output {
+            background: #1e1e1e;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            min-height: 60px;
+            display: none;
+        }
+
+        .demo-output.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 Análisis Profundo: Línea por Línea</h1>
+            <p class="subtitle">Entendiendo cada detalle del código Arduino Web Client</p>
+        </header>
+        
+        <div class="content">
+            
+            <!-- SECCIÓN 1: INCLUDES -->
+            <div class="code-section">
+                <div class="section-header">
+                    <div class="section-number">1</div>
+                    Importación de Bibliotecas
+                </div>
+                <div class="code-display">
+                    <div class="code-line">
+                        <span class="keyword">#include</span> <span class="string">&lt;SPI.h&gt;</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="keyword">#include</span> <span class="string">&lt;Ethernet.h&gt;</span>
+                    </div>
+                </div>
+                <div class="explanation-panel">
+                    <div class="explanation-title">📚 ¿Qué significan estas líneas?</div>
+                    <div class="explanation-content">
+                        <p><strong>#include</strong> es una directiva del preprocesador que le dice al compilador: "trae todo el código de esta biblioteca antes de compilar mi programa".</p>
+                        
+                        <div class="analogy-box">
+                            <strong>🎯 Analogía:</strong> Imagina que estás cocinando. En lugar de crear la salsa de tomate desde cero, compras una lata ya hecha. Las bibliotecas son como ingredientes pre-preparados que ya han sido probados y funcionan bien.
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">Detalle de cada biblioteca:</h4>
+                        
+                        <div class="technical-note">
+                            <strong>📡 SPI.h (Serial Peripheral Interface):</strong>
+                            <ul>
+                                <li><strong>Propósito:</strong> Permite la comunicación entre el Arduino y el chip Ethernet del shield</li>
+                                <li><strong>Velocidad:</strong> Comunicación rápida (hasta varios MHz)</li>
+                                <li><strong>Pines que usa:</strong> 
+                                    <ul>
+                                        <li>Pin 13: SCK (Clock - reloj)</li>
+                                        <li>Pin 12: MISO (Master In Slave Out)</li>
+                                        <li>Pin 11: MOSI (Master Out Slave In)</li>
+                                        <li>Pin 10: SS (Slave Select)</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="technical-note">
+                            <strong>🌐 Ethernet.h:</strong>
+                            <ul>
+                                <li><strong>Propósito:</strong> Proporciona funciones para conectarse a redes Ethernet</li>
+                                <li><strong>Funciones principales:</strong>
+                                    <ul>
+                                        <li><code>Ethernet.begin()</code> - Inicializa la conexión</li>
+                                        <li><code>EthernetClient</code> - Clase para conexiones cliente</li>
+                                        <li><code>IPAddress</code> - Tipo de dato para direcciones IP</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Protocolos soportados:</strong> TCP/IP, UDP, DHCP, DNS</li>
+                            </ul>
+                        </div>
+
+                        <div class="visual-example">
+                            <h4>Comunicación SPI Visualizada</h4>
+                            <div class="diagram-row">
+                                <div class="diagram-box">Arduino<br/>(Master)</div>
+                                <div class="arrow-right">→ SPI →</div>
+                                <div class="diagram-box">Chip Ethernet<br/>(Slave)</div>
+                                <div class="arrow-right">→</div>
+                                <div class="diagram-box">Internet</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 2: DIRECCIÓN MAC -->
+            <div class="code-section">
+                <div class="section-header">
+                    <div class="section-number">2</div>
+                    Dirección MAC - Identidad del Dispositivo
+                </div>
+                <div class="code-display">
+                    <div class="code-line">
+                        <span class="type">byte</span> mac[] = { <span class="number">0xDE</span>, <span class="number">0xAD</span>, <span class="number">0xBE</span>, <span class="number">0xEF</span>, <span class="number">0xFE</span>, <span class="number">0xED</span> };
+                    </div>
+                </div>
+                <div class="explanation-panel">
+                    <div class="explanation-title">🆔 Desglose completo de la dirección MAC</div>
+                    <div class="explanation-content">
+                        
+                        <p><strong>¿Qué es cada parte?</strong></p>
+                        
+                        <div class="technical-note">
+                            <strong>byte mac[]</strong>
+                            <ul>
+                                <li><code>byte</code> - Tipo de dato que almacena 8 bits (valores de 0 a 255)</li>
+                                <li><code>mac</code> - Nombre de la variable (puedes llamarla como quieras)</li>
+                                <li><code>[]</code> - Los corchetes indican que es un arreglo (array)</li>
+                            </ul>
+                        </div>
+
+                        <div class="technical-note">
+                            <strong>= { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }</strong>
+                            <ul>
+                                <li><code>0x</code> - Prefijo que indica número hexadecimal</li>
+                                <li><code>DE, AD, BE, EF, FE, ED</code> - Los 6 bytes de la dirección MAC</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">Conversión Hexadecimal a Decimal:</h4>
+                        <table class="data-table">
+                            <tr>
+                                <th>Hexadecimal</th>
+                                <th>Decimal</th>
+                                <th>Binario</th>
+                            </tr>
+                            <tr>
+                                <td>0xDE</td>
+                                <td>222</td>
+                                <td>11011110</td>
+                            </tr>
+                            <tr>
+                                <td>0xAD</td>
+                                <td>173</td>
+                                <td>10101101</td>
+                            </tr>
+                            <tr>
+                                <td>0xBE</td>
+                                <td>190</td>
+                                <td>10111110</td>
+                            </tr>
+                            <tr>
+                                <td>0xEF</td>
+                                <td>239</td>
+                                <td>11101111</td>
+                            </tr>
+                            <tr>
+                                <td>0xFE</td>
+                                <td>254</td>
+                                <td>11111110</td>
+                            </tr>
+                            <tr>
+                                <td>0xED</td>
+                                <td>237</td>
+                                <td>11101101</td>
+                            </tr>
+                        </table>
+
+                        <div class="analogy-box">
+                            <strong>🎯 Analogía:</strong> La dirección MAC es como tu número de pasaporte. Es única en el mundo y te identifica específicamente a ti. Dos dispositivos nunca deberían tener la misma MAC (aunque técnicamente puedes cambiarla, no es recomendable).
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>⚠️ Importante:</strong> 
+                            <ul>
+                                <li>Los shields Ethernet modernos traen su MAC impresa en una etiqueta</li>
+                                <li>Si tienes múltiples Arduinos, cada uno debe tener una MAC diferente</li>
+                                <li>Esta MAC de ejemplo (DE:AD:BE:EF:FE:ED) es solo para pruebas</li>
+                            </ul>
+                        </div>
+
+                        <div class="visual-example">
+                            <h4>Formato de Dirección MAC</h4>
+                            <p style="font-size: 1.5em; font-family: 'Courier New', monospace; color: #667eea; font-weight: bold;">
+                                DE:AD:BE:EF:FE:ED
+                            </p>
+                            <p style="margin-top: 10px;">↑ Formato típico (con dos puntos)</p>
+                            <p style="font-size: 1.5em; font-family: 'Courier New', monospace; color: #667eea; font-weight: bold; margin-top: 15px;">
+                                DE-AD-BE-EF-FE-ED
+                            </p>
+                            <p style="margin-top: 10px;">↑ Formato alternativo (con guiones)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 3: IP DEL SERVIDOR -->
+            <div class="code-section">
+                <div class="section-header">
+                    <div class="section-number">3</div>
+                    Dirección IP del Servidor Google
+                </div>
+                <div class="code-display">
+                    <div class="code-line">
+                        <span class="type">IPAddress</span> server(<span class="number">74</span>,<span class="number">125</span>,<span class="number">230</span>,<span class="number">223</span>); <span class="comment">// Google</span>
+                    </div>
+                </div>
+                <div class="explanation-panel">
+                    <div class="explanation-title">🌐 Entendiendo las direcciones IP</div>
+                    <div class="explanation-content">
+                        
+                        <div class="technical-note">
+                            <strong>IPAddress</strong> es una clase especial de Arduino que:
+                            <ul>
+                                <li>Almacena direcciones IP en formato correcto</li>
+                                <li>Facilita la conversión entre formatos</li>
+                                <li>Valida que los valores sean correctos (0-255)</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">Desglose de la IP: 74.125.230.223</h4>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Octeto</th>
+                                <th>Valor</th>
+                                <th>Descripción</th>
+                            </tr>
+                            <tr>
+                                <td>1º</td>
+                                <td>74</td>
+                                <td>Red de nivel superior (Google owns this range)</td>
+                            </tr>
+                            <tr>
+                                <td>2º</td>
+                                <td>125</td>
+                                <td>Subred dentro de Google</td>
+                            </tr>
+                            <tr>
+                                <td>3º</td>
+                                <td>230</td>
+                                <td>Subred más específica</td>
+                            </tr>
+                            <tr>
+                                <td>4º</td>
+                                <td>223</td>
+                                <td>Host específico (servidor individual)</td>
+                            </tr>
+                        </table>
+
+                        <div class="analogy-box">
+                            <strong>🎯 Analogía:</strong> Una dirección IP es como una dirección postal:
+                            <ul style="margin-top: 10px;">
+                                <li><strong>74</strong> = País</li>
+                                <li><strong>125</strong> = Ciudad</li>
+                                <li><strong>230</strong> = Calle</li>
+                                <li><strong>223</strong> = Número de casa</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>⚠️ Nota sobre IPs de Google:</strong>
+                            <ul>
+                                <li>Google tiene MILLONES de servidores con diferentes IPs</li>
+                                <li>Esta IP específica puede cambiar o dejar de responder</li>
+                                <li>En producción, es mejor usar DNS (google.com) en lugar de IPs fijas</li>
+                                <li>Este código usa IP directa solo para simplificar el ejemplo</li>
+                            </ul>
+                        </div>
+
+                        <div class="visual-example">
+                            <h4>¿Cómo encontrar la IP de un sitio web?</h4>
+                            <div class="interactive-demo">
+                                <p><strong>En Windows (CMD) o Mac/Linux (Terminal):</strong></p>
+                                <code style="background: #1e1e1e; color: #0f0; padding: 10px; display: block; border-radius: 5px; margin: 10px 0;">
+                                    ping google.com
+                                </code>
+                                <p style="margin-top: 10px;">Esto te mostrará la IP actual de Google desde tu ubicación</p>
+                            </div>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Versión mejorada del código:</strong>
+                            <p>En lugar de usar IP fija, podrías usar:</p>
+                            <code style="background: #1e1e1e; color: #d4d4d4; padding: 15px; display: block; border-radius: 5px; margin: 10px 0;">
+                                <span style="color: #6a9955;">// Usando DNS en lugar de IP fija</span><br/>
+                                <span style="color: #4ec9b0;">char</span> server[] = <span style="color: #ce9178;">"www.google.com"</span>;<br/>
+                                client.connect(server, <span style="color: #b5cea8;">80</span>);
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 4: CLIENTE ETHERNET -->
+            <div class="code-section">
+                <div class="section-header">
+                    <div class="section-number">4</div>
+                    Creación del Cliente Ethernet
+                </div>
+                <div class="code-display">
+                    <div class="code-line">
+                        <span class="type">EthernetClient</span> client;
+                    </div>
+                </div>
+                <div class="explanation-panel">
+                    <div class="explanation-title">🔌 El objeto que maneja la conexión</div>
+                    <div class="explanation-content">
+                        
+                        <p><strong>Esta línea crea un objeto de tipo <span class="highlight-code">EthernetClient</span></strong></p>
+
+                        <div class="technical-note">
+                            <strong>¿Qué es un objeto?</strong>
+                            <p>Un objeto es como una "caja de herramientas" que contiene:</p>
+                            <ul>
+                                <li><strong>Datos:</strong> Estado de la conexión, buffer de datos, etc.</li>
+                                <li><strong>Funciones (métodos):</strong> connect(), read(), write(), available(), etc.</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">Métodos principales del objeto client:</h4>
+                        
+                        <table class="data-table">
+                            <tr>
+                                <th>Método</th>
+                                <th>¿Qué hace?</th>
+                                <th>Ejemplo</th>
+                            </tr>
+                            <tr>
+                                <td><code>connect(ip, puerto)</code></td>
+                                <td>Intenta conectarse a un servidor</td>
+                                <td><code>client.connect(server, 80)</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>connected()</code></td>
+                                <td>Verifica si está conectado</td>
+                                <td><code>if (client.connected())</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>available()</code></td>
+                                <td>Bytes disponibles para leer</td>
+                                <td><code>if (client.available())</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>read()</code></td>
+                                <td>Lee un byte del servidor</td>
+                                <td><code>char c = client.read()</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>print()</code> / <code>println()</code></td>
+                                <td>Envía datos al servidor</td>
+                                <td><code>client.println("GET /")</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>stop()</code></td>
+                                <td>Cierra la conexión</td>
+                                <td><code>client.stop()</code></td>
+                            </tr>
+                        </table>
+
+                        <div class="analogy-box">
+                            <strong>🎯 Analogía:</strong> El objeto <code>client</code> es como tu teléfono móvil:
+                            <ul style="margin-top: 10px;">
+                                <li><code>connect()</code> = Hacer una llamada</li>
+                                <li><code>connected()</code> = Verificar si la llamada sigue activa</li>
+                                <li><code>available()</code> = ¿Hay mensajes nuevos?</li>
+                                <li><code>read()</code> = Leer un mensaje</li>
+                                <li><code>println()</code> = Enviar un mensaje</li>
+                                <li><code>stop()</code> = Colgar la llamada</li>
+                            </ul>
+                        </div>
+
+                        <div class="visual-example">
+                            <h4>Ciclo de vida de una conexión cliente</h4>
+                            <div class="diagram-row">
+                                <div class="diagram-box" style="background: #888;">Cliente<br/>creado</div>
+                                <div class="arrow-right">→</div>
+                                <div class="diagram-box" style="background: #ff9800;">connect()</div>
+                                <div class="arrow-right">→</div>
+                                <div class="diagram-box" style="background: #4caf50;">Conectado</div>
+                                <div class="arrow-right">→</div>
+                                <div class="diagram-box" style="background: #2196f3;">Enviar/Recibir<br/>datos</div>
+                                <div class="arrow-right">→</div>
+                                <div class="diagram-box" style="background: #f44336;">stop()</div>
+                                <div class="arrow-right">→</div>
+                                <div class="diagram-box" style="background: #888;">Desconectado</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 5: SETUP - SERIAL -->
+            <div class="code-section">
+                <div class="section-header">
+                    <div class="section-number">5</div>
+                    Setup: Inicialización del Puerto Serial
+                </div>
+                <div class="code-display">
+                    <div class="code-line">
+                        <span class="keyword">void</span> <span class="function">setup</span>() {
+                    </div>
+                    <div class="code-line" style="padding-left: 40px;">
+                        Serial.<span class="function">begin</span>(<span class="number">9600</span>);
+                    </div>
+                    <div class="code-line" style="padding-left: 40px;">
+                        <span class="keyword">while</span> (!Serial) {
+                    </div>
+                    <div class="code-line" style="padding-left: 60px;">
+                        ; <span class="comment">// esperar para conectar</span>
+                    </div>
+                    <div class="code-line" style="padding-left: 40px;">
+                        }
+                    </div>
+                </div>
+                <div class="explanation-panel">
+                    <div class="explanation-title">📺 Configurando la comunicación con la computadora</div>
+                    <div class="explanation-content">
+                        
+                        <h4 style="color: #667eea;">void setup()</h4>
+                        <div class="technical-note">
+                            <ul>
+                                <li><code>void</code> = Esta función no devuelve ningún valor</li>
+                                <li><code>setup()</code> = Función especial que Arduino ejecuta UNA SOLA VEZ al inicio</li>
+                                <li>Todo lo que esté dentro de <code>setup()</code> se ejecuta antes del <code>loop()</code></li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">Serial.begin(9600)</h4>
+                        <div class="technical-note">
+                            <strong>Desglose:</strong>
+                            <ul>
+                                <li><code>Serial</code> = Objeto global que maneja la comunicación USB/serial</li>
+                                <li><code>begin()</code> = Método que inicializa el puerto</li>
+                                <li><code>9600</code> = Velocidad en baudios (bits por segundo)</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">¿Qué son los baudios?</h4>
+                        <table class="data-table">
+                            <tr>
+                                <th>Baudios</th>
+                                <th>Bits/segundo</th>
+                                <th>Bytes/segundo</th>
+                                <th>Uso común</th>
+                            </tr>
+                            <tr>
+                                <td>9600</td>
+                                <td>9,600</td>
+                                <td>~1,200</td>
+                                <td>Estándar Arduino</td>
+                            </tr>
+                            <tr>
+                                <td>115200</td>
+                                <td>115,200</td>
+                                <td>~14,400</td>
+                                <td>Alta velocidad</td>
+                            </tr>
+                        </table>
+
+                        <div class="analogy-box">
+                            <strong>🎯 Analogía:</strong> Los baudios son como los carriles de una autopista. 9600 baudios = autopista de 9600 carriles donde cada carril puede pasar 1 bit por segundo. Más baudios = más rápido, pero ambos lados (Arduino y computadora) deben usar la misma velocidad.
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">while (!Serial)</h4>
+                        <div class="technical-note">
+                            <strong>Análisis detallado:</strong>
+                            <ul>
+                                <li><code>while</code> = Bucle que se repite mientras la condición sea verdadera</li>
+                                <li><code>!</code> = Operador NOT (niega la condición)</li>
+                                <li><code>Serial</code> = En este contexto, verifica si el puerto está listo</li>
+                                <li><code>;</code> = Declaración vacía (no hace nada, solo espera)</li>
+                            </ul>
+                            <p style="margin-top: 15px;"><strong>Traducción:</strong> "Mientras el puerto Serial NO esté listo, espera (no hagas nada)"</p>
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>⚠️ Importante:</strong>
+                            <ul>
+                                <li>Esta línea es NECESARIA para Arduino Leonardo y Micro</li>
+                                <li>Para Arduino Uno/Mega es opcional (pero no hace daño)</li>
+                                <li>Sin esto, podrías perder los primeros mensajes en Leonardo</li>
+                            </ul>
+                        </div>
+
+                        <div class="visual-example">
+                            <h4>Flujo de inicialización Serial</h4>
+                            <div class="diagram-row">
+                                <div class="diagram-box">Arduino<br/>inicia</div>
+                                <div class="arrow-right">→</div>
+                                <div class="diagram-box">Serial.begin(9600)</div>
+                                <div class="arrow-right">→</div>
+                                <div class="diagram-box">Espera conexión<br/>(while loop)</div>
+                                <div class="arrow-right">→</div>
+                                <div class="diagram-box">✓ Listo para<br/>comunicar</div>
+                            </div>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Para ver los mensajes:</strong>
+                            <p>En el Arduino IDE, ve a: <strong>Herramientas → Monitor Serial</strong></p>
+                            <p>Asegúrate de que la velocidad esté configurada en <strong>9600 baudios</strong> (esquina inferior derecha)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 6: ETHERNET BEGIN -->
+            <div class="code-section">
+                <div class="section-header">
+                    <div class="section-number">6</div>
+                    Inicialización de Ethernet con DHCP
+                </div>
+                <div class="code-display">
+                    <div class="code-line" style="padding-left: 40px;">
+                        <span class="keyword">if</span> (Ethernet.<span class="function">begin</span>(mac) == <span class="number">0</span>) {
+                    </div>
+                    <div class="code-line" style="padding-left: 60px;">
+                        Serial.<span class="function">println</span>(<span class="string">"Falla la conexión configurada usando DHCP"</span>);
+                    </div>
+                    <div class="code-line" style="padding-left: 60px;">
+                        <span class="keyword">for</span>(;;)
+                    </div>
+                    <div class="code-line" style="padding-left: 80px;">
+                        ;
+                    </div>
+                    <div class="code-line" style="padding-left: 40px;">
+                        }
+                    </div>
+                </div>
+                <div class="explanation-panel">
+                    <div class="explanation-title">🌐 Conectándose a la red automáticamente</div>
+                    <div class="explanation-content">
+                        
+                        <h4 style="color: #667eea;">Ethernet.begin(mac)</h4>
+                        <div class="technical-note">
+                            <strong>Esta función hace MUCHAS cosas automáticamente:</strong>
+                            <ol style="margin: 15px 0 15px 25px; line-height: 1.8;">
+                                <li>Inicializa el chip Ethernet del shield</li>
+                                <li>Envía una solicitud DHCP al router</li>
+                                <li>Espera que el router asigne una IP</li>
+                                <li>Configura la máscara de subred</li>
+                                <li>Configura el gateway (puerta de enlace)</li>
+                                <li>Configura el servidor DNS</li>
+                            </ol>
+                            <p><strong>Retorna:</strong></p>
+                            <ul style="margin: 10px 0 10px 25px;">
+                                <li><code>1</code> = Éxito (obtuvo IP del router)</li>
+                                <li><code>0</code> = Fallo (no pudo obtener IP)</li>
+                            </ul>
+                        </div>
+
+                        <div class="analogy-box">
+                            <strong>🎯 Analogía DHCP:</strong>
+                            <p>Imagina que llegas a un hotel:</p>
+                            <ul style="margin-top: 10px;">
+                                <li><strong>Sin DHCP:</strong> Tú eliges tu número de habitación (puede estar ocupado = conflicto)</li>
+                                <li><strong>Con DHCP:</strong> La recepción (router) te asigna una habitación disponible automáticamente</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">if (... == 0)</h4>
+                        <div class="technical-note">
+                            <ul>
+                                <li><code>if</code> = Condicional: "si esto es verdadero, ejecuta lo siguiente"</li>
+                                <li><code>== 0</code> = Comparación de igualdad (¿es igual a cero?)</li>
+                                <li>Si <code>Ethernet.begin()</code> retorna 0, significa que FALLÓ</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">Serial.println("mensaje")</h4>
+                        <div class="technical-note">
+                            <ul>
+                                <li><code>println</code> = Print Line (imprime y agrega nueva línea)</li>
+                                <li>Envía el mensaje al Monitor Serial</li>
+                                <li>Es útil para debugging (encontrar errores)</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">for(;;)</h4>
+                        <div class="warning-box">
+                            <strong>⚠️ Bucle Infinito Vacío:</strong>
+                            <ul>
+                                <li><code>for</code> = Bucle tradicional</li>
+                                <li><code>(;;)</code> = Sin inicialización, sin condición, sin incremento</li>
+                                <li>Equivale a <code>while(true)</code> - bucle infinito</li>
+                                <li><code>;</code> = No hace nada en cada iteración</li>
+                            </ul>
+                            <p style="margin-top: 15px;"><strong>Propósito:</strong> Detener el programa si no hay conexión. No tiene sentido continuar sin red.</p>
+                        </div>
+
+                        <div class="visual-example">
+                            <h4>Proceso DHCP Visualizado</h4>
+                            <div style="text-align: left; max-width: 600px; margin: 20px auto;">
+                                <div class="diagram-row" style="justify-content: flex-start;">
+                                    <div class="diagram-box" style="background: #2196f3;">Arduino</div>
+                                    <div class="arrow-right">→</div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <strong style="color: #667eea;">DISCOVER</strong><br/>
+                                        <span style="font-size: 0.9em;">"¿Hay algún servidor DHCP?"</span>
+                                    </div>
+                                    <div class="arrow-right">→</div>
+                                    <div class="diagram-box" style="background: #4caf50;">Router</div>
+                                </div>
+                                <div class="arrow-right" style="transform: rotate(90deg); margin: 0;">↓</div>
+                                <div class="diagram-row" style="justify-content: flex-start;">
+                                    <div class="diagram-box" style="background: #4caf50;">Router</div>
+                                    <div class="arrow-right">→</div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <strong style="color: #667eea;">OFFER</strong><br/>
+                                        <span style="font-size: 0.9em;">"Sí, puedes usar 192.168.1.100"</span>
+                                    </div>
+                                    <div class="arrow-right">→</div>
+                                    <div class="diagram-box" style="background: #2196f3;">Arduino</div>
+                                </div>
+                                <div class="arrow-right" style="transform: rotate(90deg); margin: 0;">↓</div>
+                                <div class="diagram-row" style="justify-content: flex-start;">
+                                    <div class="diagram-box" style="background: #2196f3;">Arduino</div>
+                                    <div class="arrow-right">→</div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <strong style="color: #667eea;">REQUEST</strong><br/>
+                                        <span style="font-size: 0.9em;">"Acepto 192.168.1.100"</span>
+                                    </div>
+                                    <div class="arrow-right">→</div>
+                                    <div class="diagram-box" style="background: #4caf50;">Router</div>
+                                </div>
+                                <div class="arrow-right" style="transform: rotate(90deg); margin: 0;">↓</div>
+                                <div class="diagram-row" style="justify-content: flex-start;">
+                                    <div class="diagram-box" style="background: #4caf50;">Router</div>
+                                    <div class="arrow-right">→</div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <strong style="color: #667eea;">ACK</strong><br/>
+                                        <span style="font-size: 0.9em;">"Confirmado. Es tuya por 24h"</span>
+                                    </div>
+                                    <div class="arrow-right">→</div>
+                                    <div class="diagram-box" style="background: #2196f3;">Arduino</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Configuración manual (alternativa):</strong>
+                            <p>Si DHCP no funciona, puedes configurar manualmente:</p>
+                            <code style="background: #1e1e1e; color: #d4d4d4; padding: 15px; display: block; border-radius: 5px; margin: 10px 0;">
+                                <span style="color: #4ec9b0;">IPAddress</span> ip(<span style="color: #b5cea8;">192</span>, <span style="color: #b5cea8;">168</span>, <span style="color: #b5cea8;">1</span>, <span style="color: #b5cea8;">177</span>);<br/>
+                                Ethernet.<span style="color: #dcdcaa;">begin</span>(mac, ip);
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 7: CONEXIÓN AL SERVIDOR -->
+            <div class="code-section">
+                <div class="section-header">
+                    <div class="section-number">7</div>
+                    Conectando al Servidor de Google
+                </div>
+                <div class="code-display">
+                    <div class="code-line" style="padding-left: 40px;">
+                        <span class="function">delay</span>(<span class="number">1000</span>);
+                    </div>
+                    <div class="code-line" style="padding-left: 40px;">
+                        Serial.<span class="function">println</span>(<span class="string">"conectando..."</span>);
+                    </div>
+                    <div class="code-line" style="padding-left: 40px;">
+                        <span class="keyword">if</span> (client.<span class="function">connect</span>(server, <span class="number">80</span>)) {
+                    </div>
+                    <div class="code-line" style="padding-left: 60px;">
+                        Serial.<span class="function">println</span>(<span class="string">"conectado"</span>);
+                    </div>
+                    <div class="code-line" style="padding-left: 60px;">
+                        client.<span class="function">println</span>(<span class="string">"GET /search?q=arduino HTTP/1.0"</span>);
+                    </div>
+                    <div class="code-line" style="padding-left: 60px;">
+                        client.<span class="function">println</span>();
+                    </div>
+                    <div class="code-line" style="padding-left: 40px;">
+                        }
+                    </div>
+                    <div class="code-line" style="padding-left: 40px;">
+                        <span class="keyword">else</span> {
+                    </div>
+                    <div class="code-line" style="padding-left: 60px;">
+                        Serial.<span class="function">println</span>(<span class="string">"conexion fallida"</span>);
+                    </div>
+                    <div class="code-line" style="padding-left: 40px;">
+                        }
+                    </div>
+                </div>
+                <div class="explanation-panel">
+                    <div class="explanation-title">🔗 Estableciendo conexión HTTP con Google</div>
+                    <div class="explanation-content">
+                        
+                        <h4 style="color: #667eea;">delay(1000)</h4>
+                        <div class="technical-note">
+                            <ul>
+                                <li>Pausa la ejecución durante 1000 milisegundos = 1 segundo</li>
+                                <li><strong>¿Por qué esperar?</strong> Dar tiempo al shield Ethernet para estabilizar la conexión de red</li>
+                                <li>Sin este delay, la conexión podría fallar prematuramente</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">client.connect(server, 80)</h4>
+                        <div class="technical-note">
+                            <strong>Parámetros:</strong>
+                            <ul>
+                                <li><code>server</code> = La variable IPAddress que definimos antes (74.125.230.223)</li>
+                                <li><code>80</code> = Puerto HTTP estándar</li>
+                            </ul>
+                            <strong>Retorna:</strong>
+                            <ul>
+                                <li><code>true</code> (1) = Conexión exitosa</li>
+                                <li><code>false</code> (0) = Conexión fallida</li>
+                            </ul>
+                        </div>
+
+                        <div class="analogy-box">
+                            <strong>🎯 Analogía de Puertos:</strong>
+                            <p>La dirección IP es como la dirección de un edificio (Google). El puerto es el número de departamento específico:</p>
+                            <ul style="margin-top: 10px;">
+                                <li><strong>Puerto 80:</strong> Departamento de HTTP (páginas web normales)</li>
+                                <li><strong>Puerto 443:</strong> Departamento de HTTPS (páginas seguras)</li>
+                                <li><strong>Puerto 25:</strong> Departamento de Email</li>
+                                <li><strong>Puerto 21:</strong> Departamento de FTP</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">La Petición HTTP: GET /search?q=arduino HTTP/1.0</h4>
+                        <div class="technical-note">
+                            <strong>Desglose completo:</strong>
+                            <table class="data-table" style="margin-top: 15px;">
+                                <tr>
+                                    <th>Parte</th>
+                                    <th>Significado</th>
+                                </tr>
+                                <tr>
+                                    <td><code>GET</code></td>
+                                    <td>Método HTTP que solicita información (leer)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>/search</code></td>
+                                    <td>Ruta (path) en el servidor</td>
+                                </tr>
+                                <tr>
+                                    <td><code>?</code></td>
+                                    <td>Inicia los parámetros de consulta (query string)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>q=arduino</code></td>
+                                    <td>Parámetro: buscar la palabra "arduino"</td>
+                                </tr>
+                                <tr>
+                                    <td><code>HTTP/1.0</code></td>
+                                    <td>Versión del protocolo HTTP</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">Métodos HTTP comunes:</h4>
+                        <table class="data-table">
+                            <tr>
+                                <th>Método</th>
+                                <th>Propósito</th>
+                                <th>Ejemplo</th>
+                            </tr>
+                            <tr>
+                                <td><strong>GET</strong></td>
+                                <td>Obtener datos</td>
+                                <td>Cargar una página web</td>
+                            </tr>
+                            <tr>
+                                <td><strong>POST</strong></td>
+                                <td>Enviar datos</td>
+                                <td>Enviar un formulario</td>
+                            </tr>
+                            <tr>
+                                <td><strong>PUT</strong></td>
+                                <td>Actualizar datos</td>
+                                <td>Actualizar perfil de usuario</td>
+                            </tr>
+                            <tr>
+                                <td><strong>DELETE</strong></td>
+                                <td>Eliminar datos</td>
+                                <td>Borrar una cuenta</td>
+                            </tr>
+                        </table>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">client.println() - Línea vacía</h4>
+                        <div class="warning-box">
+                            <strong>⚠️ MUY IMPORTANTE:</strong>
+                            <ul>
+                                <li>La línea vacía indica el <strong>fin de los encabezados HTTP</strong></li>
+                                <li>Sin esta línea, el servidor esperará más datos y la petición fallará</li>
+                                <li>Es parte del protocolo HTTP estándar</li>
+                            </ul>
+                        </div>
+
+                        <div class="visual-example">
+                            <h4>Petición HTTP Completa Visualizada</h4>
+                            <code style="background: #1e1e1e; color: #d4d4d4; padding: 20px; display: block; border-radius: 5px; text-align: left; margin: 10px 0; line-height: 1.8;">
+                                <span style="color: #569cd6;">GET</span> <span style="color: #ce9178;">/search?q=arduino</span> <span style="color: #4ec9b0;">HTTP/1.0</span><br/>
+                                <span style="color: #6a9955;">← Esta línea la envía client.println("GET...")</span><br/>
+                                <br/>
+                                <span style="color: #6a9955;">← Esta línea vacía la envía client.println()</span>
+                            </code>
+                        </div>
+
+                        <div class="visual-example">
+                            <h4>Proceso de Conexión TCP/IP Completo (Handshake)</h4>
+                            <div style="text-align: left; max-width: 600px; margin: 20px auto;">
+                                <div class="diagram-row" style="justify-content: flex-start;">
+                                    <div class="diagram-box" style="background: #2196f3;">Arduino</div>
+                                    <div class="arrow-right">→</div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <strong style="color: #667eea;">SYN</strong><br/>
+                                        <span style="font-size: 0.9em;">"Quiero conectar"</span>
+                                    </div>
+                                    <div class="arrow-right">→</div>
+                                    <div class="diagram-box" style="background: #4caf50;">Google</div>
+                                </div>
+                                <div class="arrow-right" style="transform: rotate(90deg); margin: 0;">↓</div>
+                                <div class="diagram-row" style="justify-content: flex-start;">
+                                    <div class="diagram-box" style="background: #4caf50;">Google</div>
+                                    <div class="arrow-right">→</div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <strong style="color: #667eea;">SYN-ACK</strong><br/>
+                                        <span style="font-size: 0.9em;">"OK, recibido"</span>
+                                    </div>
+                                    <div class="arrow-right">→</div>
+                                    <div class="diagram-box" style="background: #2196f3;">Arduino</div>
+                                </div>
+                                <div class="arrow-right" style="transform: rotate(90deg); margin: 0;">↓</div>
+                                <div class="diagram-row" style="justify-content: flex-start;">
+                                    <div class="diagram-box" style="background: #2196f3;">Arduino</div>
+                                    <div class="arrow-right">→</div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <strong style="color: #667eea;">ACK</strong><br/>
+                                        <span style="font-size: 0.9em;">"Confirmado"</span>
+                                    </div>
+                                    <div class="arrow-right">→</div>
+                                    <div class="diagram-box" style="background: #4caf50;">Google</div>
+                                </div>
+                                <div style="margin: 20px 0; padding: 15px; background: #e8f5e9; border-radius: 5px;">
+                                    <strong style="color: #2e7d32;">✓ Conexión Establecida</strong><br/>
+                                    <span style="font-size: 0.9em;">Ahora pueden intercambiar datos HTTP</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Prueba equivalente en navegador:</strong>
+                            <p>Abre tu navegador y escribe:</p>
+                            <code style="background: #1e1e1e; color: #4ec9b0; padding: 10px; display: block; border-radius: 5px; margin: 10px 0;">
+                                http://74.125.230.223/search?q=arduino
+                            </code>
+                            <p>Verás exactamente lo que Arduino recibirá (código HTML)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 8: LOOP - LECTURA -->
+            <div class="code-section">
+                <div class="section-header">
+                    <div class="section-number">8</div>
+                    Loop: Leyendo la Respuesta del Servidor
+                </div>
+                <div class="code-display">
+                    <div class="code-line">
+                        <span class="keyword">void</span> <span class="function">loop</span>()
+                    </div>
+                    <div class="code-line">
+                        {
+                    </div>
+                    <div class="code-line" style="padding-left: 40px;">
+                        <span class="keyword">if</span> (client.<span class="function">available</span>()) {
+                    </div>
+                    <div class="code-line" style="padding-left: 60px;">
+                        <span class="type">char</span> c = client.<span class="function">read</span>();
+                    </div>
+                    <div class="code-line" style="padding-left: 60px;">
+                        Serial.<span class="function">print</span>(c);
+                    </div>
+                    <div class="code-line" style="padding-left: 40px;">
+                        }
+                    </div>
+                </div>
+                <div class="explanation-panel">
+                    <div class="explanation-title">📥 Recibiendo datos byte por byte</div>
+                    <div class="explanation-content">
+                        
+                        <h4 style="color: #667eea;">void loop()</h4>
+                        <div class="technical-note">
+                            <ul>
+                                <li>Función especial que se ejecuta <strong>infinitamente</strong> después de setup()</li>
+                                <li>Se repite miles de veces por segundo</li>
+                                <li>Es el "corazón" del programa Arduino</li>
+                            </ul>
+                        </div>
+
+                        <div class="visual-example">
+                            <h4>Ciclo de Ejecución Arduino</h4>
+                            <div class="diagram-row">
+                                <div class="diagram-box" style="background: #ff9800;">setup()</div>
+                                <div class="arrow-right">→</div>
+                                <div class="diagram-box" style="background: #2196f3;">loop()</div>
+                                <div class="arrow-right" style="transform: rotate(180deg);">→</div>
+                                <div class="diagram-box" style="background: #2196f3;">loop()</div>
+                                <div class="arrow-right" style="transform: rotate(180deg);">→</div>
+                                <div class="diagram-box" style="background: #2196f3;">loop()</div>
+                                <div style="font-size: 1.5em; margin-left: 10px;">...</div>
+                            </div>
+                            <p style="margin-top: 10px; color: #666;">setup() se ejecuta 1 vez | loop() se ejecuta ∞ veces</p>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">client.available()</h4>
+                        <div class="technical-note">
+                            <strong>¿Qué hace?</strong>
+                            <ul>
+                                <li>Verifica si hay datos disponibles para leer del servidor</li>
+                                <li><strong>Retorna:</strong> Número de bytes disponibles (0 si no hay nada)</li>
+                                <li>En la condición <code>if</code>, cualquier número > 0 es considerado <code>true</code></li>
+                            </ul>
+                        </div>
+
+                        <div class="analogy-box">
+                            <strong>🎯 Analogía:</strong> Es como revisar tu buzón de correo:
+                            <ul style="margin-top: 10px;">
+                                <li><code>available()</code> = ¿Hay cartas en el buzón?</li>
+                                <li>Si hay cartas (>0), las lees</li>
+                                <li>Si no hay cartas (0), sigues con tu día</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">char c = client.read()</h4>
+                        <div class="technical-note">
+                            <strong>Desglose:</strong>
+                            <ul>
+                                <li><code>char</code> = Tipo de dato para un carácter (1 byte)</li>
+                                <li><code>c</code> = Nombre de la variable</li>
+                                <li><code>client.read()</code> = Lee UN SOLO byte del buffer</li>
+                                <li><strong>Importante:</strong> Lee solo 1 byte por llamada</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">Serial.print(c)</h4>
+                        <div class="technical-note">
+                            <ul>
+                                <li>Imprime el carácter en el Monitor Serial</li>
+                                <li><code>print()</code> NO agrega nueva línea (vs <code>println()</code>)</li>
+                                <li>Los caracteres se van mostrando uno por uno, formando el HTML completo</li>
+                            </ul>
+                        </div>
+
+                        <div class="visual-example">
+                            <h4>Proceso de Lectura Byte por Byte</h4>
+                            <code style="background: #1e1e1e; color: #d4d4d4; padding: 20px; display: block; border-radius: 5px; text-align: left; margin: 10px 0; line-height: 1.8;">
+                                <span style="color: #6a9955;">// Iteración 1:</span><br/>
+                                available() = <span style="color: #b5cea8;">152</span> bytes <span style="color: #6a9955;">// Hay datos</span><br/>
+                                c = <span style="color: #ce9178;">'&lt;'</span><br/>
+                                print('<span style="color: #ce9178;">&lt;</span>') <span style="color: #6a9955;">// Muestra: &lt;</span><br/>
+                                <br/>
+                                <span style="color: #6a9955;">// Iteración 2:</span><br/>
+                                available() = <span style="color: #b5cea8;">151</span> bytes<br/>
+                                c = <span style="color: #ce9178;">'h'</span><br/>
+                                print('<span style="color: #ce9178;">h</span>') <span style="color: #6a9955;">// Muestra: &lt;h</span><br/>
+                                <br/>
+                                <span style="color: #6a9955;">// Iteración 3:</span><br/>
+                                available() = <span style="color: #b5cea8;">150</span> bytes<br/>
+                                c = <span style="color: #ce9178;">'t'</span><br/>
+                                print('<span style="color: #ce9178;">t</span>') <span style="color: #6a9955;">// Muestra: &lt;ht</span><br/>
+                                <br/>
+                                <span style="color: #6a9955;">// ... y así sucesivamente</span>
+                            </code>
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>⚠️ ¿Por qué leer byte por byte?</strong>
+                            <ul>
+                                <li>El Arduino tiene memoria RAM limitada (2KB en Uno)</li>
+                                <li>La respuesta de Google puede ser varios KB (código HTML completo)</li>
+                                <li>No cabe todo en memoria a la vez</li>
+                                <li>Leer y mostrar byte por byte es más eficiente</li>
+                            </ul>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Alternativa para leer más rápido:</strong>
+                            <code style="background: #1e1e1e; color: #d4d4d4; padding: 15px; display: block; border-radius: 5px; margin: 10px 0;">
+                                <span style="color: #569cd6;">while</span> (client.<span style="color: #dcdcaa;">available</span>()) {<br/>
+                                &nbsp;&nbsp;<span style="color: #4ec9b0;">char</span> c = client.<span style="color: #dcdcaa;">read</span>();<br/>
+                                &nbsp;&nbsp;Serial.<span style="color: #dcdcaa;">print</span>(c);<br/>
+                                }<br/>
+                                <span style="color: #6a9955;">// Lee todos los bytes disponibles en cada loop()</span>
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 9: DESCONEXIÓN -->
+            <div class="code-section">
+                <div class="section-header">
+                    <div class="section-number">9</div>
+                    Detectando Desconexión y Finalizando
+                </div>
+                <div class="code-display">
+                    <div class="code-line" style="padding-left: 40px;">
+                        <span class="keyword">if</span> (!client.<span class="function">connected</span>()) {
+                    </div>
+                    <div class="code-line" style="padding-left: 60px;">
+                        Serial.<span class="function">println</span>();
+                    </div>
+                    <div class="code-line" style="padding-left: 60px;">
+                        Serial.<span class="function">println</span>(<span class="string">"disconnectar."</span>);
+                    </div>
+                    <div class="code-line" style="padding-left: 60px;">
+                        client.<span class="function">stop</span>();
+                    </div>
+                    <div class="code-line" style="padding-left: 60px;">
+                        <span class="keyword">for</span>(;;)
+                    </div>
+                    <div class="code-line" style="padding-left: 80px;">
+                        ;
+                    </div>
+                    <div class="code-line" style="padding-left: 40px;">
+                        }
+                    </div>
+                    <div class="code-line">
+                        }
+                    </div>
+                </div>
+                <div class="explanation-panel">
+                    <div class="explanation-title">🔌 Cerrando la conexión correctamente</div>
+                    <div class="explanation-content">
+                        
+                        <h4 style="color: #667eea;">!client.connected()</h4>
+                        <div class="technical-note">
+                            <strong>Análisis:</strong>
+                            <ul>
+                                <li><code>client.connected()</code> = Verifica si la conexión sigue activa</li>
+                                <li>Retorna <code>true</code> si conectado, <code>false</code> si no</li>
+                                <li><code>!</code> = Operador NOT (invierte el valor)</li>
+                                <li><strong>Resultado:</strong> "Si NO está conectado..."</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">¿Cuándo se desconecta?</h4>
+                        <div class="technical-note">
+                            <strong>Razones comunes:</strong>
+                            <ul>
+                                <li>El servidor (Google) envió todos los datos y cerró su lado de la conexión</li>
+                                <li>Timeout de red (sin actividad por mucho tiempo)</li>
+                                <li>Error de red (cable desconectado, etc.)</li>
+                                <li>El servidor rechazó la conexión</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">Serial.println() sin argumentos</h4>
+                        <div class="technical-note">
+                            <ul>
+                                <li>Imprime solo una nueva línea</li>
+                                <li><strong>Propósito:</strong> Separar visualmente la respuesta HTML del mensaje de desconexión</li>
+                                <li>Equivale a presionar Enter en el Monitor Serial</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">client.stop()</h4>
+                        <div class="technical-note">
+                            <strong>¿Qué hace internamente?</strong>
+                            <ul>
+                                <li>Envía paquete FIN (finalización) al servidor</li>
+                                <li>Libera los recursos de red (sockets)</li>
+                                <li>Limpia los buffers de datos</li>
+                                <li>Marca el cliente como desconectado</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>⚠️ Importancia de llamar stop():</strong>
+                            <ul>
+                                <li>Cierra formalmente la conexión</li>
+                                <li>Libera recursos para futuras conexiones</li>
+                                <li>Evita conexiones "zombies" que consuman memoria</li>
+                                <li>Es como colgar el teléfono correctamente vs. solo dejarlo tirado</li>
+                            </ul>
+                        </div>
+
+                        <h4 style="color: #667eea; margin-top: 20px;">for(;;) - Bucle Infinito Final</h4>
+                        <div class="technical-note">
+                            <strong>¿Por qué detener el programa?</strong>
+                            <ul>
+                                <li>Ya completó su tarea (conectar, enviar petición, recibir respuesta)</li>
+                                <li>No tiene sentido seguir ejecutando el loop()</li>
+                                <li>Evita intentos de reconexión innecesarios</li>
+                            </ul>
+                        </div>
+
+                        <div class="visual-example">
+                            <h4>Línea de Tiempo Completa del Programa</h4>
+                            <div style="text-align: left; max-width: 700px; margin: 20px auto; font-size: 0.95em;">
+                                <div style="padding: 15px; margin: 10px 0; background: #e3f2fd; border-left: 5px solid #2196f3; border-radius: 5px;">
+                                    <strong>⏱️ 0ms:</strong> Arduino inicia → ejecuta setup()
+                                </div>
+                                <div style="padding: 15px; margin: 10px 0; background: #e3f2fd; border-left: 5px solid #2196f3; border-radius: 5px;">
+                                    <strong>⏱️ 10ms:</strong> Inicializa Serial (9600 baudios)
+                                </div>
+                                <div style="padding: 15px; margin: 10px 0; background: #e3f2fd; border-left: 5px solid #2196f3; border-radius: 5px;">
+                                    <strong>⏱️ 500ms:</strong> Inicia DHCP → obtiene IP del router
+                                </div>
+                                <div style="padding: 15px; margin: 10px 0; background: #e3f2fd; border-left: 5px solid #2196f3; border-radius: 5px;">
+                                    <strong>⏱️ 1500ms:</strong> delay(1000) completo
+                                </div>
+                                <div style="padding: 15px; margin: 10px 0; background: #e3f2fd; border-left: 5px solid #2196f3; border-radius: 5px;">
+                                    <strong>⏱️ 1800ms:</strong> Conecta a Google (TCP handshake)
+                                </div>
+                                <div style="padding: 15px; margin: 10px 0; background: #e3f2fd; border-left: 5px solid #2196f3; border-radius: 5px;">
+                                    <strong>⏱️ 1850ms:</strong> Envía petición HTTP GET
+                                </div>
+                                <div style="padding: 15px; margin: 10px 0; background: #fff3e0; border-left: 5px solid #ff9800; border-radius: 5px;">
+                                    <strong>⏱️ 2000ms - 5000ms:</strong> loop() ejecutándose
+                                    <ul style="margin-top: 5px; margin-left: 20px;">
+                                        <li>Lee bytes del servidor</li>
+                                        <li>Imprime en Serial</li>
+                                        <li>Se repite miles de veces</li>
+                                    </ul>
+                                </div>
+                                <div style="padding: 15px; margin: 10px 0; background: #ffebee; border-left: 5px solid #f44336; border-radius: 5px;">
+                                    <strong>⏱️ 5000ms:</strong> Servidor cierra conexión
+                                </div>
+                                <div style="padding: 15px; margin: 10px 0; background: #ffebee; border-left: 5px solid #f44336; border-radius: 5px;">
+                                    <strong>⏱️ 5010ms:</strong> Detecta desconexión → llama stop()
+                                </div>
+                                <div style="padding: 15px; margin: 10px 0; background: #f5f5f5; border-left: 5px solid #757575; border-radius: 5px;">
+                                    <strong>⏱️ 5020ms - ∞:</strong> Bucle infinito vacío (programa detenido)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Versión mejorada (reconexión automática):</strong>
+                            <code style="background: #1e1e1e; color: #d4d4d4; padding: 15px; display: block; border-radius: 5px; margin: 10px 0; line-height: 1.8;">
+                                <span style="color: #569cd6;">if</span> (!client.<span style="color: #dcdcaa;">connected</span>()) {<br/>
+                                &nbsp;&nbsp;Serial.<span style="color: #dcdcaa;">println</span>(<span style="color: #ce9178;">"Desconectado. Esperando..."</span>);<br/>
+                                &nbsp;&nbsp;client.<span style="color: #dcdcaa;">stop</span>();<br/>
+                                &nbsp;&nbsp;<span style="color: #dcdcaa;">delay</span>(<span style="color: #b5cea8;">5000</span>); <span style="color: #6a9955;">// Espera 5 segundos</span><br/>
+                                &nbsp;&nbsp;<span style="color: #569cd6;">if</span> (client.<span style="color: #dcdcaa;">connect</span>(server, <span style="color: #b5cea8;">80</span>)) {<br/>
+                                &nbsp;&nbsp;&nbsp;&nbsp;Serial.<span style="color: #dcdcaa;">println</span>(<span style="color: #ce9178;">"Reconectado!"</span>);<br/>
+                                &nbsp;&nbsp;&nbsp;&nbsp;client.<span style="color: #dcdcaa;">println</span>(<span style="color: #ce9178;">"GET /search?q=arduino HTTP/1.0"</span>);<br/>
+                                &nbsp;&nbsp;&nbsp;&nbsp;client.<span style="color: #dcdcaa;">println</span>();<br/>
+                                &nbsp;&nbsp;}<br/>
+                                }<br/>
+                                <span style="color: #6a9955;">// Esto permite hacer peticiones repetidas</span>
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESUMEN FINAL -->
+            <div class="code-section" style="border: 3px solid #4caf50;">
+                <div class="section-header" style="background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);">
+                    <div class="section-number">✓</div>
+                    Resumen: Flujo Completo del Programa
+                </div>
+                <div class="explanation-panel" style="background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%);">
+                    <div class="explanation-content">
+                        <h3 style="color: #2e7d32; margin-bottom: 20px;">📋 Checklist de Ejecución</h3>
+                        
+                        <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                            <h4 style="color: #4caf50;">1️⃣ Preparación (Setup)</h4>
+                            <ul style="margin: 15px 0 15px 25px; line-height: 2;">
+                                <li>✓ Incluye bibliotecas SPI y Ethernet</li>
+                                <li>✓ Define dirección MAC del shield</li>
+                                <li>✓ Define IP del servidor (Google)</li>
+                                <li>✓ Crea objeto cliente Ethernet</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                            <h4 style="color: #4caf50;">2️⃣ Inicialización (Setup Function)</h4>
+                            <ul style="margin: 15px 0 15px 25px; line-height: 2;">
+                                <li>✓ Inicia comunicación Serial a 9600 baudios</li>
+                                <li>✓ Espera a que Serial esté listo</li>
+                                <li>✓ Obtiene IP automática vía DHCP</li>
+                                <li>✓ Espera 1 segundo de estabilización</li>
+                                <li>✓ Conecta al servidor en puerto 80</li>
+                                <li>✓ Envía petición HTTP GET</li>
+                                <li>✓ Envía línea vacía (fin de headers)</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                            <h4 style="color: #4caf50;">3️⃣ Procesamiento (Loop Function)</h4>
+                            <ul style="margin: 15px 0 15px 25px; line-height: 2;">
+                                <li>✓ Verifica si hay datos disponibles</li>
+                                <li>✓ Lee un byte a la vez</li>
+                                <li>✓ Imprime byte en Monitor Serial</li>
+                                <li>✓ Repite hasta que no haya más datos</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                            <h4 style="color: #4caf50;">4️⃣ Finalización (Loop Function)</h4>
+                            <ul style="margin: 15px 0 15px 25px; line-height: 2;">
+                                <li>✓ Detecta cuando servidor se desconecta</li>
+                                <li>✓ Imprime mensaje de desconexión</li>
+                                <li>✓ Cierra formalmente la conexión (stop)</li>
+                                <li>✓ Entra en bucle infinito (programa termina)</li>
+                            </ul>
+                        </div>
+
+                        <div class="analogy-box" style="margin-top: 30px;">
+                            <strong>🎯 Analogía Final - El Programa como una Llamada Telefónica:</strong>
+                            <ol style="margin: 15px 0 15px 25px; line-height: 2;">
+                                <li><strong>Setup:</strong> Configurar tu teléfono y obtener línea</li>
+                                <li><strong>connect():</strong> Marcar el número de Google</li>
+                                <li><strong>println(GET...):</strong> Hacer tu pregunta ("búscame info sobre Arduino")</li>
+                                <li><strong>Loop con available():</strong> Escuchar la respuesta palabra por palabra</li>
+                                <li><strong>connected():</strong> Verificar si la otra persona sigue ahí</li>
+                                <li><strong>stop():</strong> Colgar correctamente el teléfono</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div style="text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <h2 style="margin-bottom: 15px;">🎓 ¡Ahora entiendes cada línea!</h2>
+        <p style="font-size: 1.2em; opacity: 0.95;">Este código es la base para proyectos IoT más avanzados con Arduino</p>
+    </div>
+
+</body>
+</html>
