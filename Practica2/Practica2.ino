@@ -1,4 +1,4 @@
-//https://naylampmechatronics.com/blog/27_tutorial-ethernet-shield-y-arduino.html
+//Tutorial en  https://naylampmechatronics.com/blog/27_tutorial-ethernet-shield-y-arduino.html
 #include <SPI.h>
 #include <Ethernet.h>
 
@@ -105,7 +105,7 @@ void loop()
             client.print("<button onClick=location.href='./?Data=3'>ON</button>");           
             client.print("<button onClick=location.href='./?Data=4'>OFF</button>");
             client.println("<br /><br />");
-            client.println("<a href='https://naylampmechatronics.com/'>naylampmechatronics.com</a>");
+            client.println("<a href='https://mutatronica.blogspot.com//'>Mutatronik.com</a>");
             client.println("<br /><br />");             
             client.println("</b></body>");
             client.println("</html>");
