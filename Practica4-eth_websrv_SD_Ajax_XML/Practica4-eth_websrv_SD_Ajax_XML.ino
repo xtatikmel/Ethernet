@@ -1,17 +1,21 @@
 /*--------------------------------------------------------------
-  Program:      eth_websrv_SD_Ajax_in_out
+  Program:      eth_websrv_SD_Ajax_XML
 
-  Description:  Arduino web server that displays 4 analog inputs,
-                the state of 3 switches and controls 4 outputs,
-                2 using checkboxes and 2 using buttons.
-                The web page is stored on the micro SD card.
+  Description:  Arduino web server that serves up a web page
+                that displays the status of two switches and
+                one analog input.
+                The web page is stored on the SD card.
+                The web page contains JavaScript code that uses
+                Ajax and XML to get the states of the switches
+                and value of the analog input.
   
   Hardware:     Arduino Uno and official Arduino Ethernet
                 shield. Should work with other Arduinos and
                 compatible Ethernet shields.
                 2Gb micro SD card formatted FAT16.
-                A2 to A4 analog inputs, pins 2, 3 and 5 for
-                the switches, pins 6 to 9 as outputs (LEDs).
+                Push button switches interfaced to pin 7 and 8
+                of the Arduino. Potentiometer interfaced to A0
+                analog input.
                 
   Software:     Developed using Arduino 1.0.5 software
                 Should be compatible with Arduino 1.0 +
@@ -26,27 +30,27 @@
                 - SD Card library documentation:
                   http://arduino.cc/en/Reference/SD
 
-  Date:         4 April 2013
-  Modified:     19 June 2013
-                - removed use of the String class
+  Date:         27 March 2013
+  Modified:     17 June 2013
+                - removed the use of the String class
  
-  Author:       W.A. Smith, http://startingelectronics.com
+  Author:       W.A. Smith, http://startingelectronics.org
 --------------------------------------------------------------*/
 
 #include <SPI.h>
 #include <Ethernet.h>
 #include <SD.h>
+
 // size of buffer used to capture HTTP requests
-#define REQ_BUF_SZ   60
+#define REQ_BUF_SZ   50
 
 // MAC address from Ethernet shield sticker under board
-byte mac[] = { 0xD3, 0xAD, 0xB5, 0xAF, 0x05, 0xED };
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 IPAddress ip(192, 168, 1, 177); // IP address, may need to change depending on network
 EthernetServer server(80);  // create a server at port 80
 File webFile;               // the web page file on the SD card
 char HTTP_req[REQ_BUF_SZ] = {0}; // buffered HTTP request stored as null terminated string
 char req_index = 0;              // index into HTTP_req buffer
-boolean LED_state[4] = {0}; // stores the states of the LEDs
 
 void setup()
 {
@@ -69,15 +73,8 @@ void setup()
         return;  // can't find index file
     }
     Serial.println("SUCCESS - Found index.htm file.");
-    // switches on pins 2, 3 and 5
-    pinMode(2, INPUT);
-    pinMode(3, INPUT);
-    pinMode(5, INPUT);
-    // LEDs
-    pinMode(6, OUTPUT);
-    pinMode(7, OUTPUT);
-    pinMode(8, OUTPUT);
-    pinMode(9, OUTPUT);
+    pinMode(5, INPUT);        // switch is attached to Arduino pin 7
+    pinMode(6, INPUT);        // switch is attached to Arduino pin 8
     
     Ethernet.begin(mac, ip);  // initialize Ethernet device
     server.begin();           // start to listen for clients
@@ -92,7 +89,6 @@ void loop()
         while (client.connected()) {
             if (client.available()) {   // client data available to read
                 char c = client.read(); // read 1 byte (character) from client
-                // limit the size of the stored received HTTP request
                 // buffer first part of HTTP request in HTTP_req array (string)
                 // leave last element in array as 0 to null terminate string (REQ_BUF_SZ - 1)
                 if (req_index < (REQ_BUF_SZ - 1)) {
@@ -112,7 +108,6 @@ void loop()
                         client.println("Content-Type: text/xml");
                         client.println("Connection: keep-alive");
                         client.println();
-                        SetLEDs();
                         // send XML file containing input states
                         XML_response(client);
                     }
@@ -154,115 +149,34 @@ void loop()
     } // end if (client)
 }
 
-// checks if received HTTP request is switching on/off LEDs
-// also saves the state of the LEDs
-void SetLEDs(void)
-{
-    // LED 1 (pin 6)
-    if (StrContains(HTTP_req, "LED1=1")) {
-        LED_state[0] = 1;  // save LED state
-        digitalWrite(6, HIGH);
-    }
-    else if (StrContains(HTTP_req, "LED1=0")) {
-        LED_state[0] = 0;  // save LED state
-        digitalWrite(6, LOW);
-    }
-    // LED 2 (pin 7)
-    if (StrContains(HTTP_req, "LED2=1")) {
-        LED_state[1] = 1;  // save LED state
-        digitalWrite(7, HIGH);
-    }
-    else if (StrContains(HTTP_req, "LED2=0")) {
-        LED_state[1] = 0;  // save LED state
-        digitalWrite(7, LOW);
-    }
-    // LED 3 (pin 8)
-    if (StrContains(HTTP_req, "LED3=1")) {
-        LED_state[2] = 1;  // save LED state
-        digitalWrite(8, HIGH);
-    }
-    else if (StrContains(HTTP_req, "LED3=0")) {
-        LED_state[2] = 0;  // save LED state
-        digitalWrite(8, LOW);
-    }
-    // LED 4 (pin 9)
-    if (StrContains(HTTP_req, "LED4=1")) {
-        LED_state[3] = 1;  // save LED state
-        digitalWrite(9, HIGH);
-    }
-    else if (StrContains(HTTP_req, "LED4=0")) {
-        LED_state[3] = 0;  // save LED state
-        digitalWrite(9, LOW);
-    }
-}
-
-// send the XML file with analog values, switch status
-//  and LED status
+// send the XML file with switch statuses and analog value
 void XML_response(EthernetClient cl)
 {
-    int analog_val;            // stores value read from analog inputs
-    int count;                 // used by 'for' loops
-    int sw_arr[] = {2, 3, 5};  // pins interfaced to switches
+    int analog_val;
     
     cl.print("<?xml version = \"1.0\" ?>");
     cl.print("<inputs>");
-    // read analog inputs
-    for (count = 2; count <= 5; count++) { // A2 to A5
-        analog_val = analogRead(count);
-        cl.print("<analog>");
-        cl.print(analog_val);
-        cl.println("</analog>");
-    }
-    // read switches
-    for (count = 0; count < 3; count++) {
-        cl.print("<switch>");
-        if (digitalRead(sw_arr[count])) {
-            cl.print("ON");
-        }
-        else {
-            cl.print("OFF");
-        }
-        cl.println("</switch>");
-    }
-    // checkbox LED states
-    // LED1
-    cl.print("<LED>");
-    if (LED_state[0]) {
-        cl.print("checked");
+    cl.print("<button1>");
+    if (digitalRead(5)) {
+        cl.print("ON");
     }
     else {
-        cl.print("unchecked");
+        cl.print("OFF");
     }
-    cl.println("</LED>");
-    // LED2
-    cl.print("<LED>");
-    if (LED_state[1]) {
-        cl.print("checked");
-    }
-    else {
-        cl.print("unchecked");
-    }
-     cl.println("</LED>");
-    // button LED states
-    // LED3
-    cl.print("<LED>");
-    if (LED_state[2]) {
-        cl.print("on");
+    cl.print("</button1>");
+    cl.print("<button2>");
+    if (digitalRead(6)) {
+        cl.print("ON");
     }
     else {
-        cl.print("off");
+        cl.print("OFF");
     }
-    cl.println("</LED>");
-    // LED4
-    cl.print("<LED>");
-    if (LED_state[3]) {
-        cl.print("on");
-    }
-    else {
-        cl.print("off");
-    }
-    cl.println("</LED>");
-    
+    cl.print("</button2>");
+    // read analog pin A0
+    analog_val = analogRead(0);
+    cl.print("<analog1>");
+    cl.print(analog_val);
+    cl.print("</analog1>");
     cl.print("</inputs>");
 }
 
