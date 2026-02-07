@@ -92,8 +92,8 @@ void loop() {
     
     // Voltajes
     client.println("<h2>Voltajes</h2>");
-    float v1 = (analogRead(A0) * 5.0 / 1024.0) * 11.0;
-    float v2 = (analogRead(A1) * 5.0 / 1024.0) * 11.0;
+    float v1 = (analogRead(A0) * 5.0 / 1024.0);
+    float v2 = (analogRead(A1) * 5.0 / 1024.0);
     client.print("AN0: "); client.print(v1, 2); client.println(" V<br>");
     client.print("AN1: "); client.print(v2, 2); client.println(" V");
     
