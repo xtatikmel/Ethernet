@@ -8,8 +8,16 @@ EthernetServer server(80); //Creamos un servidor Web con el puerto 80 que es el 
  
 int LED1=2; //Pin del LED 1
 int LED2=3; //Pin del LED 2
+int pin_lectura1 = A0; 
+int pin_lectura2 = A1; 
 String estado1="OFF"; //Estado del Led 1 inicialmente "OFF"
 String estado2="OFF"; //Estado del Led 2 inicialmente "OFF" 
+float voltaje_entrada1;
+float voltaje_final1;
+float voltaje_entrada2;
+float voltaje_final2;
+float resistencia1 = 100000; //Resistencia de 100K
+float resistencia2 = 10000; //Resistencia de 10k
 
 void setup()
 {
@@ -28,10 +36,17 @@ void setup()
   pinMode(5,INPUT_PULLUP);
   digitalWrite(LED1,HIGH);
   digitalWrite(LED2,HIGH);
+  pinMode(pin_lectura1, INPUT);
+  pinMode(pin_lectura2, INPUT);
 }
  
 void loop()
 {
+  voltaje_entrada1 = (analogRead(A0) * 4.95) / 1024;  //Lee el voltaje de entrada
+  voltaje_final1 = voltaje_entrada1 / (resistencia2 / (resistencia1 + resistencia2));  //Fórmula del divisor resistivo para el voltaje final
+  voltaje_entrada2 = (analogRead(A1) * 4.95) / 1024;  //Lee el voltaje de entrada
+  voltaje_final2 = voltaje_entrada2 / (resistencia2 / (resistencia1 + resistencia2));  //Fórmula del divisor resistivo para el voltaje final
+
   EthernetClient client = server.available(); //Creamos un cliente Web
   //Verificamos si se detecte un cliente a través de una petición HTTP
   if (client) {
@@ -87,8 +102,8 @@ void loop()
             client.println("<div style='text-align:center;'>");
             client.println("<h1>IotLabs MECHATRONICS</h1>");
             client.println("<h2>Entradas Analogicas</h2>");
-            client.print("AN0="); client.println(analogRead(0));
-            client.print("<br />AN1=");client.println(analogRead(1)); 
+            client.print("AN0="); client.println(voltaje_final1);
+            client.print("<br />AN1=");client.println(voltaje_final2); 
             client.println("<h2>Entradas Digitales</h2>");
             client.print("D4=");client.println(digitalRead(4));
             client.println("<br />D5=");client.print(digitalRead(5));
