@@ -11,8 +11,8 @@ const byte PIN_BATERIA = A0;   // Batería 12V
 const byte PIN_PANEL = A1;      // Panel Solar 12V
 
 // Configuración divisor de voltaje 30k/10k
-const float R1 = 30000.0;  // 30kΩ
-const float R2 = 10000.0;  // 10kΩ
+const float R1 = 1200.0;  // 30kΩ
+const float R2 = 1500.0;  // 10kΩ
 const float VREF = 5.0;    // Voltaje de referencia Arduino
 const float FACTOR_DIVISION = (R1 + R2) / R2;  // = 4.0
 
@@ -255,7 +255,7 @@ void loop() {
     
     // Info técnica
     client.println("<div class='info'>");
-    client.println("📊 <strong>Configuración:</strong> Divisor 30kΩ/10kΩ (Factor 4:1) | Rango: 0-20V | Auto-refresh: 10s");
+    client.println("📊 <strong>Configuración:</strong> Divisor 1,kΩ/1,5kΩ (Factor 4:1) | Rango: 0-20V | Auto-refresh: 10s");
     client.println("</div>");
     
     client.println("</body></html>");
