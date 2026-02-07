@@ -1,143 +1,133 @@
-//Tutorial en  https://naylampmechatronics.com/blog/27_tutorial-ethernet-shield-y-arduino.html
 #include <SPI.h>
 #include <Ethernet.h>
 
-byte mac[] = { 0xDE, 0xAD, 0xAE, 0xEF, 0xF0, 0xED };//Ponemos la dirección MAC de la Ethernet Shield
-IPAddress ip(192,168,1,177); //Asignamos  la IP al Arduino
-EthernetServer server(80); //Creamos un servidor Web con el puerto 80 que es el puerto HTTP por defecto
- 
-int LED1=2; //Pin del LED 1
-int LED2=3; //Pin del LED 2
-int pin_lectura1 = A0; 
-int pin_lectura2 = A1; 
-String estado1="OFF"; //Estado del Led 1 inicialmente "OFF"
-String estado2="OFF"; //Estado del Led 2 inicialmente "OFF" 
-float voltaje_entrada1;
-float voltaje_final1;
-float voltaje_entrada2;
-float voltaje_final2;
-float resistencia1 = 100000; //Resistencia de 100K
-float resistencia2 = 10000; //Resistencia de 10k
+byte mac[] = { 0xDE, 0xAD, 0xAE, 0xEF, 0xF0, 0xED };
+IPAddress ip(192, 168, 1, 177);
+EthernetServer server(80);
 
-void setup()
-{
+const byte LED1 = 2;
+const byte LED2 = 3;
+
+void setup() {
   Serial.begin(9600);
- 
-  // Inicializamos la comunicación Ethernet y el servidor
+  
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+  pinMode(4, INPUT_PULLUP);
+  pinMode(5, INPUT_PULLUP);
+  
+  digitalWrite(LED1, LOW);
+  digitalWrite(LED2, LOW);
+  
   Ethernet.begin(mac, ip);
   server.begin();
   
-  Serial.print("server is at ");
+  Serial.print("Servidor en: ");
   Serial.println(Ethernet.localIP());
-  
-  pinMode(LED1,OUTPUT);
-  pinMode(LED2,OUTPUT);
-  pinMode(4,INPUT_PULLUP);   //declara un pin como entrada y activa la resistencia pullup interna para ese pin
-  pinMode(5,INPUT_PULLUP);
-  digitalWrite(LED1,HIGH);
-  digitalWrite(LED2,HIGH);
-  pinMode(pin_lectura1, INPUT);
-  pinMode(pin_lectura2, INPUT);
 }
- 
-void loop()
-{
-  voltaje_entrada1 = (analogRead(A0) * 4.95) / 1024;  //Lee el voltaje de entrada
-  voltaje_final1 = voltaje_entrada1 / (resistencia2 / (resistencia1 + resistencia2));  //Fórmula del divisor resistivo para el voltaje final
-  voltaje_entrada2 = (analogRead(A1) * 4.95) / 1024;  //Lee el voltaje de entrada
-  voltaje_final2 = voltaje_entrada2 / (resistencia2 / (resistencia1 + resistencia2));  //Fórmula del divisor resistivo para el voltaje final
 
-  EthernetClient client = server.available(); //Creamos un cliente Web
-  //Verificamos si se detecte un cliente a través de una petición HTTP
+void loop() {
+  EthernetClient client = server.available();
+  
   if (client) {
-    Serial.println("new client");
-    boolean currentLineIsBlank = true; //Una petición HTTP acaba con una línea en blanco
-    String cadena=""; //Creamos una cadena de caracteres vacía
-    while (client.connected()) {
+    Serial.println("Nuevo cliente");
+    
+    String request = "";
+    unsigned long timeout = millis();
+    
+    // ESPERAR Y LEER LA PETICIÓN (máximo 2 segundos)
+    while (client.connected() && (millis() - timeout < 2000)) {
       if (client.available()) {
-        char c = client.read();//Leemos la petición HTTP carácter por carácter
-        Serial.write(c);//Visualizamos la petición HTTP por el Monitor Serial
-        if(cadena.length()<50)
-        {
-                    cadena.concat(c);//concatenmos el String 'cadena' con la petición HTTP (c). De esta manera convertimos la petición HTTP a un String
-           
-                   //Ya que hemos convertido la petición HTTP a una cadena de caracteres, ahora podremos buscar partes del texto.
-                   int posicion=cadena.indexOf("Data="); //Guardamos la posición de la Palabra "Data=" a la variable 'posicion'
-           
-                    if(cadena.substring(posicion)=="Data=1")//Si en la posición hay "Data=1"
-                    {
-                      digitalWrite(LED1,HIGH);
-                      estado1="ON";
-                    }
-                    else if(cadena.substring(posicion)=="Data=2")//Si en posición hay "Data=2"
-                    {
-                      digitalWrite(LED1,LOW);
-                      estado1="OFF";
-                    }
-                    else if(cadena.substring(posicion)=="Data=3")//Si en la posición hay "Data=3"
-                    {
-                      digitalWrite(LED2,HIGH);
-                      estado2="ON";
-                    }
-                    else if(cadena.substring(posicion)=="Data=4")//Si en la posición hay "Data=4"
-                    {
-                      digitalWrite(LED2,LOW);
-                      estado2="OFF";
-                    } 
-                          
-        }
-        //Cuando reciba una línea en blanco, quiere decir que la petición HTTP ha acabado y el servidor Web está listo para enviar una respuesta
-        if (c == 'n' && currentLineIsBlank) {
- 
-            // Enviamos al cliente una respuesta HTTP
-            client.println("HTTP/1.1 200 OK");
-            client.println("Content-Type: text/html");
-            client.println();
- 
-            //Página web en formato HTML
-            client.println("<html>");                 
-            client.println("<head><title>IotLabs Mutatronics</title>");
-            client.println("</head>");
-            client.println("<body>");
-            client.println("<div style='text-align:center;'>");
-            client.println("<h1>IotLabs MECHATRONICS</h1>");
-            client.println("<h2>Entradas Analogicas</h2>");
-            client.print("AN0="); client.println(voltaje_final1);
-            client.print("<br />AN1=");client.println(voltaje_final2); 
-            client.println("<h2>Entradas Digitales</h2>");
-            client.print("D4=");client.println(digitalRead(4));
-            client.println("<br />D5=");client.print(digitalRead(5));
-            client.println("<br /><br />");
-            client.println("<a href='http://192.168.1.177'>Actualizar entradas</a>");
-            client.println("<h2>Salidas Digitales </h2>");        
-            client.println("Estado del LED 1 = ");client.print(estado1);            
-            client.println("<br />");            
-            client.print("<button onClick=location.href='./?Data=1'>ON</button>");           
-            client.print("<button onClick=location.href='./?Data=2'>OFF</button>");
-            client.println("<br /><br />");
-            client.println("Estado del LED 2 = ");client.print(estado2);            
-            client.println("<br />");            
-            client.print("<button onClick=location.href='./?Data=3'>ON</button>");           
-            client.print("<button onClick=location.href='./?Data=4'>OFF</button>");
-            client.println("<br /><br />");
-            client.println("<a href='https://mutatronica.blogspot.com//'>Mutatronik.com</a>");
-            client.println("<br /><br />");             
-            client.println("</b></body>");
-            client.println("</html>");
-            break;
-        }
-        if (c == 'n') {
-          currentLineIsBlank = true;
-        }
-        else if (c != 'r') {
-          currentLineIsBlank = false;
+        char c = client.read();
+        Serial.write(c);  // Ver qué llega
+        request += c;
+        
+        // Detectar fin de petición HTTP (doble salto de línea)
+        if (request.endsWith("\r\n\r\n") || request.endsWith("\n\n")) {
+          Serial.println("\n*** Peticion completa recibida ***");
+          break;
         }
       }
     }
-    //Dar tiempo al navegador para recibir los datos
-    delay(1);
-    client.stop();// Cierra la conexión
+    
+    // PROCESAR COMANDOS
+    if (request.indexOf("GET /?Data=1") >= 0) {
+      digitalWrite(LED1, HIGH);
+      Serial.println("LED1 -> ON");
+    }
+    else if (request.indexOf("GET /?Data=2") >= 0) {
+      digitalWrite(LED1, LOW);
+      Serial.println("LED1 -> OFF");
+    }
+    else if (request.indexOf("GET /?Data=3") >= 0) {
+      digitalWrite(LED2, HIGH);
+      Serial.println("LED2 -> ON");
+    }
+    else if (request.indexOf("GET /?Data=4") >= 0) {
+      digitalWrite(LED2, LOW);
+      Serial.println("LED2 -> OFF");
+    }
+    
+    // ENVIAR RESPUESTA
+    Serial.println("Enviando respuesta...");
+    
+    client.println("HTTP/1.1 200 OK");
+    client.println("Content-Type: text/html");
+    client.println("Connection: close");
+    client.println();
+    
+    // HTML simplificado
+    client.println("<!DOCTYPE html><html><head>");
+    client.println("<meta charset='UTF-8'>");
+    client.println("<meta name='viewport' content='width=device-width'>");
+    client.println("<title>Arduino</title>");
+    client.println("<style>");
+    client.println("body{font-family:Arial;text-align:center;margin:20px}");
+    client.println("button{padding:10px 20px;margin:5px;font-size:16px}");
+    client.println(".on{background:#4CAF50;color:white;border:none}");
+    client.println(".off{background:#f44336;color:white;border:none}");
+    client.println("</style></head><body>");
+    
+    client.println("<h1>Control Arduino</h1>");
+    
+    // Voltajes
+    client.println("<h2>Voltajes</h2>");
+    float v1 = (analogRead(A0) * 5.0 / 1024.0) * 11.0;
+    float v2 = (analogRead(A1) * 5.0 / 1024.0) * 11.0;
+    client.print("AN0: "); client.print(v1, 2); client.println(" V<br>");
+    client.print("AN1: "); client.print(v2, 2); client.println(" V");
+    
+    // Entradas digitales
+    client.println("<h2>Entradas Digitales</h2>");
+    client.print("D4: "); 
+    client.println(digitalRead(4) == LOW ? "PRESIONADO" : "LIBRE");
+    client.println("<br>");
+    client.print("D5: "); 
+    client.println(digitalRead(5) == LOW ? "PRESIONADO" : "LIBRE");
+    
+    // LED 1
+    client.println("<h2>LED 1</h2>");
+    client.print("Estado: <b>");
+    client.print(digitalRead(LED1) ? "ON" : "OFF");
+    client.println("</b><br><br>");
+    client.println("<a href='/?Data=1'><button class='on'>ENCENDER</button></a>");
+    client.println("<a href='/?Data=2'><button class='off'>APAGAR</button></a>");
+    
+    // LED 2
+    client.println("<h2>LED 2</h2>");
+    client.print("Estado: <b>");
+    client.print(digitalRead(LED2) ? "ON" : "OFF");
+    client.println("</b><br><br>");
+    client.println("<a href='/?Data=3'><button class='on'>ENCENDER</button></a>");
+    client.println("<a href='/?Data=4'><button class='off'>APAGAR</button></a>");
+    
+    client.println("<br><br><hr><a href='/'>Actualizar</a>");
+    client.println("</body></html>");
+    
+    // IMPORTANTE: Dar tiempo antes de cerrar
+    delay(100);
+    client.stop();
+    
+    Serial.println("Cliente desconectado\n");
   }
-  
 }
-  
