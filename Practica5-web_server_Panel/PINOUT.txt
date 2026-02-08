@@ -1,0 +1,123 @@
+================================================================================
+         PRACTICA5 - MONITOR PANEL SOLAR 12V CON GAUGE
+                    CONFIGURACIÓN DE PINES
+================================================================================
+
+ARDUINO UNO + ETHERNET SHIELD + SD CARD
+────────────────────────────────────────────────────────────────────────────
+
+PINES ANALÓGICOS:
+─────────────────
+A0          [ETHERNET SHIELD - RESERVADO]
+A1          [ETHERNET SHIELD - RESERVADO]
+A2          ──── Panel Solar (Divisor 30kΩ/10kΩ) ────> 0-20V
+A3          ──── Batería 12V (Divisor 30kΩ/10kΩ) ────> 0-20V
+A4          ──── Control PWM (Divisor 30kΩ/10kΩ) ────> 0-20V
+A5          ──── LDR - Sensor de Luz Solar
+
+
+PINES DIGITALES:
+────────────────
+D0          [SERIAL RX - RESERVADO]
+D1          [SERIAL TX - RESERVADO]
+D2          ──── LED ROJO (Estado: Descargando)
+D3          ──── LED AMARILLO (Estado: Equilibrio)
+D4          [SD CARD - RESERVADO]
+D5          ──── LED VERDE (Estado: Generando)
+D6          ──── LED de Control 1 (Checkbox)
+D7          ──── LED de Control 2 (Checkbox)
+D8          ──── LED de Control 3 (Button)
+D9          ──── LED de Control 4 (Button)
+D10         [ETHERNET SHIELD - CS - RESERVADO]
+D11         [ETHERNET SHIELD - MOSI - RESERVADO]
+D12         [ETHERNET SHIELD - MISO - RESERVADO]
+D13         [ETHERNET SHIELD - SCK - RESERVADO]
+
+
+CIRCUITO DIVISOR DE VOLTAJE (Para A2, A3, A4):
+──────────────────────────────────────────────
+                R1 (30kΩ)
+   +─────────────────────────────+─────> A_PIN
+   |                             |
+ VOLTAJE                        R2 (10kΩ)
+  0-20V                         |
+   |                            GND
+   GND ───────────────────────────
+
+Fórmula: V_real = V_pin * (R1 + R2) / R2 * CALIBRACION
+         V_real = V_pin * 4.0 * 0.94
+
+
+SENSOR LDR (A5):
+────────────────
+        +5V
+         |
+        R (10kΩ)
+         |
+         +─────> A5 (LDR)
+         |
+       LDR
+         |
+        GND
+
+
+ESTADOS DE LEDs (D2, D3, D5):
+─────────────────────────────
+Condición                        ROJO    AMARILLO   VERDE
+─────────────────────────────────────────────────────────
+Batería < 12V & Panel < 12.5V    ON       OFF       OFF      (DESCARGANDO)
+Ninguno de los anteriores        OFF      ON        OFF      (EQUILIBRIO)
+Panel > 13V & Batería < 12.8V    OFF      OFF       ON       (GENERANDO)
+
+
+INTERFAZ WEB:
+─────────────
+URL: 192.168.1.177
+Puerto: 80
+
+AJAX Endpoints:
+- GET /                    → Carga index.htm desde SD
+- GET /ajax_inputs?...     → Respuesta XML con datos
+
+
+BAUDRATE SERIAL:
+────────────────
+9600 bps (para debugging)
+
+
+CONFIGURACIÓN SD CARD:
+──────────────────────
+Formato: FAT16
+Archivo: index.htm
+
+
+CONSUMO APROXIMADO:
+───────────────────
+Arduino Uno:       ~50mA
+Ethernet Shield:   ~100mA
+LEDs (3x5mm):      ~15mA (cuando activos)
+LDR:               ~5mA
+TOTAL:             ~170mA @ 5V
+
+
+NOTAS IMPORTANTES:
+──────────────────
+1. El divisor de voltaje es CRÍTICO para mediciones precisas
+2. Usar resistencias de al menos 1/4W
+3. Calibrar CALIBRACION si hay error sistemático
+4. Colocar capacitor 100nF entre A_PIN y GND para estabilidad
+5. Verificar valores en Serial Monitor antes de confiar en mediciones
+6. La SD card DEBE tener index.htm formateado
+7. Probar conectividad Ethernet antes de cargar código final
+
+
+VERIFICACIÓN DE FUNCIONAMIENTO:
+──────────────────────────────
+✓ Serial Monitor muestra "SD inicializada"
+✓ Serial Monitor muestra "Servidor en: 192.168.1.177"
+✓ Puedes acceder a 192.168.1.177 en el navegador
+✓ Los gauges se actualizan cada 1 segundo
+✓ Los LEDs cambian de color según voltajes
+✓ El sensor LDR responde a cambios de luz
+
+================================================================================

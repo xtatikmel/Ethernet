@@ -1,0 +1,351 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    CHECKLIST DE VERIFICACIÓN - PRACTICA5
+═══════════════════════════════════════════════════════════════════════════════
+
+PRE-IMPLEMENTACIÓN
+═══════════════════════════════════════════════════════════════════════════════
+
+Hardware:
+  □ Arduino Uno disponible
+  □ Ethernet Shield disponible
+  □ SD Card (FAT16) disponible
+  □ Cable Ethernet disponible
+  □ Resistencias 30kΩ y 10kΩ para divisores (3 juegos)
+  □ 3 LEDs (Rojo, Amarillo, Verde)
+  □ 4 LEDs de control (D6-D9)
+  □ LDR sensor de luz disponible
+  □ Resistencia pull-up para LDR (10kΩ)
+  □ Multímetro para calibración
+
+Software:
+  □ Arduino IDE instalado
+  □ Librerías: SPI, Ethernet, SD (incluidas en IDE)
+  □ Navegador web moderno
+  □ Editor de texto para modificar HTML (opcional)
+
+
+INSTALACIÓN ARCHIVOS
+═══════════════════════════════════════════════════════════════════════════════
+
+Descarga/Copia:
+  □ PanelSolarsimple.ino → Arduino IDE
+  □ index.htm → Raíz de SD Card
+  □ PINOUT.txt → Para referencia
+  □ PRUEBAS.txt → Para validación
+  □ README_CAMBIOS.md → Para documentación
+
+
+CONFIGURACIÓN DE RED
+═══════════════════════════════════════════════════════════════════════════════
+
+Red Disponible:
+  □ WiFi o Ethernet disponible
+  □ Rango IP conocido (192.168.x.x típicamente)
+  □ Arduino conectado a router/switch
+  □ Laptop/PC en misma red
+
+Verificar Conectividad:
+  □ Abrir línea de comandos
+  □ Ejecutar: ping 192.168.1.177 (después de cargar código)
+  □ Debería responder (antes de cargar código, fallará - es normal)
+
+
+MONTAJE CIRCUITO
+═══════════════════════════════════════════════════════════════════════════════
+
+Divisores de Voltaje (para A2, A3, A4):
+  □ R1 (30kΩ) desde voltaje positivo hasta A_PIN
+  □ R2 (10kΩ) desde A_PIN hasta GND
+  □ Capacitor 100nF entre A_PIN y GND (opcional pero recomendado)
+  □ REPETIR PARA LOS 3 PINES (A2, A3, A4)
+
+Sensor LDR (A5):
+  □ Resistencia 10kΩ desde +5V hasta A5
+  □ LDR desde A5 hasta GND
+  □ Sensor se oscurece cuando baja luz
+
+LEDs de Estado (D2, D3, D5):
+  □ LED Rojo en D2 (ánodo a D2 a través de 220Ω)
+  □ LED Amarillo en D3 (ánodo a D3 a través de 220Ω)
+  □ LED Verde en D5 (ánodo a D5 a través de 220Ω)
+  □ Todos los cátodos a GND
+
+LEDs de Control (D6-D9):
+  □ LED 1 en D6 (ánodo a D6 a través de 220Ω, cátodo a GND)
+  □ LED 2 en D7 (ánodo a D7 a través de 220Ω, cátodo a GND)
+  □ LED 3 en D8 (ánodo a D8 a través de 220Ω, cátodo a GND)
+  □ LED 4 en D9 (ánodo a D9 a través de 220Ω, cátodo a GND)
+
+Ethernet Shield:
+  □ Shield colocado correctamente en Arduino
+  □ Pines alineados correctamente
+  □ SD Card insertada en ranura
+  □ Cable Ethernet conectado
+
+
+CARGA DE CÓDIGO
+═══════════════════════════════════════════════════════════════════════════════
+
+Arduino IDE:
+  □ Abrir Arduino IDE
+  □ Archivo → Abrir → PanelSolarsimple.ino
+  □ Seleccionar Board: Arduino Uno
+  □ Seleccionar Puerto COM correcto
+  □ Compilar (Sketch → Verify)
+  □ Verificar sin errores
+  □ Subir (Sketch → Upload)
+  □ Ver mensaje "Done uploading"
+
+Serial Monitor:
+  □ Tools → Serial Monitor
+  □ Seleccionar 9600 baud
+  □ Presionar Reset en Arduino
+  □ Ver mensajes:
+    - "Inicializando SD card..."
+    - "OK - SD inicializada"
+    - "OK - Archivo index.htm encontrado"
+    - "Servidor en: 192.168.1.177"
+
+
+PREPARACIÓN SD CARD
+═══════════════════════════════════════════════════════════════════════════════
+
+Formateo:
+  □ Formatear SD card en FAT16 (NO FAT32)
+  □ En Windows: Click derecho → Formatear → FAT
+  □ En Mac: Disk Utility → Formatear como MS-DOS
+
+Copiar Archivo:
+  □ Copiar index.htm a raíz de SD
+  □ Estructura final:
+     SD:/
+     └── index.htm
+  □ SOLO este archivo, nada más
+  □ Eyectar SD card de forma segura
+
+
+INSERCIÓN SD CARD EN SHIELD
+═══════════════════════════════════════════════════════════════════════════════
+
+Instalación:
+  □ Desconectar Arduino de poder
+  □ Tomar SD card con contactos hacia el shield
+  □ Insertar en ranura con cuidado
+  □ Escuchar "click" cuando encaje
+  □ SD card debe quedar en su lugar
+  □ NO FORZAR
+
+Verificación:
+  □ Shield debería reconocer la tarjeta
+  □ Serial Monitor debería mostrar "OK - SD inicializada"
+  □ Si no: verificar inserción o usar otra SD card
+
+
+PRUEBAS DE CONECTIVIDAD
+═══════════════════════════════════════════════════════════════════════════════
+
+Ethernet:
+  □ Cable Ethernet conectado de Arduino a router
+  □ LED verde en Ethernet Shield debería estar encendido
+  □ LED naranja parpadeando (actividad de red)
+
+IP Assignment:
+  □ Arduino obtiene IP automáticamente (DHCP)
+  □ Serial Monitor muestra "Servidor en: 192.168.1.177"
+  □ Nota: IP puede variar según red
+
+Navegador Web:
+  □ Abrir navegador (Chrome, Firefox, Safari, Edge)
+  □ Ir a: http://192.168.1.177
+  □ Página debería cargar en 2-3 segundos
+  □ Ver título "Monitor Panel Solar 12V"
+  □ Ver 3 gauges
+
+
+VALIDACIÓN SENSORES
+═══════════════════════════════════════════════════════════════════════════════
+
+Voltaje Panel (A2):
+  □ Usar multímetro para medir entrada real
+  □ Comparar con valor mostrado en web (panel_volt)
+  □ Diferencia < 0.5V es aceptable
+  □ Si > 1V, ajustar CALIBRACION en código
+
+Voltaje Batería (A3):
+  □ Usar multímetro para medir batería 12V
+  □ Comparar con valor mostrado en web (bateria_volt)
+  □ Diferencia < 0.5V es aceptable
+  □ Si > 1V, ajustar CALIBRACION en código
+
+Voltaje PWM (A4):
+  □ Usar multímetro para medir entrada
+  □ Comparar con valor mostrado en web (pwm_volt)
+  □ Diferencia < 0.5V es aceptable
+
+LDR Sensor (A5):
+  □ Cambiar iluminación sobre sensor
+  □ Observar lectura ADC cambiar (0-1023)
+  □ Observar intensidad % cambiar (0-100%)
+  □ Valores esperados:
+    - Oscuridad: 0-100
+    - Luz interior: 200-500
+    - Luz solar: 800-1023
+
+
+VALIDACIÓN LEDs ESTADO
+═══════════════════════════════════════════════════════════════════════════════
+
+LED Rojo (Descargando):
+  □ Aplicar: Batería < 12V y Panel < 12.5V
+  □ Verificar: LED Rojo se enciende físicamente
+  □ Verificar: Círculo rojo en web está brillante
+  □ Desaplicar: LED debería apagarse
+
+LED Amarillo (Equilibrio):
+  □ Aplicar: Batería entre 12-12.8V y Panel entre 12.5-13V
+  □ Verificar: LED Amarillo se enciende físicamente
+  □ Verificar: Círculo amarillo en web está brillante
+  □ Desaplicar: LED debería apagarse
+
+LED Verde (Generando):
+  □ Aplicar: Panel > 13V y Batería < 12.8V
+  □ Verificar: LED Verde se enciende físicamente
+  □ Verificar: Círculo verde en web está brillante
+  □ Desaplicar: LED debería apagarse
+
+
+VALIDACIÓN CONTROLES LED D6-D9
+═══════════════════════════════════════════════════════════════════════════════
+
+LED D6 (Checkbox):
+  □ Hacer click en checkbox LED D6
+  □ Verificar: LED físico se enciende
+  □ Hacer click nuevamente
+  □ Verificar: LED físico se apaga
+
+LED D7 (Checkbox):
+  □ Hacer click en checkbox LED D7
+  □ Verificar: LED físico se enciende
+  □ Hacer click nuevamente
+  □ Verificar: LED físico se apaga
+
+LED D8 (Botón):
+  □ Hacer click en botón "D8 - OFF"
+  □ Verificar: LED físico se enciende
+  □ Botón debería mostrar "D8 - ON"
+  □ Hacer click nuevamente
+  □ Verificar: LED físico se apaga
+  □ Botón debería mostrar "D8 - OFF"
+
+LED D9 (Botón):
+  □ Hacer click en botón "D9 - OFF"
+  □ Verificar: LED físico se enciende
+  □ Botón debería mostrar "D9 - ON"
+  □ Hacer click nuevamente
+  □ Verificar: LED físico se apaga
+  □ Botón debería mostrar "D9 - OFF"
+
+
+VALIDACIÓN GAUGES
+═══════════════════════════════════════════════════════════════════════════════
+
+Gauge Panel Solar:
+  □ Visible en pantalla
+  □ Aguja roja apuntando a valor ADC actual
+  □ Número en rango 0-1023
+  □ Voltaje en rango 0-20V mostrado debajo
+
+Gauge Batería 12V:
+  □ Visible en pantalla
+  □ Aguja roja apuntando a valor ADC actual
+  □ Número en rango 0-1023
+  □ Voltaje en rango 0-20V mostrado debajo
+
+Gauge PWM:
+  □ Visible en pantalla
+  □ Aguja roja apuntando a valor ADC actual
+  □ Número en rango 0-1023
+  □ Voltaje en rango 0-20V mostrado debajo
+
+Actualización:
+  □ Todos los gauges se actualizan cada segundo
+  □ Cambios suave en la aguja (no saltarse)
+  □ Valores sincronizados entre sí
+
+
+VALIDACIÓN INTERFAZ
+═══════════════════════════════════════════════════════════════════════════════
+
+Responsividad:
+  □ Reducir tamaño ventana navegador
+  □ Layout se adapta correctamente
+  □ Nada se superpone
+  □ Prueba en teléfono móvil
+  □ Interfaz sigue siendo usable
+
+Estabilidad:
+  □ Dejar página abierta 5 minutos
+  □ Verificar sin errores en console
+  □ Verificar sin actualizaciones lentas
+  □ Refrescar página (F5)
+  □ Debería cargar nuevamente sin problemas
+
+Velocidad:
+  □ Carga página: < 2 segundos
+  □ Actualización AJAX: cada 1 segundo ± 200ms
+  □ Respuesta a clicks: inmediata
+
+
+CALIBRACIÓN FINAL
+═══════════════════════════════════════════════════════════════════════════════
+
+Si hay error sistemático (> 1V):
+
+  □ Anotar voltaje con multímetro: V_real
+  □ Anotar voltaje en web: V_mostrado
+  □ Calcular: CALIBRACION_nueva = 0.94 * (V_real / V_mostrado)
+  □ Editar PanelSolarsimple.ino línea 54
+  □ Cambiar: const float CALIBRACION = 0.94;
+  □ Por: const float CALIBRACION = X.XX; (valor calculado)
+  □ Compilar y subir código
+  □ Verificar nuevamente
+  □ Repetir hasta diferencia < 0.3V
+
+
+DOCUMENTACIÓN
+═══════════════════════════════════════════════════════════════════════════════
+
+Archivos Disponibles:
+  □ README_CAMBIOS.md - Documentación técnica
+  □ PINOUT.txt - Esquema de pines
+  □ PRUEBAS.txt - Guía de pruebas detalladas
+  □ OPTIMIZACIONES.txt - Análisis técnico
+  □ RESUMEN_EJECUTIVO.txt - Este resumen
+
+
+PRÓXIMOS PASOS
+═══════════════════════════════════════════════════════════════════════════════
+
+Una vez validado:
+  □ Sistema completamente funcional
+  □ Listo para monitoreo en producción
+  □ Puede agregar lógica adicional en Arduino
+  □ Puede mejorar interfaz HTML/CSS
+  □ Puede escalar a múltiples Arduinos
+
+Mejoras Opcionales:
+  □ Agregar histórico de datos
+  □ Guardar logs en SD card
+  □ Alertas por email/SMS
+  □ Control PWM automático
+  □ Integración con cloud
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                      ✓ CHECKLIST COMPLETADO ✓
+
+Felicitaciones, tu sistema está listo para usar.
+Guarda este checklist para futuras revisiones.
+
+═══════════════════════════════════════════════════════════════════════════════

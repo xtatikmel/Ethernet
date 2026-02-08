@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor Panel Solar 12V</title>
+    <script>
+        var panel_gauge_val = 0;
+        var bateria_gauge_val = 0;
+        var pwm_gauge_val = 0;
+        var LED_D6 = 0, LED_D7 = 0, LED_D8 = 0, LED_D9 = 0;
+        var LED_RED = 0, LED_YELLOW = 0, LED_GREEN = 0;
+        
+        eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('t W=v(f){W.2t.3T(A);A.B={Z:2u,19:1q,1h:1q,1J:U,1b:D,K:0,V:[\'0\',\'20\',\'40\',\'2A\',\'2B\',\'D\'],2r:10,2C:M,1E:U,2q:{2D:3,2E:2},2H:M,1c:{2j:10,2m:3y,2O:\'3v\'},J:{2P:\'#4h\',V:\'#31\',2r:\'#3k\',1J:\'#37\',1E:\'#37\',3e:\'#31\',1t:{2s:\'1e(3Y, 3d, 3d, 1)\',3c:\'1e(1Y, 5I, 5E, .9)\'}},1o:[{1n:20,1D:2A,1F:\'#3j\'},{1n:2A,1D:2B,1F:\'#36\'},{1n:2B,1D:D,1F:\'#5n\'}]};t g=0,1p=A,N=0,1S=0,1G=U;A.5d=v(a){N=f.1c?g:a;t b=(f.1b-f.K)/D;1S=a>f.1b?1S=f.1b+b:a<f.K?f.K-b:a;g=a;f.1c?3l():A.1g();C A};A.3m=v(a){N=g=a;A.1g();C A};A.4T=v(){g=N=1S=A.B.K;A.1g();C A};A.4R=v(){C g};A.13=v(){};v 2k(a,b){Q(t i 4P b){z(1H b[i]==\"1W\"&&!(4O.4y.2V.4p(b[i])===\'[1W 4n]\')&&i!=\'Z\'){z(1H a[i]!=\"1W\"){a[i]={}}2k(a[i],b[i])}O{a[i]=b[i]}}};2k(A.B,f);A.B.K=1R(A.B.K);A.B.1b=1R(A.B.1b);f=A.B;N=g=f.K;z(!f.Z){4m 4j("4g 4d 4b 46 44 41 3Z 3W W 1W!");}t j=f.Z.5K?f.Z:2R.5v(f.Z),q=j.3u(\'2d\'),1i,1y,1A,14,17,u,1d;v 2M(){j.19=f.19;j.1h=f.1h;1i=j.4s(M);1d=1i.3u(\'2d\');1y=j.19;1A=j.1h;14=1y/2;17=1A/2;u=14<17?14:17;1i.2J=U;1d.3P(14,17);1d.G();q.3P(14,17);q.G()};2M();A.4Z=v(a){2k(A.B,a);2M();A.1g();C A};t k={4q:v(p){C p},4e:v(p){C E.1L(p,2)},4c:v(p){C E.1L(p,5)},3v:v(p){C 1-E.1O(E.5C(p))},5k:v(p){C 1-(v(p){Q(t a=0,b=1;1;a+=b,b/=2){z(p>=(7-4*a)/11){C-E.1L((11-6*a-11*p)/4,2)+E.1L(b,2)}}})(1-p)},4S:v(p){C 1-(v(p){t x=1.5;C E.1L(2,10*(p-1))*E.1T(20*E.1a*x/3*p)})(1-p)}};t l=2u;v 3S(d){t e=2v 3R;l=2x(v(){t a=2v 3R-e,1M=a/d.2m;z(1M>1){1M=1}t b=1H d.2g==\"v\"?d.2g:k[d.2g];t c=b(1M);d.3Q(c);z(1M==1){2b(l)}},d.2j||10)};v 3l(){l&&2b(l);t b=(1S-N),1n=N,29=f.1c;3S({2j:29.2j,2m:29.2m,2g:29.2O,3Q:v(a){N=1R(1n)+b*a;1p.1g()}})};q.5l="3O";A.1g=v(){z(!1i.2J){1d.3M(-14,-17,1y,1A);1d.G();t a=q;q=1d;3L();3K();3I();3H();3F();3D();3z();1i.2J=M;q=a;5G a}q.3M(-14,-17,1y,1A);q.G();q.4a(1i,-14,-17,1y,1A);z(!W.28){t b=2x(v(){z(!W.28){C}2b(b);2K();2L();z(!1G){1p.13&&1p.13();1G=M}},10)}O{2K();2L();z(!1G){1p.13&&1p.13();1G=M}}C A};v S(a){C a*E.1a/4J};v 1l(a,b,c){t d=q.4Y(0,0,0,c);d.1V(0,a);d.1V(1,b);C d};v 3L(){t a=u/D*5g,3x=u-a,2a=u/D*5q,5u=u-2a,1f=u/D*5z,5A=u-1f;3t=u/D*5F;q.G();z(f.2H){q.2o=3x;q.2n=\'1e(0, 0, 0, 0.5)\'}q.P();q.16(0,0,a,0,E.1a*2,M);q.L=1l(\'#42\',\'#43\',a);q.T();q.R();q.P();q.16(0,0,2a,0,E.1a*2,M);q.L=1l(\'#49\',\'#36\',2a);q.T();q.P();q.16(0,0,1f,0,E.1a*2,M);q.L=1l(\'#3j\',\'#3s\',1f);q.T();q.P();q.16(0,0,3t,0,E.1a*2,M);q.L=f.J.2P;q.T();q.G()};v 3H(){t r=u/D*2T;q.2e=2;q.2U=f.J.V;q.G();Q(t i=0;i<f.V.H;++i){t a=45+i*(1U/(f.V.H-1));q.1z(S(a));q.P();q.1K(0,r);q.F(0,r-u/D*15);q.1X();q.R();q.G()}z(f.2C){q.1z(S(2X));q.P();q.16(0,0,r,S(45),S(4N),U);q.1X();q.R();q.G()}};v 3I(){t r=u/D*2T;q.2e=1;q.2U=f.J.2r;q.G();t b=f.2r*(f.V.H-1);Q(t i=0;i<b;++i){t a=45+i*(1U/b);q.1z(S(a));q.P();q.1K(0,r);q.F(0,r-u/D*7.5);q.1X();q.R();q.G()}};v 3F(){t r=u/D*55;Q(t i=0;i<f.V.H;++i){t a=45+i*(1U/(f.V.H-1)),p=1w(r,S(a));q.1x=20*(u/1q)+"2i 2Y";q.L=f.J.3e;q.2e=0;q.2h="2f";q.27(f.V[i],p.x,p.y+3)}};v 3D(){z(!f.1J){C}q.G();q.1x=24*(u/1q)+"2i 2Y";q.L=f.J.1J;q.2h="2f";q.27(f.1J,0,-u/4.25);q.R()};v 3z(){z(!f.1E){C}q.G();q.1x=22*(u/1q)+"2i 2Y";q.L=f.J.1E;q.2h="2f";q.27(f.1E,0,u/3.25);q.R()};v 32(a){t b=f.2q.2E,34=f.2q.2D;a=1R(a);t n=(a<0);a=E.35(a);z(b>0){a=a.5t(b).2V().1j(\'.\');Q(t i=0,s=34-a[0].H;i<s;++i){a[0]=\'0\'+a[0]}a=(n?\'-\':\'\')+a[0]+\'.\'+a[1]}O{a=E.3O(a).2V();Q(t i=0,s=34-a.H;i<s;++i){a=\'0\'+a}a=(n?\'-\':\'\')+a}C a};v 1w(r,a){t x=0,y=r,1O=E.1O(a),1T=E.1T(a),X=x*1T-y*1O,Y=x*1O+y*1T;C{x:X,y:Y}};v 3K(){q.G();t a=u/D*2T;t b=a-u/D*15;Q(t i=0,s=f.1o.H;i<s;i++){t c=f.1o[i],39=(f.1b-f.K)/1U,1P=S(45+(c.1n-f.K)/39),1N=S(45+(c.1D-f.K)/39);q.P();q.1z(S(2X));q.16(0,0,a,1P,1N,U);q.R();q.G();t d=1w(b,1P),3a=1w(a,1P);q.1K(d.x,d.y);q.F(3a.x,3a.y);t e=1w(a,1N),3b=1w(b,1N);q.F(e.x,e.y);q.F(3b.x,3b.y);q.F(d.x,d.y);q.1C();q.L=c.1F;q.T();q.P();q.1z(S(2X));q.16(0,0,b,1P-0.2,1N+0.2,U);q.R();q.1C();q.L=f.J.2P;q.T();q.G()}};v 2L(){t a=u/D*12,1f=u/D*8,1u=u/D*3X,1r=u/D*20,2l=u/D*4,1B=u/D*2,38=v(){q.3f=2;q.3g=2;q.2o=10;q.2n=\'1e(5L, 3h, 3h, 0.45)\'};38();q.G();z(N<0){N=E.35(f.K-N)}O z(f.K>0){N-=f.K}O{N=E.35(f.K)+N}q.1z(S(45+N/((f.1b-f.K)/1U)));q.P();q.1K(-1B,-1r);q.F(-2l,0);q.F(-1,1u);q.F(1,1u);q.F(2l,0);q.F(1B,-1r);q.1C();q.L=1l(f.J.1t.2s,f.J.1t.3c,1u-1r);q.T();q.P();q.F(-0.5,1u);q.F(-1,1u);q.F(-2l,0);q.F(-1B,-1r);q.F(1B/2-2,-1r);q.1C();q.L=\'1e(1Y, 1Y, 1Y, 0.2)\';q.T();q.R();38();q.P();q.16(0,0,a,0,E.1a*2,M);q.L=1l(\'#3s\',\'#36\',a);q.T();q.R();q.P();q.16(0,0,1f,0,E.1a*2,M);q.L=1l("#47","#48",1f);q.T()};v 3i(x,y,w,h,r){q.P();q.1K(x+r,y);q.F(x+w-r,y);q.23(x+w,y,x+w,y+r);q.F(x+w,y+h-r);q.23(x+w,y+h,x+w-r,y+h);q.F(x+r,y+h);q.23(x,y+h,x,y+h-r);q.F(x,y+r);q.23(x,y,x+r,y);q.1C()};v 2K(){q.G();q.1x=40*(u/1q)+"2i 30";t a=32(g),2Z=q.4f(\'-\'+32(0)).19,y=u-u/D*33,x=0,2W=0.12*u;q.G();3i(-2Z/2-0.21*u,y-2W-0.4i*u,2Z+0.3n*u,2W+0.4k*u,0.21*u);t b=q.4l(x,y-0.12*u-0.21*u+(0.12*u+0.3o*u)/2,u/10,x,y-0.12*u-0.21*u+(0.12*u+0.3o*u)/2,u/5);b.1V(0,"#37");b.1V(1,"#3k");q.2U=b;q.2e=0.3n*u;q.1X();q.2o=0.3p*u;q.2n=\'1e(0, 0, 0, 1)\';q.L="#4o";q.T();q.R();q.3f=0.3q*u;q.3g=0.3q*u;q.2o=0.3p*u;q.2n=\'1e(0, 0, 0, 0.3)\';q.L="#31";q.2h="2f";q.27(a,-x,y);q.R()}};W.28=U;(v(){t d=2R,h=d.3r(\'4r\')[0],2S=4t.4u.4v().4w(\'4x\')!=-1,2Q=\'4z://4A-4B.4C/4D/4E/4F-7-4G.\'+(2S?\'4H\':\'4I\'),1I="@1x-4K {"+"1x-4L: \'30\';"+"4M: 2Q(\'"+2Q+"\');"+"}",1s,r=d.3w(\'1v\');r.2N=\'1I/4Q\';z(2S){h.2p(r);1s=r.2I;1s.3A=1I}O{4U{r.2p(d.4V(1I))}4W(e){r.3A=1I}h.2p(r);1s=r.2I?r.2I:(r.4X||d.3B[d.3B.H-1])}t b=2x(v(){z(!d.3C){C}2b(b);t a=d.3w(\'50\');a.1v.51=\'30\';a.1v.52=\'53\';a.1v.1h=a.1v.19=0;a.1v.54=\'56\';a.57=\'.\';d.3C.2p(a);58(v(){W.28=M;a.59.5a(a)},3y)},1)})();W.2t=[];W.2t.5b=v(a){z(1H(a)==\'5c\'){Q(t i=0,s=A.H;i<s;i++){z(A[i].B.Z.18(\'5e\')==a){C A[i]}}}O z(1H(a)==\'5f\'){C A[a]}O{C 2u}};v 3E(a){z(2G.3G){2G.3G(\'5h\',a,U)}O{2G.5i(\'5j\',a)}};3E(v(){v 2F(a){t b=a[0];Q(t i=1,s=a.H;i<s;i++){b+=a[i].1Z(0,1).5m()+a[i].1Z(1,a[i].H-1)}C b};v 3J(a){C a.5o(/^\\s+|\\s+$/g,\'\')};t c=2R.3r(\'5p\');Q(t i=0,s=c.H;i<s;i++){z(c[i].18(\'1k-2N\')==\'5r-5s\'){t d=c[i],B={},1m,w=2c(d.18(\'19\')),h=2c(d.18(\'1h\'));B.Z=d;z(w){B.19=w}z(h){B.1h=h}Q(t e=0,1s=d.3N.H;e<1s;e++){1m=d.3N.5w(e).5x;z(1m!=\'1k-2N\'&&1m.1Z(0,5)==\'1k-\'){t f=1m.1Z(5,1m.H-5).5y().1j(\'-\'),I=d.18(1m);z(!I){2z}5B(f[0]){2y\'J\':{z(f[1]){z(!B.J){B.J={}}z(f[1]==\'1t\'){t k=I.1j(/\\s+/);z(k[0]&&k[1]){B.J.1t={2s:k[0],3c:k[1]}}O{B.J.1t=I}}O{f.5D();B.J[2F(f)]=I}}26}2y\'1o\':{z(!B.1o){B.1o=[]}2w=I.1j(\',\');Q(t j=0,l=2w.H;j<l;j++){t m=3J(2w[j]).1j(/\\s+/),1Q={};z(m[0]&&m[0]!=\'\'){1Q.1n=m[0]}z(m[1]&&m[1]!=\'\'){1Q.1D=m[1]}z(m[2]&&m[2]!=\'\'){1Q.1F=m[2]}B.1o.3T(1Q)}26}2y\'1c\':{z(f[1]){z(!B.1c){B.1c={}}z(f[1]==\'2O\'&&/^\\s*v\\s*\\(/.5H(I)){I=3U(\'(\'+I+\')\')};B.1c[f[1]]=I}26}5J:{t n=2F(f);z(n==\'13\'){2z}z(n==\'V\'){I=I.1j(/\\s+/)}O z(n==\'2C\'||n==\'2H\'){I=I==\'M\'?M:U}O z(n==\'2q\'){t o=I.1j(\'.\');z(o.H==2){I={2D:2c(o[0]),2E:2c(o[1])}}O{2z}}B[n]=I;26}}}}t g=2v W(B);z(d.18(\'1k-3V\')){g.3m(1R(d.18(\'1k-3V\')))}z(d.18(\'1k-13\')){g.13=v(){3U(A.B.Z.18(\'1k-13\'))}}g.1g()}}});
+        
+        function GetArduinoIO() {
+            var nocache = "&nocache=" + Math.random() * 1000000;
+            var request = new XMLHttpRequest();
+            
+            request.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    if (this.responseXML != null) {
+                        // Obtener valores de gauges
+                        var panels = this.responseXML.getElementsByTagName('panel_gauge');
+                        var bateria = this.responseXML.getElementsByTagName('bateria_gauge');
+                        var pwm = this.responseXML.getElementsByTagName('pwm_gauge');
+                        
+                        if (panels.length > 0) {
+                            panel_gauge_val = parseInt(panels[0].childNodes[0].nodeValue);
+                            Gauge.Collection.get('panel_gauge').setValue(panel_gauge_val);
+                        }
+                        if (bateria.length > 0) {
+                            bateria_gauge_val = parseInt(bateria[0].childNodes[0].nodeValue);
+                            Gauge.Collection.get('bateria_gauge').setValue(bateria_gauge_val);
+                        }
+                        if (pwm.length > 0) {
+                            pwm_gauge_val = parseInt(pwm[0].childNodes[0].nodeValue);
+                            Gauge.Collection.get('pwm_gauge').setValue(pwm_gauge_val);
+                        }
+                        
+                        // Obtener voltajes
+                        var panel_volt = this.responseXML.getElementsByTagName('panel_volt');
+                        var bateria_volt = this.responseXML.getElementsByTagName('bateria_volt');
+                        var pwm_volt = this.responseXML.getElementsByTagName('pwm_volt');
+                        var ldr = this.responseXML.getElementsByTagName('ldr');
+                        
+                        if (panel_volt.length > 0) {
+                            document.getElementById('panel_volt').innerHTML = panel_volt[0].childNodes[0].nodeValue;
+                        }
+                        if (bateria_volt.length > 0) {
+                            document.getElementById('bateria_volt').innerHTML = bateria_volt[0].childNodes[0].nodeValue;
+                        }
+                        if (pwm_volt.length > 0) {
+                            document.getElementById('pwm_volt').innerHTML = pwm_volt[0].childNodes[0].nodeValue;
+                        }
+                        if (ldr.length > 0) {
+                            var ldr_val = parseInt(ldr[0].childNodes[0].nodeValue);
+                            document.getElementById('ldr_val').innerHTML = ldr_val;
+                            // Mostrar intensidad de luz
+                            var intensidad = (ldr_val / 10.23).toFixed(1) + "%";
+                            document.getElementById('ldr_intensity').innerHTML = intensidad;
+                        }
+                        
+                        // LEDs de control D6-D9
+                        var leds = this.responseXML.getElementsByTagName('LED');
+                        if (leds.length >= 4) {
+                            LED_D6 = (leds[0].childNodes[0].nodeValue === "on") ? 1 : 0;
+                            LED_D7 = (leds[1].childNodes[0].nodeValue === "on") ? 1 : 0;
+                            LED_D8 = (leds[2].childNodes[0].nodeValue === "on") ? 1 : 0;
+                            LED_D9 = (leds[3].childNodes[0].nodeValue === "on") ? 1 : 0;
+                            
+                            document.getElementById('led_d6').checked = (LED_D6 === 1);
+                            document.getElementById('led_d7').checked = (LED_D7 === 1);
+                            document.getElementById('led_d8').innerHTML = LED_D8 === 1 ? "D8 - ON" : "D8 - OFF";
+                            document.getElementById('led_d9').innerHTML = LED_D9 === 1 ? "D9 - ON" : "D9 - OFF";
+                        }
+                        
+                        // LEDs de estado
+                        var led_red = this.responseXML.getElementsByTagName('LED_RED');
+                        var led_yellow = this.responseXML.getElementsByTagName('LED_YELLOW');
+                        var led_green = this.responseXML.getElementsByTagName('LED_GREEN');
+                        
+                        if (led_red.length > 0) {
+                            LED_RED = led_red[0].childNodes[0].nodeValue;
+                            var red_elem = document.getElementById('status_red');
+                            if (red_elem) red_elem.style.backgroundColor = (LED_RED === "on") ? "#ff4444" : "#ffaaaa";
+                        }
+                        if (led_yellow.length > 0) {
+                            LED_YELLOW = led_yellow[0].childNodes[0].nodeValue;
+                            var yellow_elem = document.getElementById('status_yellow');
+                            if (yellow_elem) yellow_elem.style.backgroundColor = (LED_YELLOW === "on") ? "#ffaa00" : "#ffffaa";
+                        }
+                        if (led_green.length > 0) {
+                            LED_GREEN = led_green[0].childNodes[0].nodeValue;
+                            var green_elem = document.getElementById('status_green');
+                            if (green_elem) green_elem.style.backgroundColor = (LED_GREEN === "on") ? "#44ff44" : "#aaffaa";
+                        }
+                    }
+                }
+            }
+            
+            request.open("GET", "ajax_inputs" + nocache, true);
+            request.send(null);
+            setTimeout('GetArduinoIO()', 1000);
+        }
+        
+        function toggleLED(pin) {
+            var param = "&" + pin + "=" + (eval("LED_" + pin) === 1 ? 0 : 1);
+            var request = new XMLHttpRequest();
+            request.open("GET", "ajax_inputs" + param, true);
+            request.send(null);
+        }
+        
+        function toggleD8() {
+            var param = "&LED3=" + (LED_D8 === 1 ? 0 : 1);
+            var request = new XMLHttpRequest();
+            request.open("GET", "ajax_inputs" + param, true);
+            request.send(null);
+        }
+        
+        function toggleD9() {
+            var param = "&LED4=" + (LED_D9 === 1 ? 0 : 1);
+            var request = new XMLHttpRequest();
+            request.open("GET", "ajax_inputs" + param, true);
+            request.send(null);
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .gauge-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .gauge-box {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .gauge-box h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .gauge-box canvas {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+        
+        .voltage-info {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+        }
+        
+        .voltage-info p {
+            color: #666;
+            margin: 5px 0;
+        }
+        
+        .voltage-value {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+        
+        .status-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        
+        .status-title {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+        
+        .status-leds {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .status-led {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-led span {
+            font-weight: bold;
+            color: #333;
+            font-size: 0.9em;
+        }
+        
+        .led-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2), inset 0 0 5px rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        #status_red {
+            background-color: #ffaaaa;
+        }
+        
+        #status_yellow {
+            background-color: #ffffaa;
+        }
+        
+        #status_green {
+            background-color: #aaffaa;
+        }
+        
+        .ldr-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        
+        .ldr-title {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+        
+        .ldr-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .ldr-item {
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .ldr-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .ldr-value {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+        
+        .control-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        
+        .control-title {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+        
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .control-item {
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            transition: all 0.3s ease;
+        }
+        
+        .control-item:hover {
+            border-color: #667eea;
+            background: #f5f5ff;
+        }
+        
+        .control-item label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .control-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+        
+        button {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .led-button {
+            display: block;
+            margin-top: 10px;
+            padding: 10px;
+            background: #667eea;
+        }
+        
+        .led-button:hover {
+            background: #764ba2;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .gauge-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .ldr-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-leds {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body onload="GetArduinoIO()">
+    <div class="container">
+        <h1>☀️ Monitor Panel Solar 12V</h1>
+        
+        <!-- Gauges -->
+        <div class="gauge-container">
+            <div class="gauge-box">
+                <h2>Panel Solar</h2>
+                <canvas id="panel_gauge" data-type="canv-gauge" 
+                        data-min-value="0" data-max-value="1023"
+                        data-major-ticks="0 200 400 600 800 1000 1023"
+                        width="200" height="200"></canvas>
+                <div class="voltage-info">
+                    <p>Voltaje (20V max):</p>
+                    <p class="voltage-value"><span id="panel_volt">0.0</span> V</p>
+                </div>
+            </div>
+            
+            <div class="gauge-box">
+                <h2>Batería 12V</h2>
+                <canvas id="bateria_gauge" data-type="canv-gauge"
+                        data-min-value="0" data-max-value="1023"
+                        data-major-ticks="0 200 400 600 800 1000 1023"
+                        width="200" height="200"></canvas>
+                <div class="voltage-info">
+                    <p>Voltaje (20V max):</p>
+                    <p class="voltage-value"><span id="bateria_volt">0.0</span> V</p>
+                </div>
+            </div>
+            
+            <div class="gauge-box">
+                <h2>Salida PWM</h2>
+                <canvas id="pwm_gauge" data-type="canv-gauge"
+                        data-min-value="0" data-max-value="1023"
+                        data-major-ticks="0 200 400 600 800 1000 1023"
+                        width="200" height="200"></canvas>
+                <div class="voltage-info">
+                    <p>Voltaje (20V max):</p>
+                    <p class="voltage-value"><span id="pwm_volt">0.0</span> V</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Estado del Sistema -->
+        <div class="status-container">
+            <div class="status-title">🔴 Estado del Sistema</div>
+            <div class="status-leds">
+                <div class="status-led">
+                    <span>Descargando</span>
+                    <div id="status_red" class="led-circle"></div>
+                </div>
+                <div class="status-led">
+                    <span>Equilibrio</span>
+                    <div id="status_yellow" class="led-circle"></div>
+                </div>
+                <div class="status-led">
+                    <span>Generando</span>
+                    <div id="status_green" class="led-circle"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- LDR - Intensidad de Luz -->
+        <div class="ldr-container">
+            <div class="ldr-title">💡 Sensor LDR (A5)</div>
+            <div class="ldr-info">
+                <div class="ldr-item">
+                    <p class="ldr-label">Lectura ADC:</p>
+                    <p class="ldr-value"><span id="ldr_val">0</span>/1023</p>
+                </div>
+                <div class="ldr-item">
+                    <p class="ldr-label">Intensidad de Luz:</p>
+                    <p class="ldr-value"><span id="ldr_intensity">0%</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Control de LEDs -->
+        <div class="control-container">
+            <div class="control-title">⚙️ Control de LEDs</div>
+            <div class="control-grid">
+                <div class="control-item">
+                    <label>
+                        <input type="checkbox" id="led_d6" name="LED1" onchange="toggleLED('D6')">
+                        LED D6 (Checkbox)
+                    </label>
+                </div>
+                
+                <div class="control-item">
+                    <label>
+                        <input type="checkbox" id="led_d7" name="LED2" onchange="toggleLED('D7')">
+                        LED D7 (Checkbox)
+                    </label>
+                </div>
+                
+                <div class="control-item">
+                    <button type="button" id="led_d8" onclick="toggleD8()">
+                        D8 - OFF
+                    </button>
+                </div>
+                
+                <div class="control-item">
+                    <button type="button" id="led_d9" onclick="toggleD9()">
+                        D9 - OFF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

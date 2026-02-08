@@ -1,0 +1,236 @@
+================================================================================
+      PRACTICA5 - GUÍA DE PRUEBAS Y VALIDACIÓN
+================================================================================
+
+ANTES DE COMENZAR:
+──────────────────
+□ Verificar conexiones físicas según PINOUT.txt
+□ Cargar el código PanelSolarsimple.ino en Arduino
+□ Colocar index.htm en la SD card (raíz)
+□ Asegurar que la red WiFi/Ethernet sea estable
+
+
+PRUEBA 1: VERIFICACIÓN SERIAL (Monitor de depuración)
+──────────────────────────────────────────────────────
+Pasos:
+1. Abrir Serial Monitor (9600 baud)
+2. Reiniciar Arduino
+3. Verificar mensajes:
+   ✓ "Inicializando SD card..."
+   ✓ "OK - SD inicializada"
+   ✓ "OK - Archivo index.htm encontrado"
+   ✓ "Servidor en: 192.168.1.177"
+
+Si hay errores:
+❌ "ERROR - Fallo inicializacion SD!" → Verificar conexión SD/CS
+❌ "ERROR - No encontrado index.htm!" → Asegurar index.htm en raíz de SD
+
+
+PRUEBA 2: CONECTIVIDAD ETHERNET
+─────────────────────────────────
+Pasos:
+1. Abrir navegador web
+2. Ir a: http://192.168.1.177
+3. Debería cargar la página index.htm
+
+Si falla:
+❌ No puede conectar → Verificar cable Ethernet
+❌ Página en blanco → Verificar contenido de index.htm en SD
+❌ Timeout → Verificar IP de red
+
+
+PRUEBA 3: MEDICIÓN DE VOLTAJES
+───────────────────────────────
+Con voltímetro digital:
+
+1. MEDIR EN A2 (Panel Solar):
+   - Conectar voltímetro entre A2 y GND
+   - Leer valor en voltímetro (0-20V)
+   - Comparar con valor en la web
+   - ✓ Diferencia < 0.5V es aceptable
+   - ❌ Si diferencia > 1V: Ajustar CALIBRACION en .ino
+
+2. MEDIR EN A3 (Batería 12V):
+   - Conectar voltímetro entre A3 y GND
+   - Leer valor en voltímetro (0-20V)
+   - Comparar con valor en la web
+   - ✓ Diferencia < 0.5V es aceptable
+
+3. MEDIR EN A4 (PWM):
+   - Igual procedimiento que A2
+
+Fórmula de ajuste si hay error:
+CALIBRACION_nueva = CALIBRACION_actual * (voltaje_esperado / voltaje_mostrado)
+
+Ejemplo:
+- Voltímetro: 13.2V en batería
+- Página web: 12.5V
+- CALIBRACION_nueva = 0.94 * (13.2 / 12.5) = 0.995
+
+
+PRUEBA 4: SENSOR LDR
+────────────────────
+Pasos:
+1. Observar "Sensor LDR (A5)" en la página
+2. Cambiar intensidad de luz en el sensor:
+   - Aumentar luz → Lectura ADC aumenta
+   - Disminuir luz → Lectura ADC disminuye
+   - Intensidad en % debe cambiar proporcionalmente
+3. Valores esperados:
+   - Oscuridad total: 0-100 ADC (0-10%)
+   - Luz interior: 200-500 ADC (20-50%)
+   - Luz solar directa: 800-1023 ADC (78-100%)
+
+
+PRUEBA 5: LEDs DE ESTADO (D2, D3, D5)
+─────────────────────────────────────
+Pasos:
+1. Verificar físicamente los LEDs están conectados
+2. Variar voltajes de entrada:
+
+   CASO 1 - LED ROJO (Descargando):
+   - Aplicar batería < 12V
+   - Aplicar panel < 12.5V
+   - ✓ LED ROJO debe estar brillante (círculo rojo en web)
+   - Verificar en Serial Monitor
+
+   CASO 2 - LED AMARILLO (Equilibrio):
+   - Aplicar batería entre 12-12.8V
+   - Aplicar panel entre 12.5-13V
+   - ✓ LED AMARILLO debe estar brillante (círculo amarillo en web)
+
+   CASO 3 - LED VERDE (Generando):
+   - Aplicar batería < 12.8V
+   - Aplicar panel > 13V
+   - ✓ LED VERDE debe estar brillante (círculo verde en web)
+
+
+PRUEBA 6: LEDs DE CONTROL (D6-D9)
+──────────────────────────────────
+LEDS CON CHECKBOX (D6, D7):
+1. En la página web, marcar checkbox D6
+2. LED D6 debe encenderse
+3. Desmarcar → LED debe apagarse
+4. Mismo con D7
+
+LEDS CON BOTÓN (D8, D9):
+1. En la página web, hacer click en botón "D8 - OFF"
+2. LED D8 debe encenderse y mostrar "D8 - ON"
+3. Hacer click nuevamente → Apagarse
+4. Mismo con D9
+
+
+PRUEBA 7: RESPUESTA EN TIEMPO REAL
+────────────────────────────────────
+Pasos:
+1. Abrir la página en el navegador
+2. Observar el Gauge del Panel Solar
+3. Cambiar voltaje en entrada A2
+4. Verificar que Gauge se actualiza en máximo 2 segundos
+5. Los valores en voltios deben cambiar simultáneamente
+
+Nota: La actualización es cada 1000ms (1 segundo)
+
+
+PRUEBA 8: RESPONSIVIDAD DE LA INTERFAZ
+───────────────────────────────────────
+Pasos:
+1. Abrir página en navegador de escritorio
+2. Cambiar tamaño de ventana
+3. ✓ Interfaz debe adaptarse (responsive)
+4. Abrir en navegador móvil
+5. ✓ Interfaz debe verse correcta en teléfono
+
+
+PRUEBA 9: CARGA DE PÁGINA
+──────────────────────────
+Tiempo esperado:
+- Carga index.htm: < 1 segundo
+- Primer AJAX: < 2 segundos
+- Gauges inicializados: < 3 segundos
+
+Si es más lento:
+- Verificar velocidad de SD card
+- Verificar conexión Ethernet
+- Verificar si hay mucho tráfico de red
+
+
+PRUEBA 10: ESTABILIDAD
+──────────────────────
+Pasos:
+1. Dejar la página abierta durante 10 minutos
+2. Observar:
+   ✓ Gauges actualizan cada segundo sin problema
+   ✓ No hay actualizaciones atrasadas
+   ✓ No hay errores en consola del navegador
+   ✓ Memoria no aumenta constantemente
+3. Refrescar página manualmente
+   ✓ Debe cargar normalmente
+
+
+PRUEBA 11: VALIDACIÓN DE DATOS XML
+───────────────────────────────────
+Pasos (para desarrolladores):
+1. Abrir DevTools (F12) en navegador
+2. Ir a pestaña Network
+3. Filtrar por "ajax_inputs"
+4. Hacer clic en una request
+5. Ir a "Response"
+6. Verificar estructura XML:
+   <?xml version = "1.0" ?>
+   <inputs>
+     <panel_gauge>512</panel_gauge>
+     <bateria_gauge>654</bateria_gauge>
+     <pwm_gauge>123</pwm_gauge>
+     <panel_volt>10.0</panel_volt>
+     <bateria_volt>12.8</bateria_volt>
+     <pwm_volt>2.4</pwm_volt>
+     <ldr>456</ldr>
+     <LED>on</LED>
+     <LED>off</LED>
+     <LED>on</LED>
+     <LED>off</LED>
+     <LED_RED>on</LED_RED>
+     <LED_YELLOW>off</LED_YELLOW>
+     <LED_GREEN>off</LED_GREEN>
+   </inputs>
+
+
+TABLA DE DIAGNÓSTICO RÁPIDA:
+────────────────────────────
+
+PROBLEMA                      SOLUCIÓN
+─────────────────────────────────────────────────────────
+No carga página              → Verificar IP, cable Ethernet
+                             → Verificar index.htm en SD
+                             
+Voltajes incorrectos         → Ajustar CALIBRACION
+                             → Verificar divisor de voltaje
+                             
+Gauges no se actualizan      → Verificar conexión Ethernet
+                             → Abrir DevTools, ver errores
+                             → Recargar página
+                             
+LEDs no cambian              → Verificar conexiones físicas
+                             → Verificar valores en Serial
+                             → Revisar lógica en .ino
+                             
+LDR no responde              → Verificar resistencia pull-up
+                             → Verificar sensor conectado
+                             → Probar con luz directa
+                             
+Interfaz lenta               → Aumentar velocidad SD
+                             → Verificar ancho de banda
+                             → Reducir número de gauges
+
+
+REPORTAR PROBLEMAS:
+───────────────────
+Si encuentra un problema:
+1. Copiar mensajes de Serial Monitor
+2. Tomar screenshot de la página web
+3. Anotar voltajes esperados vs reales
+4. Mencionar qué pruebas pasaron/fallaron
+5. Incluir configuración del divisor usado
+
+================================================================================
