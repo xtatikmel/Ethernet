@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Arduino MEGA 24 Output</title>
+        <script>
+		strLED = "";
+
+		function GetArduinoIO()
+		{
+			nocache = "&nocache=" + Math.random() * 1000000;
+			var request = new XMLHttpRequest();
+			request.onreadystatechange = function()
+			{
+				if (this.readyState == 4) {
+					if (this.status == 200) {
+						if (this.responseXML != null) {
+							// XML file received - contains LED states
+							var re;
+							var num_LEDs;
+							var i;
+							var ledstr = "";
+							
+							re = this.responseXML.getElementsByTagName('LED');
+							num_LEDs = re.length;
+							
+							for (i = 0; i < num_LEDs; i++) {
+								ledstr = "LED" + (i + 1);
+								if (re[i].childNodes[0].nodeValue === "checked") {
+									document.getElementsByName(ledstr)[0].checked = true;
+								}
+								else {
+									document.getElementsByName(ledstr)[0].checked = false;
+								}
+							}
+						}
+					}
+				}
+			}
+			// send HTTP GET request with LEDs to switch on/off if any
+			request.open("GET", "ajax_inputs" + strLED + nocache, true);
+			request.send(null);
+			setTimeout('GetArduinoIO()', 1000);
+			strLED = "";
+		}
+		// service LEDs when checkbox checked/unchecked
+		function GetCheck(led_num_str, cb)
+		{
+			if (cb.checked) {
+				strLED += ("&" + led_num_str + "=1");
+			}
+			else {
+				strLED += ("&" + led_num_str + "=0");
+			}
+		}
+	</script>
+	<style>
+		.out_box {
+			float: left;
+			margin: 0 20px 20px 0;
+			border: 1px solid blue;
+			padding: 0 5px 0 5px;
+			min-width: 280px;
+		}
+		input {
+			margin: 10px;
+		}
+		input {
+			vertical-align: -3px;
+		}
+		h1 {
+			font-size: 120%;
+			color: blue;
+			margin: 0 0 10px 0;
+		}
+		h2 {
+			font-size: 85%;
+			color: #5734E6;
+			margin: 5px 0 5px 0;
+		}
+		p, form, button {
+			font-size: 80%;
+			color: #252525;
+		}
+		.small_text {
+			font-size: 70%;
+			color: #737373;
+		}
+	</style>
+    </head>
+    <body onload="GetArduinoIO()">
+        <h1>Arduino MEGA 24 Output</h1>
+		<div class="out_box">
+			<form class="check_LEDs" name="LED_form1">
+				<input type="checkbox" name="LED1" value="0" onclick="GetCheck('LED1', this)" />LED 1 (D26)
+				<input type="checkbox" name="LED2" value="0" onclick="GetCheck('LED2', this)" />LED 2 (D27)<br />
+				<input type="checkbox" name="LED3" value="0" onclick="GetCheck('LED3', this)" />LED 3 (D28)
+				<input type="checkbox" name="LED4" value="0" onclick="GetCheck('LED4', this)" />LED 4 (D29)
+			</form>
+		</div>
+		<div class="out_box">
+			<form class="check_LEDs" name="LED_form2">
+				<input type="checkbox" name="LED5" value="0" onclick="GetCheck('LED5', this)" />LED 5 (D30)
+				<input type="checkbox" name="LED6" value="0" onclick="GetCheck('LED6', this)" />LED 6 (D31)<br />
+				<input type="checkbox" name="LED7" value="0" onclick="GetCheck('LED7', this)" />LED 7 (D32)
+				<input type="checkbox" name="LED8" value="0" onclick="GetCheck('LED8', this)" />LED 8 (D33)
+			</form>
+		</div>
+		<div class="out_box">
+			<form class="check_LEDs" name="LED_form3">
+				<input type="checkbox" name="LED9" value="0" onclick="GetCheck('LED9', this)" />LED 9 (D34)
+				<input type="checkbox" name="LED10" value="0" onclick="GetCheck('LED10', this)" />LED 10 (D35)<br />
+				<input type="checkbox" name="LED11" value="0" onclick="GetCheck('LED11', this)" />LED 11 (D36)
+				<input type="checkbox" name="LED12" value="0" onclick="GetCheck('LED12', this)" />LED 12 (D37)
+			</form>
+		</div>
+		<div class="out_box">
+			<form class="check_LEDs" name="LED_form4">
+				<input type="checkbox" name="LED13" value="0" onclick="GetCheck('LED13', this)" />LED 13 (D38)
+				<input type="checkbox" name="LED14" value="0" onclick="GetCheck('LED14', this)" />LED 14 (D39)<br />
+				<input type="checkbox" name="LED15" value="0" onclick="GetCheck('LED15', this)" />LED 15 (D40)
+				<input type="checkbox" name="LED16" value="0" onclick="GetCheck('LED16', this)" />LED 16 (D41)
+			</form>
+		</div>
+		<div class="out_box">
+			<form class="check_LEDs" name="LED_form5">
+				<input type="checkbox" name="LED17" value="0" onclick="GetCheck('LED17', this)" />LED 17 (D42)
+				<input type="checkbox" name="LED18" value="0" onclick="GetCheck('LED18', this)" />LED 18 (D43)<br />
+				<input type="checkbox" name="LED19" value="0" onclick="GetCheck('LED19', this)" />LED 19 (D44)
+				<input type="checkbox" name="LED20" value="0" onclick="GetCheck('LED20', this)" />LED 20 (D45)
+			</form>
+		</div>
+		<div class="out_box">
+			<form class="check_LEDs" name="LED_form6">
+				<input type="checkbox" name="LED21" value="0" onclick="GetCheck('LED21', this)" />LED 21 (D46)
+				<input type="checkbox" name="LED22" value="0" onclick="GetCheck('LED22', this)" />LED 22 (D47)<br />
+				<input type="checkbox" name="LED23" value="0" onclick="GetCheck('LED23', this)" />LED 23 (D48)
+				<input type="checkbox" name="LED24" value="0" onclick="GetCheck('LED24', this)" />LED 24 (D49)
+			</form>
+		</div>
+    </body>
+</html>

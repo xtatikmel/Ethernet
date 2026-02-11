@@ -17,7 +17,7 @@ const float VREF = 5.0;    // Voltaje de referencia Arduino
 const float FACTOR_DIVISION = (R1 + R2) / R2;  // = 4.0
 
 // Calibración fina (ajustar según tu multímetro)
-const float CALIBRACION = 0.94;  // Modificar si hay error sistemático
+const float CALIBRACION = 0.96;  // Modificar si hay error sistemático
 
 // Configuración de muestreo para reducir ruido
 const int NUM_MUESTRAS = 10;
