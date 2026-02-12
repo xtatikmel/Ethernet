@@ -1,17 +1,12 @@
 #include <LedRGB.h>
-
 #include "Tela.h"
-
-
 
 byte mac[] = {
   0xDe, 0xAD, 0xBE, 0xEF, 0xFE, 0xED
 };
 
 IPAddress ip(192,168,1,10);
-
 EthernetServer webServer(80);
-
 EthernetClient conexao;
 
 int cod;
@@ -19,27 +14,22 @@ int cod;
 LedRGB led(3, 5, 8);
 Tela t;
 
-
 void setup() {
    Serial.begin(9600);
    Ethernet.begin(mac,ip);
    webServer.begin();
    Serial.print("Servidor esta em ");
    Serial.println(Ethernet.localIP());
-
 }
 
 void loop() {
   // Preparando servidor para uma nova conexão
   t.conexao = webServer.available();
-  
   if(t.conexao){  // Cliente tentando se conectar no server
     Serial.print("Nova conexao");
-    
     boolean currentLineIsBlank = true; // Variavel de controle
     String recebido;
     Serial.println("Conectado");
-    
       while (t.conexao.connected()){
           if(t.conexao.available()){ // Verificando o que tem para ser enviado p/ servidor
             char c = t.conexao.read(); // Recebendo mensagem

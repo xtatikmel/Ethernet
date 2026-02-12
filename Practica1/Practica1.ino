@@ -8,6 +8,7 @@ created 18 Dec 2009
 modified 9 Apr 2012
 by David A. Mellis
 traducido J.M. Ruiz Nov. 2012
+Implementado en| Dexter Newtron Labs 2026
 */
 #include <SPI.h>
 #include <Ethernet.h>
@@ -15,7 +16,7 @@ traducido J.M. Ruiz Nov. 2012
 // Los Shields Ethernet más actuales Ethernet tienen una dirección MAC impresa en una
 // etiqueta pegada en ellos
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress server(74,125,230,223); // Google
+IPAddress server(192,168,1,177); // Google
 // Inicializar la biblioteca de cliente Ethernet
 // Con la dirección IP y el puerto del servidor
 // Que desea conectarse (por defecto es el puerto 80 para HTTP):
