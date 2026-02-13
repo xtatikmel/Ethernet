@@ -7,17 +7,17 @@ EthernetServer server(80);
 
 const byte LED1 = 2;
 const byte LED2 = 3;
-const byte PIN_BATERIA = A0;   // Batería 12V
-const byte PIN_PANEL = A1;      // Panel Solar 12V
+const byte PIN_BATERIA = A3;   // Batería 12V
+const byte PIN_PANEL = A2;      // Panel Solar 12V
 
 // Configuración divisor de voltaje 30k/10k
-const float R1 = 1200.0;  // 30kΩ
-const float R2 = 1500.0;  // 10kΩ
+const float R1 = 30000.0;  // 30kΩ
+const float R2 = 10000.0;  // 10kΩ
 const float VREF = 5.0;    // Voltaje de referencia Arduino
 const float FACTOR_DIVISION = (R1 + R2) / R2;  // = 4.0
 
 // Calibración fina (ajustar según tu multímetro)
-const float CALIBRACION = 0.96;  // Modificar si hay error sistemático
+const float CALIBRACION = 1.04;  // Modificar si hay error sistemático
 
 // Configuración de muestreo para reducir ruido
 const int NUM_MUESTRAS = 10;
