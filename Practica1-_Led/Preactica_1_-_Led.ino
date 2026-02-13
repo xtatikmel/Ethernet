@@ -1,23 +1,16 @@
 /*--------------------------------------------------------------
-  Program:      eth_websrv_LED
+Programa: eth_websrv_LED
 
-  Description:  Arduino web server that serves up a web page
-                allowing the user to control an LED
-  
-  Hardware:     - Arduino Uno and official Arduino Ethernet
-                  shield. Should work with other Arduinos and
-                  compatible Ethernet shields.
-                - LED and resistor in series connected between
-                  Arduino pin 2 and GND
-                
-  Software:     Developed using Arduino 1.0.3 software
-                Should be compatible with Arduino 1.0 +
-  
-  References:   - WebServer example by David A. Mellis and 
-                  modified by Tom Igoe
-                - Ethernet library documentation:
-                  http://arduino.cc/en/Reference/Ethernet
+Descripción: Servidor web Arduino que genera una página web que permite al usuario controlar un LED.
 
+Hardware: - Arduino Uno y shield Ethernet oficial de Arduino. Debería funcionar con otros Arduinos y shields Ethernet compatibles.
+- LED y resistencia conectados en serie entre el pin 2 de Arduino y GND.
+
+Software: Desarrollado con Arduino 1.0.3. Debería ser compatible con Arduino 1.0 y versiones posteriores.
+
+Referencias: - Ejemplo de servidor web de David A. Mellis y modificado por Tom Igoe.
+- Documentación de la biblioteca Ethernet:
+http://arduino.cc/en/Reference/Ethernet
   Date:         11 January 2013
  
   Author:       W.A. Smith, http://startingelectronics.org
@@ -26,41 +19,41 @@
 #include <SPI.h>
 #include <Ethernet.h>
 
-// MAC address from Ethernet shield sticker under board
+// Dirección MAC de la etiqueta de protección Ethernet debajo de la placa
 byte mac[] = { 0xDE, 0xAD, 0xAE, 0xEF, 0xF0, 0xED };//Ponemos la dirección MAC de la Ethernet Shield
 IPAddress ip(192,168,1,177); //Asignamos  la IP al Arduino
 EthernetServer server(80); //Creamos un servidor Web con el puerto 80 que es el puerto HTTP por defecto
  
-String HTTP_req;          // stores the HTTP request
-boolean LED_status = 0;   // state of LED, off by default
+String HTTP_req;          // almacena la solicitud HTTP
+boolean LED_status = 0;   // Estado del LED, apagado por defecto
 
 void setup()
 {
-    Ethernet.begin(mac, ip);  // initialize Ethernet device
-    server.begin();           // start to listen for clients
-    Serial.begin(9600);       // for diagnostics
-    pinMode(2, OUTPUT);       // LED on pin 2
+    Ethernet.begin(mac, ip);  // inicializar dispositivo Ethernet
+    server.begin();           // empezar a escuchar a los clientes
+    Serial.begin(9600);       // para diagnóstico
+    pinMode(2, OUTPUT);       // LED en el pin 2
 }
 
 void loop()
 {
-    EthernetClient client = server.available();  // try to get client
+    EthernetClient client = server.available();  // intentar obtener cliente
 
-    if (client) {  // got client?
+    if (client) {  // cliente obtenido?
         boolean currentLineIsBlank = true;
         while (client.connected()) {
-            if (client.available()) {   // client data available to read
-                char c = client.read(); // read 1 byte (character) from client
-                HTTP_req += c;  // save the HTTP request 1 char at a time
-                // last line of client request is blank and ends with \n
-                // respond to client only after last line received
+            if (client.available()) {   // datos del cliente disponibles para leer
+                char c = client.read(); // leer 1 byte (carácter) del cliente
+                HTTP_req += c;  // guardar la solicitud HTTP 1 carácter a la vez
+                // la última línea de la solicitud del cliente está en blanco y termina con \n
+                // responder al cliente solo después de recibir la última línea
                 if (c == '\n' && currentLineIsBlank) {
-                    // send a standard http response header
+                    // enviar un encabezado de respuesta HTTP estándar
                     client.println("HTTP/1.1 200 OK");
                     client.println("Content-Type: text/html");
                     client.println("Connection: close");
                     client.println();
-                    // send web page
+                    // enviar página web
                     client.println("<!DOCTYPE html>");
                     client.println("<html>");
                     client.println("<head>");
@@ -68,38 +61,38 @@ void loop()
                     client.println("</head>");
                     client.println("<body>");
                     client.println("<h1>LED</h1>");
-                    client.println("<p>Click to switch LED on and off.</p>");
+                    client.println("<p>Haga clic para encender y apagar el LED.</p>");
                     client.println("<form method=\"get\">");
                     ProcessCheckbox(client);
                     client.println("</form>");
                     client.println("</body>");
                     client.println("</html>");
                     Serial.print(HTTP_req);
-                    HTTP_req = "";    // finished with request, empty string
+                    HTTP_req = "";    // Terminado con la solicitud, cadena vacía para la próxima solicitud
                     break;
                 }
-                // every line of text received from the client ends with \r\n
+                // cada línea de texto recibida del cliente termina con \r\n
                 if (c == '\n') {
-                    // last character on line of received text
-                    // starting new line with next character read
+                    // último carácter en la línea de texto recibida
+                    // comenzando una nueva línea con el siguiente carácter leído
                     currentLineIsBlank = true;
                 } 
                 else if (c != '\r') {
-                    // a text character was received from client
+                    // se recibió un carácter de texto del cliente
                     currentLineIsBlank = false;
                 }
             } // end if (client.available())
         } // end while (client.connected())
-        delay(1);      // give the web browser time to receive the data
-        client.stop(); // close the connection
+        delay(1);      // dar tiempo al navegador web para recibir los datos
+        client.stop(); // cerrar la conexión
     } // end if (client)
 }
 
-// switch LED and send back HTML for LED checkbox
+// Cambiar LED y enviar HTML para la casilla de verificación LED
 void ProcessCheckbox(EthernetClient cl)
 {
-    if (HTTP_req.indexOf("LED2=2") > -1) {  // see if checkbox was clicked
-        // the checkbox was clicked, toggle the LED
+    if (HTTP_req.indexOf("LED2=2") > -1) {  // ver si se hizo clic en la casilla de verificación
+        // se hizo clic en la casilla de verificación, cambiar el estado del LED
         if (LED_status) {
             LED_status = 0;
         }
@@ -108,15 +101,15 @@ void ProcessCheckbox(EthernetClient cl)
         }
     }
     
-    if (LED_status) {    // switch LED on
+    if (LED_status) {    // encender LED
         digitalWrite(2, HIGH);
-        // checkbox is checked
+        // la casilla de verificación está marcada
         cl.println("<input type=\"checkbox\" name=\"LED2\" value=\"2\" \
         onclick=\"submit();\" checked>LED2");
     }
-    else {              // switch LED off
+    else {              // apagar LED
         digitalWrite(2, LOW);
-        // checkbox is unchecked
+        // la casilla de verificación no está marcada
         cl.println("<input type=\"checkbox\" name=\"LED2\" value=\"2\" \
         onclick=\"submit();\">LED2");
     }

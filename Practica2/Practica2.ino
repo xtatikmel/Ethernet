@@ -19,7 +19,7 @@ void setup()
   Ethernet.begin(mac, ip);
   server.begin();
   
-  Serial.print("server is at ");
+  Serial.print("El servidor está en ");
   Serial.println(Ethernet.localIP());
   
   pinMode(LED1,OUTPUT);
@@ -35,7 +35,7 @@ void loop()
   EthernetClient client = server.available(); //Creamos un cliente Web
   //Verificamos si se detecte un cliente a través de una petición HTTP
   if (client) {
-    Serial.println("new client");
+    Serial.println("Nuevo cliente");
     boolean currentLineIsBlank = true; //Una petición HTTP acaba con una línea en blanco
     String cadena=""; //Creamos una cadena de caracteres vacía
     while (client.connected()) {
