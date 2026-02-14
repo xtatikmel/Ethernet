@@ -11,7 +11,7 @@ const byte PIN_BATERIA = A3;   // Batería 12V
 const byte PIN_PANEL = A2;      // Panel Solar 12V
 
 // Configuración divisor de voltaje 30k/10k
-const float R1 = 30000.0;  // 30kΩ
+const float R1 = 33000.0;  // 30kΩ
 const float R2 = 10000.0;  // 10kΩ
 const float VREF = 5.0;    // Voltaje de referencia Arduino
 const float FACTOR_DIVISION = (R1 + R2) / R2;  // = 4.0
@@ -81,11 +81,11 @@ float leerVoltaje(byte pin) {
 // Función para estimar estado de batería 12V
 String estadoBateria(float voltaje) {
   if (voltaje >= 12.6) return "CARGADA (100%)";
-  else if (voltaje >= 12.4) return "BUENA (75-99%)";
-  else if (voltaje >= 12.2) return "MEDIA (50-75%)";
-  else if (voltaje >= 12.0) return "BAJA (25-50%)";
-  else if (voltaje >= 11.8) return "MUY BAJA (<25%)";
-  else if (voltaje < 11.8 && voltaje > 5.0) return "CRITICA!";
+  else if (voltaje >= 11.4) return "BUENA (75-99%)";
+  else if (voltaje >= 9.2) return "MEDIA (50-75%)";
+  else if (voltaje >= 8.0) return "BAJA (25-50%)";
+  else if (voltaje >= 7.8) return "MUY BAJA (<25%)";
+  else if (voltaje < 6.8 && voltaje > 5.0) return "CRITICA!";
   else return "DESCONECTADA";
 }
 
@@ -209,13 +209,13 @@ void loop() {
     client.println(" V</div>");
     
     client.print("<div class='estado ");
-    if (voltajePanel >= 13.0) client.print("bueno");
-    else if (voltajePanel >= 11.0) client.print("medio");
+    if (voltajePanel >= 11.0) client.print("bueno");
+    else if (voltajePanel >= 9.0) client.print("medio");
     else client.print("malo");
     client.print("'>");
     
-    if (voltajePanel >= 13.0) client.print("GENERANDO (SOL)");
-    else if (voltajePanel >= 11.0) client.print("GENERACION BAJA");
+    if (voltajePanel >= 11.0) client.print("GENERANDO (SOL)");
+    else if (voltajePanel >= 9.0) client.print("GENERACION BAJA");
     else if (voltajePanel > 5.0) client.print("SIN SOL");
     else client.print("DESCONECTADO");
     client.println("</div>");
@@ -255,7 +255,7 @@ void loop() {
     
     // Info técnica
     client.println("<div class='info'>");
-    client.println("📊 <strong>Configuración:</strong> Divisor 1,kΩ/1,5kΩ (Factor 4:1) | Rango: 0-20V | Auto-refresh: 10s");
+    client.println("📊 <strong>Configuración:</strong> Divisor 3,3kΩ/10kΩ (Factor 4:1) | Rango: 0-20V | Auto-refresh: 10s");
     client.println("</div>");
     
     client.println("</body></html>");
